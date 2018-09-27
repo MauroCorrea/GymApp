@@ -4,12 +4,12 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h2>Administración de Usuarios</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="buttonUser">Agregar Usuario</a>
 </p>
-<table class="table">
+<table>
     <thead>
         <tr>
             <th>
@@ -79,9 +79,12 @@
                 @Html.DisplayFor(modelItem => item.Commentaries)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.UserId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.UserId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.UserId" class="buttonUser">Modificar</a>
+                <br style="padding-top:2px"/>
+                <a asp-action="Details" asp-route-id="@item.UserId" class="buttonUser">Detalles</a>
+                <br />
+                <br />
+                <a asp-action="Delete" asp-route-id="@item.UserId" class="buttonUserDelete">Eliminar</a>
             </td>
         </tr>
 }
