@@ -9,12 +9,14 @@ namespace GymTest.Models
         {
         }
 
-        public DbSet<MVCApp.Models.User> Users { get; set; }
+        public DbSet<GymTest.Models.CashCategory> CashCategories { get; set; }
 
-        public DbSet<MVCApp.Models.CashCategory> CashCategories { get; set; }
+        public DbSet<GymTest.Models.CashMovement> CashMovements { get; set; }
 
-        public DbSet<MVCApp.Models.CashMovement> CashMovements { get; set; }
+        public DbSet<GymTest.Models.CashMovementType> CashMovementTypes { get; set; }
 
-        public DbSet<MVCApp.Models.Payment> Payments { get; set; }
+        public DbSet<GymTest.Models.Payment> Payments { get; set; }
+
+        public DbSet<GymTest.Models.User> Users { get; set; }
     }
 }
