@@ -3,14 +3,16 @@ using System;
 using GymTest.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GymTest.Migrations
 {
     [DbContext(typeof(GymTestContext))]
-    partial class GymTestContextModelSnapshot : ModelSnapshot
+    [Migration("20180927230312_InitialMacDb")]
+    partial class InitialMacDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
