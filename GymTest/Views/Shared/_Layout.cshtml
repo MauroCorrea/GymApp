@@ -33,7 +33,14 @@
                     <ul class="nav navbar-nav">
                         <li><a asp-area="" asp-controller="Users" asp-action="Index">Usuarios</a></li>
                         <li><a asp-area="" asp-controller="Payments" asp-action="Index">Pagos</a></li>
-                        <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                        <li>
+                            <form asp-controller="Home" asp-action="Contact">
+                                <p>
+                                <p style="color: white">Huella:</p> <input type="text" name="Fingerprint">
+                                    <input type="submit" value="Consultar" />
+                                </p>
+                            </form>
+                        </li>
                     </ul>
                 </div>
             </div>

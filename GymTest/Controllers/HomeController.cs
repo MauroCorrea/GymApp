@@ -10,6 +10,13 @@ namespace GymTest.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly GymTestContext _context;
+
+        public HomeController(GymTestContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -22,9 +29,21 @@ namespace GymTest.Controllers
             return View();
         }
 
-        public IActionResult Contact()
+        public IActionResult Contact(string fingerprint)
         {
-            ViewData["Message"] = "Your contact page.";
+            var users = from m in _context.User
+                        select m;
+
+            users = users.Where(s => s.DocumentNumber.Equals(fingerprint));
+
+            if (users.Count() > 0)
+            {
+                ViewData["Message"] = "Lo Encontramos!!!";
+            }
+            else
+            {
+                ViewData["Message"] = "No lo encontramos :(";
+            }
 
             return View();
         }
