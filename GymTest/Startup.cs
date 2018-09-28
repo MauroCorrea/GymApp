@@ -21,7 +21,7 @@ namespace GymTest
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            /*services.Configure<CookiePolicyOptions>(options =>
+            services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
@@ -35,13 +35,13 @@ namespace GymTest
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDbContext<GymTestContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("GymTestContext")));*/
+                    options.UseSqlServer(Configuration.GetConnectionString("GymTestContext")));
 
             // Add framework services.
-            services.AddMvc();
+            /*services.AddMvc();
 
             services.AddDbContext<GymTestContext>(options =>
-                    options.UseSqlite("Data Source=GymApp.db"));
+                    options.UseSqlite("Data Source=GymApp.db"));*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -9,6 +9,14 @@
 <p>
     <a asp-action="Create" class="buttonUser">Agregar Usuario</a>
 </p>
+
+<form asp-controller="Users" asp-action="Index">
+    <p>
+        Filtrar: <input type="text" name="SearchString">
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
 <table>
     <thead>
         <tr>
