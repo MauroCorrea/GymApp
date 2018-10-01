@@ -9,23 +9,22 @@ using GymTest.Models;
 
 namespace GymTest.Controllers
 {
-    public class PaymentsController : Controller
+    public class AssistancesController : Controller
     {
         private readonly GymTestContext _context;
 
-        public PaymentsController(GymTestContext context)
+        public AssistancesController(GymTestContext context)
         {
             _context = context;
         }
 
-        // GET: Payments
+        // GET: Assistances
         public async Task<IActionResult> Index()
         {
-            var gymTestContext = _context.Payment.Include(p => p.User);
-            return View(await gymTestContext.ToListAsync());
+            return View(await _context.Assistance.ToListAsync());
         }
 
-        // GET: Payments/Details/5
+        // GET: Assistances/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,57 +32,39 @@ namespace GymTest.Controllers
                 return NotFound();
             }
 
-            var payment = await _context.Payment
-                .Include(p => p.User)
-                .FirstOrDefaultAsync(m => m.PaymentId == id);
-            if (payment == null)
+            var assistance = await _context.Assistance
+                .FirstOrDefaultAsync(m => m.ID == id);
+            if (assistance == null)
             {
                 return NotFound();
             }
 
-            return View(payment);
+            return View(assistance);
         }
 
-        // GET: Payments/Create
-        public IActionResult Create(string userIdFilter)
+        // GET: Assistances/Create
+        public IActionResult Create()
         {
-            var users = from m in _context.User
-                       select m;
-
-            if (!String.IsNullOrEmpty(userIdFilter))
-            {
-                if (users.Where(s => s.UserName.Contains(userIdFilter)).Count() > 0)
-                {
-                    users = users.Where(s => s.UserName.Contains(userIdFilter));
-                }
-                else
-                {
-                    users = users.Where(s => s.DocumentNumber.Contains(userIdFilter));
-                }
-            }
-
-            ViewData["UserId"] = new SelectList(users, "UserId", "DocumentNumber");
             return View();
         }
 
-        // POST: Payments/Create
+        // POST: Assistances/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PaymentId,PaymentDate,Amount,UserId")] Payment payment)
+        public async Task<IActionResult> Create([Bind("ID,AssistanceDate")] Assistance assistance)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(payment);
+                _context.Add(assistance);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber", payment.UserId);
-            return View(payment);
+            return View(assistance);
         }
 
-        // GET: Payments/Edit/5
+        // GET: Assistances/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -91,23 +72,22 @@ namespace GymTest.Controllers
                 return NotFound();
             }
 
-            var payment = await _context.Payment.FindAsync(id);
-            if (payment == null)
+            var assistance = await _context.Assistance.FindAsync(id);
+            if (assistance == null)
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber", payment.UserId);
-            return View(payment);
+            return View(assistance);
         }
 
-        // POST: Payments/Edit/5
+        // POST: Assistances/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PaymentId,PaymentDate,Amount,UserId")] Payment payment)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,AssistanceDate")] Assistance assistance)
         {
-            if (id != payment.PaymentId)
+            if (id != assistance.ID)
             {
                 return NotFound();
             }
@@ -116,12 +96,12 @@ namespace GymTest.Controllers
             {
                 try
                 {
-                    _context.Update(payment);
+                    _context.Update(assistance);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PaymentExists(payment.PaymentId))
+                    if (!AssistanceExists(assistance.ID))
                     {
                         return NotFound();
                     }
@@ -132,11 +112,10 @@ namespace GymTest.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber", payment.UserId);
-            return View(payment);
+            return View(assistance);
         }
 
-        // GET: Payments/Delete/5
+        // GET: Assistances/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -144,31 +123,30 @@ namespace GymTest.Controllers
                 return NotFound();
             }
 
-            var payment = await _context.Payment
-                .Include(p => p.User)
-                .FirstOrDefaultAsync(m => m.PaymentId == id);
-            if (payment == null)
+            var assistance = await _context.Assistance
+                .FirstOrDefaultAsync(m => m.ID == id);
+            if (assistance == null)
             {
                 return NotFound();
             }
 
-            return View(payment);
+            return View(assistance);
         }
 
-        // POST: Payments/Delete/5
+        // POST: Assistances/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var payment = await _context.Payment.FindAsync(id);
-            _context.Payment.Remove(payment);
+            var assistance = await _context.Assistance.FindAsync(id);
+            _context.Assistance.Remove(assistance);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PaymentExists(int id)
+        private bool AssistanceExists(int id)
         {
-            return _context.Payment.Any(e => e.PaymentId == id);
+            return _context.Assistance.Any(e => e.ID == id);
         }
     }
 }

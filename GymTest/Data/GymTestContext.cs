@@ -17,5 +17,7 @@ namespace GymTest.Models
         public DbSet<GymTest.Models.User> User { get; set; }
 
         public DbSet<GymTest.Models.Payment> Payment { get; set; }
+
+        public DbSet<GymTest.Models.Assistance> Assistance { get; set; }
     }
 }

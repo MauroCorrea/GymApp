@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using GymTest.Models;
+using GymTest.Controllers;
 
 namespace GymTest.Controllers
 {
@@ -39,6 +40,12 @@ namespace GymTest.Controllers
             if (users.Count() > 0)
             {
                 ViewData["Message"] = "Lo Encontramos!!!";
+                /*Assistance assistance = new Assistance();
+                assistance.User = users.FirstOrDefault();
+                assistance.AssistanceDate = DateTime.Now;
+                assistance.ID = 0;
+                _context.Add(assistance);
+                _context.SaveChangesAsync();*/
             }
             else
             {
