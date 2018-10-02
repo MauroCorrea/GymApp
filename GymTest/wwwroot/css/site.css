@@ -35,3 +35,11 @@ body {
         display: none;
     }
 }
+
+.navbar-header {
+    background-color: cornflowerblue;
+}
+
+.navbar {
+    background-color: blue;
+}
