@@ -45,24 +45,27 @@ namespace GymTest.Controllers
         }
 
         // GET: Payments/Create
-        public IActionResult Create(string userIdFilter)
+        public IActionResult Create(int? id)
         {
-            var users = from m in _context.User
-                       select m;
-
-            if (!String.IsNullOrEmpty(userIdFilter))
+            if(id == null)
             {
-                if (users.Where(s => s.UserName.Contains(userIdFilter)).Count() > 0)
+                ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber");
+            }
+            else
+            {
+                var users = from m in _context.User
+                            select m;
+
+                users = users.Where(s => s.UserId.Equals(id));
+
+                if (users == null)
                 {
-                    users = users.Where(s => s.UserName.Contains(userIdFilter));
+                    return NotFound();
                 }
-                else
-                {
-                    users = users.Where(s => s.DocumentNumber.Contains(userIdFilter));
-                }
+
+                ViewData["UserId"] = new SelectList(users, "UserId", "DocumentNumber");
             }
 
-            ViewData["UserId"] = new SelectList(users, "UserId", "DocumentNumber");
             return View();
         }
 
