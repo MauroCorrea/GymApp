@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Index";
 }
-<br/>
+<br />
 <h2>Administración de Usuarios</h2>
 
 <p>
@@ -54,46 +54,47 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BirthDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DocumentNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phones)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SignInDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Commentaries)
-            </td>
-            <td>
-                <div class="btn-group-vertical">
-                    <a asp-action="Edit" asp-route-id="@item.UserId" class="btn btn-primary">Modificar</a>
-                    <a asp-action="Details" asp-route-id="@item.UserId" class="btn btn-primary">Detalles</a>
-                    <a asp-action="Delete" asp-route-id="@item.UserId" class="btn btn-danger">Eliminar</a>
-                </div>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BirthDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DocumentNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phones)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SignInDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Commentaries)
+                </td>
+                <td>
+                    <div class="btn-group-vertical">
+                        <a asp-action="Edit" asp-route-id="@item.UserId" class="btn btn-primary">Modificar</a>
+                        <a asp-action="Details" asp-route-id="@item.UserId" class="btn btn-primary">Detalles</a>
+                        <a asp-action="Delete" asp-route-id="@item.UserId" class="btn btn-danger">Eliminar</a>
+                    </div>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
