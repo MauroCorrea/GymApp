@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GymTest.Models.Assistance>
+@model IEnumerable<GymTest.Models.Assistance>
 
 @{
     ViewData["Title"] = "Index";
@@ -15,6 +15,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.AssistanceDate)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -25,9 +28,12 @@
                 @Html.DisplayFor(modelItem => item.AssistanceDate)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                @Html.DisplayFor(modelItem => item.User.DocumentNumber)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.AssistanceId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.AssistanceId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.AssistanceId">Delete</a>
             </td>
         </tr>
 }

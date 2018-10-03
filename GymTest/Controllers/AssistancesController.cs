@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,7 +21,8 @@ namespace GymTest.Controllers
         // GET: Assistances
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Assistance.ToListAsync());
+            var gymTestContext = _context.Assistance.Include(a => a.User);
+            return View(await gymTestContext.ToListAsync());
         }
 
         // GET: Assistances/Details/5
@@ -33,7 +34,8 @@ namespace GymTest.Controllers
             }
 
             var assistance = await _context.Assistance
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .Include(a => a.User)
+                .FirstOrDefaultAsync(m => m.AssistanceId == id);
             if (assistance == null)
             {
                 return NotFound();
@@ -45,6 +47,7 @@ namespace GymTest.Controllers
         // GET: Assistances/Create
         public IActionResult Create()
         {
+            ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber");
             return View();
         }
 
@@ -53,7 +56,7 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,AssistanceDate")] Assistance assistance)
+        public async Task<IActionResult> Create([Bind("AssistanceId,AssistanceDate,UserId")] Assistance assistance)
         {
             if (ModelState.IsValid)
             {
@@ -61,6 +64,7 @@ namespace GymTest.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber", assistance.UserId);
             return View(assistance);
         }
 
@@ -77,6 +81,7 @@ namespace GymTest.Controllers
             {
                 return NotFound();
             }
+            ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber", assistance.UserId);
             return View(assistance);
         }
 
@@ -85,9 +90,9 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,AssistanceDate")] Assistance assistance)
+        public async Task<IActionResult> Edit(int id, [Bind("AssistanceId,AssistanceDate,UserId")] Assistance assistance)
         {
-            if (id != assistance.ID)
+            if (id != assistance.AssistanceId)
             {
                 return NotFound();
             }
@@ -101,7 +106,7 @@ namespace GymTest.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AssistanceExists(assistance.ID))
+                    if (!AssistanceExists(assistance.AssistanceId))
                     {
                         return NotFound();
                     }
@@ -112,6 +117,7 @@ namespace GymTest.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber", assistance.UserId);
             return View(assistance);
         }
 
@@ -124,7 +130,8 @@ namespace GymTest.Controllers
             }
 
             var assistance = await _context.Assistance
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .Include(a => a.User)
+                .FirstOrDefaultAsync(m => m.AssistanceId == id);
             if (assistance == null)
             {
                 return NotFound();
@@ -146,7 +153,7 @@ namespace GymTest.Controllers
 
         private bool AssistanceExists(int id)
         {
-            return _context.Assistance.Any(e => e.ID == id);
+            return _context.Assistance.Any(e => e.AssistanceId == id);
         }
     }
 }

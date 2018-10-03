@@ -1,14 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GymTest.Models
 {
     public class Assistance
     {
-        public int ID { get; set; }
-        public virtual User User { get; set; }
+        [Required]
+        public int AssistanceId { get; set; }
+
+        [Display(Name = "Fecha asistencia")]
+        [DataType(DataType.Date)]
         public DateTime AssistanceDate { get; set; }
+
+        [ForeignKey("User")]
+        public int UserId { get; set; }
+
+        public virtual User User { get; set; }
+
+        public Assistance()
+        {
+        }
     }
 }

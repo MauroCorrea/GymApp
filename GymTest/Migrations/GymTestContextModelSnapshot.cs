@@ -16,6 +16,22 @@ namespace GymTest.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.3-rtm-32065");
 
+            modelBuilder.Entity("GymTest.Models.Assistance", b =>
+                {
+                    b.Property<int>("AssistanceId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("AssistanceDate");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("AssistanceId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Assistance");
+                });
+
             modelBuilder.Entity("GymTest.Models.Payment", b =>
                 {
                     b.Property<int>("PaymentId")
@@ -77,6 +93,14 @@ namespace GymTest.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("GymTest.Models.Assistance", b =>
+                {
+                    b.HasOne("GymTest.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("GymTest.Models.Payment", b =>

@@ -1,4 +1,4 @@
-﻿@model GymTest.Models.Assistance
+@model GymTest.Models.Assistance
 
 @{
     ViewData["Title"] = "Edit";
@@ -12,11 +12,16 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ID" />
+            <input type="hidden" asp-for="AssistanceId" />
             <div class="form-group">
                 <label asp-for="AssistanceDate" class="control-label"></label>
                 <input asp-for="AssistanceDate" class="form-control" />
                 <span asp-validation-for="AssistanceDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
+                <span asp-validation-for="UserId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />

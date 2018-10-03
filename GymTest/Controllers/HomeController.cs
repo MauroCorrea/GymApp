@@ -37,15 +37,17 @@ namespace GymTest.Controllers
 
             users = users.Where(s => s.DocumentNumber.Equals(fingerprint));
 
-            if (users.Count() > 0)
+            if (users.Count()== 1)
             {
-                ViewData["Message"] = "Lo Encontramos!!!";
-                /*Assistance assistance = new Assistance();
+                var ass = from a in _context.Assistance select a;
+                ass = ass.Where(a => a.UserId.Equals(users.FirstOrDefault().UserId));
+
+                ViewData["Message"] = "Lo Encontramos!! Y es la vez número " + (ass.Count() + 1) + " que vine!";
+                Assistance assistance = new Assistance();
                 assistance.User = users.FirstOrDefault();
                 assistance.AssistanceDate = DateTime.Now;
-                assistance.ID = 0;
-                _context.Add(assistance);
-                _context.SaveChangesAsync();*/
+                _context.Assistance.Add(assistance);
+                _context.SaveChangesAsync();
             }
             else
             {
