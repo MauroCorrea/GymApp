@@ -49,7 +49,8 @@ namespace GymTest.Controllers
         {
             if(id == null)
             {
-                ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber");
+                //ViewData["UserId"] = new SelectList(_context.User, "UserId", "FirstName" + " " + "LastName" + " (" + "UserName" + ")");
+                ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserName");
             }
             else
             {
@@ -63,7 +64,8 @@ namespace GymTest.Controllers
                     return NotFound();
                 }
 
-                ViewData["UserId"] = new SelectList(users, "UserId", "DocumentNumber");
+                //ViewData["UserId"] = new SelectList(users, "UserId", "FirstName" + " " + "LastName" + " (" + "UserName" + ")");
+                ViewData["UserId"] = new SelectList(users, "UserId", "UserName");
             }
 
             return View();
@@ -82,7 +84,7 @@ namespace GymTest.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber", payment.UserId);
+            ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserName", payment.UserId);
             return View(payment);
         }
 
@@ -99,7 +101,7 @@ namespace GymTest.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber", payment.UserId);
+            ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserName", payment.UserId);
             return View(payment);
         }
 
