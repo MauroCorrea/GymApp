@@ -26,14 +26,10 @@ namespace GymTest.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                if(users.Where(s => s.UserName.Contains(searchString)).Count() > 0)
-                {
-                    users = users.Where(s => s.UserName.Contains(searchString));
-                }
-                else
-                {
-                    users = users.Where(s => s.DocumentNumber.Contains(searchString));
-                }
+                users = users.Where(s => s.UserName.ToLower().Contains(searchString.ToLower()) ||
+                                    s.FirstName.ToLower().Contains(searchString.ToLower()) ||
+                                    s.LastName.ToLower().Contains(searchString.ToLower()));
+
             }
             return View(await users.ToListAsync());
         }

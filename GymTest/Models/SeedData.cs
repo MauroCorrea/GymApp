@@ -16,8 +16,8 @@ namespace GymTest.Models
 
         public static void Initialize(IServiceProvider serviceProvider)
         {
-            using (var context = new SystemContext(
-                serviceProvider.GetRequiredService<DbContextOptions<SystemContext>>()))
+            using (var context = new GymTestContext(
+                serviceProvider.GetRequiredService<DbContextOptions<GymTestContext>>()))
             {
                 // Look for any movies.
                 if (true) // levantar la info del appsettings
@@ -25,18 +25,18 @@ namespace GymTest.Models
                     return;   // DB has been seeded
                 }
 
-                context.CashCategories.AddRange(
-                    new CashCategory
-                     {
-                    CashCategoryDescription = "Categoria 1",
-                    CashCategoryId = 1
-                     }, 
-                    new CashCategory
-                     {
-                    CashCategoryDescription = "Categoria 2",
-                    CashCategoryId = 2
-                     }
-                );
+                //context.CashCategories.AddRange(
+                //    new CashCategory
+                //     {
+                //    CashCategoryDescription = "Categoria 1",
+                //    CashCategoryId = 1
+                //     }, 
+                //    new CashCategory
+                //     {
+                //    CashCategoryDescription = "Categoria 2",
+                //    CashCategoryId = 2
+                //     }
+                //);
                 context.SaveChanges();
             }
         }
