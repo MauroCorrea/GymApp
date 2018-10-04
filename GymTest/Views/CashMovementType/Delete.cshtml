@@ -1,0 +1,27 @@
+@model GymTest.Models.CashMovementType
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Eliminar</h2>
+
+<h3>Está seguro que desea eliminar este tipo de movimiento?</h3>
+<div>
+    <h4>Tipo de movimiento de caja</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CashMovementTypeDescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CashMovementTypeDescription)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="CashMovementTypeId" />
+        <input type="submit" value="Eliminar" class="btn btn-default" /> |
+        <a asp-action="Index">Regresar</a>
+    </form>
+</div>

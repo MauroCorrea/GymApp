@@ -1,0 +1,35 @@
+@model IEnumerable<GymTest.Models.CashCategory>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Categorías de movimiento de caja</h2>
+
+<p>
+    <a asp-action="Create">Agregar categoría</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CashCategoryDescription)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CashCategoryDescription)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.CashCategoryId" class="btn btn-primary">Modificar</a> 
+                <a asp-action="Details" asp-route-id="@item.CashCategoryId" class="btn btn-primary">Detalle</a> 
+                <a asp-action="Delete" asp-route-id="@item.CashCategoryId" class="btn btn-danger">Eliminar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,24 @@
+@model GymTest.Models.CashMovementType
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Detalle</h2>
+
+<div>
+    <h4>Tipo de movimiento de caja</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CashMovementTypeDescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CashMovementTypeDescription)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.CashMovementTypeId">Modificar</a> |
+    <a asp-action="Index">Regresar</a>
+</div>

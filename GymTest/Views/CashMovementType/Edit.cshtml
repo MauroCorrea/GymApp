@@ -1,0 +1,34 @@
+@model GymTest.Models.CashMovementType
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Modificar</h2>
+
+<h4>Tipo de movimiento de caja</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CashMovementTypeId" />
+            <div class="form-group">
+                <label asp-for="CashMovementTypeDescription" class="control-label"></label>
+                <input asp-for="CashMovementTypeDescription" class="form-control" />
+                <span asp-validation-for="CashMovementTypeDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Regresar</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

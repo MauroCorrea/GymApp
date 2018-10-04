@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using GymTest.Models;
 
 namespace GymTest.Models
 {
@@ -19,5 +14,11 @@ namespace GymTest.Models
         public DbSet<GymTest.Models.Payment> Payment { get; set; }
 
         public DbSet<GymTest.Models.Assistance> Assistance { get; set; }
+
+        public DbSet<GymTest.Models.CashCategory> CashCategory { get; set; }
+
+        public DbSet<GymTest.Models.CashMovement> CashMovement { get; set; }
+
+        public DbSet<GymTest.Models.CashMovementType> CashMovementType { get; set; }
     }
 }
