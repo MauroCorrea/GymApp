@@ -15,6 +15,7 @@ namespace GymTest.Models
 
         [DataType(DataType.Currency)]
         [Display(Name = "Monto")]
+        [DisplayFormat(DataFormatString = "$ {0:n}")]
         [Required]
         public float? Amount { get; set; }
 
