@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using GymTest.Models;
 using Microsoft.EntityFrameworkCore;
+using GymTest.Services;
 
 namespace GymTest
 {
@@ -30,11 +31,13 @@ namespace GymTest
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            //*******Services Injection*******
+            services.AddScoped<IAssistanceLogic, AssistanceLogicImpl>();
+
+            //*******Database context implementation*******
             // Windows
             //services.AddDbContext<GymTestContext>(options =>
             //        options.UseSqlServer(Configuration.GetConnectionString("GymTestContext")));
-
-
             //MAC
             services.AddDbContext<GymTestContext>(options =>
                     options.UseSqlite("Data Source=GymApp.db"));

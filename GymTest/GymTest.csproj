@@ -19,4 +19,7 @@
   <ItemGroup>
     <Compile Remove="Models\SystemContext.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
 </Project>

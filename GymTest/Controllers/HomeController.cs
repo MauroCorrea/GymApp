@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using GymTest.Models;
 using GymTest.Controllers;
+using GymTest.Services;
 
 namespace GymTest.Controllers
 {
@@ -13,9 +14,12 @@ namespace GymTest.Controllers
     {
         private readonly GymTestContext _context;
 
-        public HomeController(GymTestContext context)
+        private readonly IAssistanceLogic _assistanceLogic;
+
+        public HomeController(GymTestContext context, IAssistanceLogic assistanceLogic)
         {
             _context = context;
+            _assistanceLogic = assistanceLogic;
         }
 
         public IActionResult Index()
@@ -35,19 +39,19 @@ namespace GymTest.Controllers
             var users = from m in _context.User
                         select m;
 
-            users = users.Where(s => s.DocumentNumber.Equals(fingerprint));
+            //users = users.Where(s => s.DocumentNumber.Equals(fingerprint));
 
-            if (users.Count()== 1)
+            if (_assistanceLogic.ProcessAssistance(fingerprint))
             {
-                var ass = from a in _context.Assistance select a;
-                ass = ass.Where(a => a.UserId.Equals(users.FirstOrDefault().UserId));
+                //var ass = from a in _context.Assistance select a;
+                //ass = ass.Where(a => a.UserId.Equals(users.FirstOrDefault().UserId));
 
-                ViewData["Message"] = "Lo Encontramos!! Y es la vez número " + (ass.Count() + 1) + " que vine!";
-                Assistance assistance = new Assistance();
-                assistance.User = users.FirstOrDefault();
-                assistance.AssistanceDate = DateTime.Now;
-                _context.Assistance.Add(assistance);
-                _context.SaveChangesAsync();
+                ViewData["Message"] = "Lo Encontramos!!";
+                //Assistance assistance = new Assistance();
+                //assistance.User = users.FirstOrDefault();
+                //assistance.AssistanceDate = DateTime.Now;
+                //_context.Assistance.Add(assistance);
+                //_context.SaveChangesAsync();
             }
             else
             {
