@@ -18,6 +18,18 @@
             @Html.DisplayFor(model => model.PaymentDate)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.MovmentTypeId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MovmentTypeId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.QuantityMovmentType)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.QuantityMovmentType)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.Amount)
         </dt>
         <dd>
@@ -33,7 +45,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="PaymentId" />
-        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
-        <a asp-action="Index" class="btn btn-default">Volver</a>
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
     </form>
 </div>

@@ -4,29 +4,23 @@
     ViewData["Title"] = "Details";
 }
 
-<br />
-<h2>Detalles Usuario</h2>
+<h2>Details</h2>
 
 <div>
+    <h4>User</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.UserName)
+            @Html.DisplayNameFor(model => model.Token)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.UserName)
+            @Html.DisplayFor(model => model.Token)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.FirstName)
+            @Html.DisplayNameFor(model => model.FullName)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.LastName)
+            @Html.DisplayFor(model => model.FullName)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.BirthDate)
@@ -73,7 +67,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.UserId" class="btn btn-default">Editar Usuario</a> |
-    <a asp-controller="Payments" asp-action="Create" asp-route-id="@Model.UserId" class="btn btn-default">Agregar Pago</a> |
-    <a asp-action="Index" class="btn btn-default">Volver</a>
+    <a asp-action="Edit" asp-route-id="@Model.UserId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
 </div>

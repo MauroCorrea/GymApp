@@ -45,29 +45,9 @@ namespace GymTest.Controllers
         }
 
         // GET: Payments/Create
-        public IActionResult Create(int? id)
+        public IActionResult Create()
         {
-            if(id == null)
-            {
-                //ViewData["UserId"] = new SelectList(_context.User, "UserId", "FirstName" + " " + "LastName" + " (" + "UserName" + ")");
-                ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserName");
-            }
-            else
-            {
-                var users = from m in _context.User
-                            select m;
-
-                users = users.Where(s => s.UserId.Equals(id));
-
-                if (users == null)
-                {
-                    return NotFound();
-                }
-
-                //ViewData["UserId"] = new SelectList(users, "UserId", "FirstName" + " " + "LastName" + " (" + "UserName" + ")");
-                ViewData["UserId"] = new SelectList(users, "UserId", "UserName");
-            }
-
+            ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber");
             return View();
         }
 
@@ -76,7 +56,7 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PaymentId,PaymentDate,Amount,UserId")] Payment payment)
+        public async Task<IActionResult> Create([Bind("PaymentId,PaymentDate,MovmentTypeId,QuantityMovmentType,Amount,UserId")] Payment payment)
         {
             if (ModelState.IsValid)
             {
@@ -84,7 +64,7 @@ namespace GymTest.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserName", payment.UserId);
+            ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber", payment.UserId);
             return View(payment);
         }
 
@@ -101,7 +81,7 @@ namespace GymTest.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "UserName", payment.UserId);
+            ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber", payment.UserId);
             return View(payment);
         }
 
@@ -110,7 +90,7 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PaymentId,PaymentDate,Amount,UserId")] Payment payment)
+        public async Task<IActionResult> Edit(int id, [Bind("PaymentId,PaymentDate,MovmentTypeId,QuantityMovmentType,Amount,UserId")] Payment payment)
         {
             if (id != payment.PaymentId)
             {

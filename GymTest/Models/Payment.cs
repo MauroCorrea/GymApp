@@ -9,14 +9,21 @@ namespace GymTest.Models
         [Required]
         public int PaymentId { get; set; }
 
+        [Required(ErrorMessage = "La fecha de pago es obligatoria")]
         [Display(Name = "Fecha pago")]
         [DataType(DataType.Date)]
         public DateTime PaymentDate { get; set; }
 
+        [ForeignKey("MovmentType")]
+        public int MovmentTypeId { get; set; }
+
+        [Required]
+        public int QuantityMovmentType { get; set; }
+
+        [Required(ErrorMessage = "Campo monto es obligatorio")]
         [DataType(DataType.Currency)]
         [Display(Name = "Monto")]
         [DisplayFormat(DataFormatString = "$ {0:n}")]
-        [Required]
         public float? Amount { get; set; }
 
         [ForeignKey("User")]

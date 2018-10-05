@@ -19,6 +19,16 @@
                 <span asp-validation-for="PaymentDate" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="MovmentTypeId" class="control-label"></label>
+                <input asp-for="MovmentTypeId" class="form-control" />
+                <span asp-validation-for="MovmentTypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="QuantityMovmentType" class="control-label"></label>
+                <input asp-for="QuantityMovmentType" class="form-control" />
+                <span asp-validation-for="QuantityMovmentType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Amount" class="control-label"></label>
                 <input asp-for="Amount" class="form-control" />
                 <span asp-validation-for="Amount" class="text-danger"></span>
@@ -29,14 +39,14 @@
                 <span asp-validation-for="UserId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Guardar" class="btn btn-success" />
+                <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index" class="btn btn-default">Volver</a>
+    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

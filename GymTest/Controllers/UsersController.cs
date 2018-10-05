@@ -19,19 +19,9 @@ namespace GymTest.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index()
         {
-            var users = from m in _context.User
-                         select m;
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                users = users.Where(s => s.UserName.ToLower().Contains(searchString.ToLower()) ||
-                                    s.FirstName.ToLower().Contains(searchString.ToLower()) ||
-                                    s.LastName.ToLower().Contains(searchString.ToLower()));
-
-            }
-            return View(await users.ToListAsync());
+            return View(await _context.User.ToListAsync());
         }
 
         // GET: Users/Details/5
@@ -63,7 +53,7 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserId,UserName,FirstName,LastName,BirthDate,DocumentNumber,Email,Address,Phones,SignInDate,Commentaries")] User user)
+        public async Task<IActionResult> Create([Bind("UserId,Token,FullName,BirthDate,DocumentNumber,Email,Address,Phones,SignInDate,Commentaries")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -95,7 +85,7 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserId,UserName,FirstName,LastName,BirthDate,DocumentNumber,Email,Address,Phones,SignInDate,Commentaries")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("UserId,Token,FullName,BirthDate,DocumentNumber,Email,Address,Phones,SignInDate,Commentaries")] User user)
         {
             if (id != user.UserId)
             {

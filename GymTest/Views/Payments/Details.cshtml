@@ -17,6 +17,18 @@
             @Html.DisplayFor(model => model.PaymentDate)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.MovmentTypeId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MovmentTypeId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.QuantityMovmentType)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.QuantityMovmentType)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.Amount)
         </dt>
         <dd>
@@ -26,11 +38,11 @@
             @Html.DisplayNameFor(model => model.User)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.User.UserName)
+            @Html.DisplayFor(model => model.User.DocumentNumber)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.PaymentId" class="btn btn-default">Editar Pago</a> |
-    <a asp-action="Index" class="btn btn-default">Volver</a>
+    <a asp-action="Edit" asp-route-id="@Model.PaymentId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
 </div>
