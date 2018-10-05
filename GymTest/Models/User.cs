@@ -38,7 +38,7 @@ namespace GymTest.Models
         [DataType(DataType.Date)]
         public DateTime SignInDate { get; set; }
 
-        [StringLength(20)]
+        [StringLength(200)]
         [Display(Name = "Comentarios")]
         public string Commentaries { get; set; }
 

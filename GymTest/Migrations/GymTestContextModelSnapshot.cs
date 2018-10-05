@@ -92,7 +92,11 @@ namespace GymTest.Migrations
                     b.Property<float?>("Amount")
                         .IsRequired();
 
+                    b.Property<int>("MovmentTypeId");
+
                     b.Property<DateTime>("PaymentDate");
+
+                    b.Property<int>("QuantityMovmentType");
 
                     b.Property<int>("UserId");
 
@@ -121,26 +125,19 @@ namespace GymTest.Migrations
                         .HasMaxLength(20);
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("FullName")
                         .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50);
+                        .HasMaxLength(100);
 
                     b.Property<string>("Phones")
-                        .IsRequired()
                         .HasMaxLength(200);
 
                     b.Property<DateTime>("SignInDate");
 
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasMaxLength(50);
+                    b.Property<string>("Token")
+                        .IsRequired();
 
                     b.HasKey("UserId");
 

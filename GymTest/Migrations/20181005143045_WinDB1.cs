@@ -1,11 +1,44 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GymTest.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class WinDB1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<int>(
+                name: "MovmentTypeId",
+                table: "Payment",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.AddColumn<int>(
+                name: "QuantityMovmentType",
+                table: "Payment",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.CreateTable(
+                name: "Assistance",
+                columns: table => new
+                {
+                    AssistanceId = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    AssistanceDate = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Assistance", x => x.AssistanceId);
+                    table.ForeignKey(
+                        name: "FK_Assistance_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateTable(
                 name: "CashCategory",
                 columns: table => new
@@ -61,6 +94,11 @@ namespace GymTest.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Assistance_UserId",
+                table: "Assistance",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CashMovement_CashCategoryId",
                 table: "CashMovement",
                 column: "CashCategoryId");
@@ -74,6 +112,9 @@ namespace GymTest.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Assistance");
+
+            migrationBuilder.DropTable(
                 name: "CashMovement");
 
             migrationBuilder.DropTable(
@@ -81,6 +122,61 @@ namespace GymTest.Migrations
 
             migrationBuilder.DropTable(
                 name: "CashMovementType");
+
+            migrationBuilder.DropColumn(
+                name: "FullName",
+                table: "User");
+
+            migrationBuilder.DropColumn(
+                name: "Token",
+                table: "User");
+
+            migrationBuilder.DropColumn(
+                name: "MovmentTypeId",
+                table: "Payment");
+
+            migrationBuilder.DropColumn(
+                name: "QuantityMovmentType",
+                table: "Payment");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "Phones",
+                table: "User",
+                maxLength: 200,
+                nullable: false,
+                oldClrType: typeof(string),
+                oldMaxLength: 200,
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "Email",
+                table: "User",
+                maxLength: 50,
+                nullable: false,
+                oldClrType: typeof(string),
+                oldMaxLength: 50,
+                oldNullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "FirstName",
+                table: "User",
+                maxLength: 50,
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<string>(
+                name: "LastName",
+                table: "User",
+                maxLength: 50,
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<string>(
+                name: "UserName",
+                table: "User",
+                maxLength: 50,
+                nullable: false,
+                defaultValue: "");
         }
     }
 }

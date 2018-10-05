@@ -17,6 +17,8 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Migrations\20181003235557_InitialCreate.cs" />
+    <Compile Remove="Migrations\20181003235557_InitialCreate.Designer.cs" />
     <Compile Remove="Models\SystemContext.cs" />
   </ItemGroup>
   <ItemGroup>

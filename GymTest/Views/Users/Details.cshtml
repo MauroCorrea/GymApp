@@ -3,11 +3,11 @@
 @{
     ViewData["Title"] = "Details";
 }
-
-<h2>Details</h2>
+<br />
+<h2>Detalles Usuario</h2>
 
 <div>
-    <h4>User</h4>
+    <h4>Usuario</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -67,6 +67,7 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.UserId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.UserId" class="btn btn-default">Editar Usuario</a> |
+    <a asp-controller="Payments" asp-action="Create" asp-route-id="@Model.UserId" class="btn btn-default">Agregar Pago</a> |
+    <a asp-action="Index" class="btn btn-default">Volver</a>
 </div>

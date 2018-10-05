@@ -14,16 +14,15 @@ namespace GymTest.Migrations
                 {
                     UserId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    UserName = table.Column<string>(maxLength: 50, nullable: false),
-                    FirstName = table.Column<string>(maxLength: 50, nullable: false),
-                    LastName = table.Column<string>(maxLength: 50, nullable: false),
-                    BirthDate = table.Column<DateTime>(nullable: false),
+                    Token = table.Column<string>(maxLength: 50, nullable: false),
+                    FullName = table.Column<string>(maxLength: 100, nullable: false),
+                    BirthDate = table.Column<DateTime>(nullable: true),
                     DocumentNumber = table.Column<string>(maxLength: 20, nullable: false),
-                    Email = table.Column<string>(maxLength: 50, nullable: false),
+                    Email = table.Column<string>(maxLength: 50, nullable: true),
                     Address = table.Column<string>(maxLength: 200, nullable: true),
-                    Phones = table.Column<string>(maxLength: 200, nullable: false),
+                    Phones = table.Column<string>(maxLength: 15, nullable: true),
                     SignInDate = table.Column<DateTime>(nullable: false),
-                    Commentaries = table.Column<string>(maxLength: 20, nullable: true)
+                    Commentaries = table.Column<string>(maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
