@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using GymTest.Models;
+using GymTest.Data;
 using Microsoft.EntityFrameworkCore;
 using GymTest.Services;
 

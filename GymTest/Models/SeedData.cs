@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using System;
+using GymTest.Data;
 
 namespace GymTest.Models
 {

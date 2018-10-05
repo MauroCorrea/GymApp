@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using GymTest.Models;
 using GymTest.Controllers;
 using GymTest.Services;
+using GymTest.Data;
 
 namespace GymTest.Controllers
 {
