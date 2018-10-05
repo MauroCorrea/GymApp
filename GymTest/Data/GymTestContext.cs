@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace GymTest.Models
+namespace GymTest.Data
 {
     public class GymTestContext : DbContext
     {
