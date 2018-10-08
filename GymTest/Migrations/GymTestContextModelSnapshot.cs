@@ -84,6 +84,20 @@ namespace GymTest.Migrations
                     b.ToTable("CashMovementType");
                 });
 
+            modelBuilder.Entity("GymTest.Models.MovementType", b =>
+                {
+                    b.Property<int>("MovementTypeId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(20);
+
+                    b.HasKey("MovementTypeId");
+
+                    b.ToTable("MovementType");
+                });
+
             modelBuilder.Entity("GymTest.Models.Payment", b =>
                 {
                     b.Property<int>("PaymentId")
@@ -102,6 +116,8 @@ namespace GymTest.Migrations
 
                     b.HasKey("PaymentId");
 
+                    b.HasIndex("MovmentTypeId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Payment");
@@ -118,7 +134,7 @@ namespace GymTest.Migrations
                     b.Property<DateTime>("BirthDate");
 
                     b.Property<string>("Commentaries")
-                        .HasMaxLength(20);
+                        .HasMaxLength(200);
 
                     b.Property<string>("DocumentNumber")
                         .IsRequired()
@@ -167,6 +183,11 @@ namespace GymTest.Migrations
 
             modelBuilder.Entity("GymTest.Models.Payment", b =>
                 {
+                    b.HasOne("GymTest.Models.MovementType", "MovmentType")
+                        .WithMany()
+                        .HasForeignKey("MovmentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("GymTest.Models.User", "User")
                         .WithMany("Payments")
                         .HasForeignKey("UserId")

@@ -3,11 +3,11 @@
 @{
     ViewData["Title"] = "Details";
 }
-<br />
-<h2>Detalles de Pago</h2>
+
+<h2>Details</h2>
 
 <div>
-    <h4>Pago</h4>
+    <h4>Payment</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -17,10 +17,10 @@
             @Html.DisplayFor(model => model.PaymentDate)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.MovmentTypeId)
+            @Html.DisplayNameFor(model => model.MovmentType)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.MovmentTypeId)
+            @Html.DisplayFor(model => model.MovmentType.Description)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.QuantityMovmentType)
@@ -43,6 +43,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.PaymentId" class="btn btn-default">Editar Pago</a> |
-    <a asp-action="Index" class="btn btn-default">Volver</a>
+    <a asp-action="Edit" asp-route-id="@Model.PaymentId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
 </div>

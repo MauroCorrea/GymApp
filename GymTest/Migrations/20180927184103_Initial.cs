@@ -29,6 +29,23 @@ namespace GymTest.Migrations
                     table.PrimaryKey("PK_User", x => x.UserId);
                 });
 
+
+
+            migrationBuilder.CreateTable(
+                name: "MovementType",
+                columns: table => new
+                {
+                    MovementTypeId = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Description = table.Column<string>(maxLength: 20, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MovementType", x => x.MovementTypeId);
+                });
+
+
+
             migrationBuilder.CreateTable(
                 name: "Payment",
                 columns: table => new
@@ -36,6 +53,7 @@ namespace GymTest.Migrations
                     PaymentId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     PaymentDate = table.Column<DateTime>(nullable: false),
+                    MovementTypeId = table.Column<DateTime>(nullable: false),
                     Amount = table.Column<float>(nullable: false),
                     UserId = table.Column<int>(nullable: false)
                 },
@@ -48,16 +66,38 @@ namespace GymTest.Migrations
                         principalTable: "User",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Payment_MovementType_MovmentTypeId",
+                        column: x => x.MovementTypeId,
+                        principalTable: "MovementType",
+                        principalColumn: "MovementTypeId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Payment_UserId",
                 table: "Payment",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payment_MovmentTypeId",
+                table: "Payment",
+                column: "MovmentTypeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Payment_MovementType_MovmentTypeId",
+                table: "Payment");
+
+            migrationBuilder.DropTable(
+                name: "MovementType");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Payment_MovmentTypeId",
+                table: "Payment");
+
             migrationBuilder.DropTable(
                 name: "Payment");
 

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using GymTest.Models;
 
 namespace GymTest.Data
 {
@@ -20,5 +21,7 @@ namespace GymTest.Data
         public DbSet<GymTest.Models.CashMovement> CashMovement { get; set; }
 
         public DbSet<GymTest.Models.CashMovementType> CashMovementType { get; set; }
+
+        public DbSet<GymTest.Models.MovementType> MovementType { get; set; }
     }
 }

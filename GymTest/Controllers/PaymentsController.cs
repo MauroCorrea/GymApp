@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using GymTest.Models;
 using GymTest.Data;
+using GymTest.Models;
 
 namespace GymTest.Controllers
 {
@@ -22,7 +22,7 @@ namespace GymTest.Controllers
         // GET: Payments
         public async Task<IActionResult> Index()
         {
-            var gymTestContext = _context.Payment.Include(p => p.User);
+            var gymTestContext = _context.Payment.Include(p => p.MovmentType).Include(p => p.User);
             return View(await gymTestContext.ToListAsync());
         }
 
@@ -35,6 +35,7 @@ namespace GymTest.Controllers
             }
 
             var payment = await _context.Payment
+                .Include(p => p.MovmentType)
                 .Include(p => p.User)
                 .FirstOrDefaultAsync(m => m.PaymentId == id);
             if (payment == null)
@@ -48,6 +49,7 @@ namespace GymTest.Controllers
         // GET: Payments/Create
         public IActionResult Create()
         {
+            ViewData["MovmentTypeId"] = new SelectList(_context.MovementType, "MovementTypeId", "Description");
             ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber");
             return View();
         }
@@ -65,6 +67,7 @@ namespace GymTest.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["MovmentTypeId"] = new SelectList(_context.MovementType, "MovementTypeId", "Description", payment.MovmentTypeId);
             ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber", payment.UserId);
             return View(payment);
         }
@@ -82,6 +85,7 @@ namespace GymTest.Controllers
             {
                 return NotFound();
             }
+            ViewData["MovmentTypeId"] = new SelectList(_context.MovementType, "MovementTypeId", "Description", payment.MovmentTypeId);
             ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber", payment.UserId);
             return View(payment);
         }
@@ -118,6 +122,7 @@ namespace GymTest.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["MovmentTypeId"] = new SelectList(_context.MovementType, "MovementTypeId", "Description", payment.MovmentTypeId);
             ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber", payment.UserId);
             return View(payment);
         }
@@ -131,6 +136,7 @@ namespace GymTest.Controllers
             }
 
             var payment = await _context.Payment
+                .Include(p => p.MovmentType)
                 .Include(p => p.User)
                 .FirstOrDefaultAsync(m => m.PaymentId == id);
             if (payment == null)

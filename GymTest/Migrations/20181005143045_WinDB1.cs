@@ -132,10 +132,6 @@ namespace GymTest.Migrations
                 table: "User");
 
             migrationBuilder.DropColumn(
-                name: "MovmentTypeId",
-                table: "Payment");
-
-            migrationBuilder.DropColumn(
                 name: "QuantityMovmentType",
                 table: "Payment");
 

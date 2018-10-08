@@ -4,11 +4,11 @@
     ViewData["Title"] = "Delete";
 }
 
-<h2>Eliminar Pago</h2>
+<h2>Delete</h2>
 
-<h3>¿Está seguro que desea eliminar el Pago?</h3>
+<h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>Pago</h4>
+    <h4>Payment</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -18,10 +18,10 @@
             @Html.DisplayFor(model => model.PaymentDate)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.MovmentTypeId)
+            @Html.DisplayNameFor(model => model.MovmentType)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.MovmentTypeId)
+            @Html.DisplayFor(model => model.MovmentType.Description)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.QuantityMovmentType)
@@ -45,7 +45,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="PaymentId" />
-        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
-        <a asp-action="Index" class="btn btn-default">Volver</a>
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
     </form>
 </div>

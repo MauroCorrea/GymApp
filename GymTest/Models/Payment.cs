@@ -17,6 +17,8 @@ namespace GymTest.Models
         [ForeignKey("MovmentType")]
         public int MovmentTypeId { get; set; }
 
+        public virtual MovementType MovmentType { get; set; }
+
         [Required]
         public int QuantityMovmentType { get; set; }
 
