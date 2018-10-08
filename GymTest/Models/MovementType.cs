@@ -2,6 +2,12 @@
 
 namespace GymTest.Models
 {
+    public enum PaymentTypeEnum
+    {
+        Monthly = 1,
+        ByAssistances = 2
+    }
+
     public class MovementType
     {
         [Required]
