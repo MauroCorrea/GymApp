@@ -106,7 +106,7 @@ namespace GymTest.Migrations
                     b.Property<float?>("Amount")
                         .IsRequired();
 
-                    b.Property<int>("MovmentTypeId");
+                    b.Property<int>("MovementTypeId");
 
                     b.Property<DateTime>("PaymentDate");
 
@@ -116,7 +116,7 @@ namespace GymTest.Migrations
 
                     b.HasKey("PaymentId");
 
-                    b.HasIndex("MovmentTypeId");
+                    b.HasIndex("MovementTypeId");
 
                     b.HasIndex("UserId");
 
@@ -185,7 +185,7 @@ namespace GymTest.Migrations
                 {
                     b.HasOne("GymTest.Models.MovementType", "MovmentType")
                         .WithMany()
-                        .HasForeignKey("MovmentTypeId")
+                        .HasForeignKey("MovementTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("GymTest.Models.User", "User")

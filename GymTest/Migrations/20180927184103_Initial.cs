@@ -67,7 +67,7 @@ namespace GymTest.Migrations
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Payment_MovementType_MovmentTypeId",
+                        name: "FK_Payment_MovementType_MovementTypeId",
                         column: x => x.MovementTypeId,
                         principalTable: "MovementType",
                         principalColumn: "MovementTypeId",
@@ -80,22 +80,22 @@ namespace GymTest.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Payment_MovmentTypeId",
+                name: "IX_Payment_MovementTypeId",
                 table: "Payment",
-                column: "MovmentTypeId");
+                column: "MovementTypeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Payment_MovementType_MovmentTypeId",
+                name: "FK_Payment_MovementType_MovementTypeId",
                 table: "Payment");
 
             migrationBuilder.DropTable(
                 name: "MovementType");
 
             migrationBuilder.DropIndex(
-                name: "IX_Payment_MovmentTypeId",
+                name: "IX_Payment_MovementTypeId",
                 table: "Payment");
 
             migrationBuilder.DropTable(

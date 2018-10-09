@@ -7,11 +7,6 @@ namespace GymTest.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "MovmentTypeId",
-                table: "Payment",
-                nullable: false,
-                defaultValue: 0);
 
             migrationBuilder.AddColumn<int>(
                 name: "QuantityMovmentType",

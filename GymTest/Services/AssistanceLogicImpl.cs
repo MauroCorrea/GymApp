@@ -34,9 +34,9 @@ namespace GymTest.Services
                 if (payments.Count() > 0)
                 {
                     var newestPayment = payments.OrderByDescending(p => p.PaymentDate).First();
-                    if (newestPayment.MovmentTypeId > 0)
+                    if (newestPayment.MovementTypeId > 0)
                     {
-                        switch (newestPayment.MovmentTypeId)
+                        switch (newestPayment.MovementTypeId)
                         {
                             case (int)PaymentTypeEnum.Monthly:
                                 var monthsPayed = newestPayment.QuantityMovmentType;

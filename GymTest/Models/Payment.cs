@@ -15,7 +15,7 @@ namespace GymTest.Models
         public DateTime PaymentDate { get; set; }
 
         [ForeignKey("MovmentType")]
-        public int MovmentTypeId { get; set; }
+        public int MovementTypeId { get; set; }
 
         public virtual MovementType MovmentType { get; set; }
 

@@ -94,7 +94,7 @@ namespace GymTest.Migrations
                     b.Property<float?>("Amount")
                         .IsRequired();
 
-                    b.Property<int>("MovmentTypeId");
+                    b.Property<int>("MovementTypeId");
 
                     b.Property<DateTime>("PaymentDate");
 
