@@ -1,85 +1,85 @@
 ﻿@model IEnumerable<GymTest.Models.User>
 
-@{
+    @{
     ViewData["Title"] = "Index";
-}
-<br />
-<h2>Administración de Usuarios</h2>
+    }
+    <br />
+    <h2>Administración de Usuarios</h2>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Nuevo Usuario</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Token)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BirthDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DocumentNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phones)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SignInDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Commentaries)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Token)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BirthDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DocumentNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phones)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SignInDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Commentaries)
-            </td>
-            <td>
-                <div class="btn-group-vertical">
-                    <a asp-action="Edit" asp-route-id="@item.UserId" class="btn btn-primary">Editar</a>
-                    <a asp-action="Details" asp-route-id="@item.UserId" class="btn btn-primary">Detalles</a>
-                    <a asp-action="Delete" asp-route-id="@item.UserId" class="btn btn-danger">Eliminar</a>
-                </div>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Nuevo Usuario</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Token)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FullName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BirthDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DocumentNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Phones)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SignInDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Commentaries)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Token)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BirthDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DocumentNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phones)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SignInDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Commentaries)
+                </td>
+                <td>
+                    <div class="btn-group-vertical">
+                        <a asp-action="Edit" asp-route-id="@item.UserId" class="btn btn-primary">Editar</a>
+                        <a asp-action="Details" asp-route-id="@item.UserId" class="btn btn-primary">Detalles</a>
+                        <a asp-action="Delete" asp-route-id="@item.UserId" class="btn btn-danger">Eliminar</a>
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
