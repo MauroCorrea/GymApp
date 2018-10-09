@@ -37,10 +37,10 @@ namespace GymTest.Controllers
 
         public IActionResult Contact(string fingerprint)
         {
-            var users = from m in _context.User
+            /*var users = from m in _context.User
                         select m;
 
-            //users = users.Where(s => s.DocumentNumber.Equals(fingerprint));
+            users = users.Where(s => s.DocumentNumber.Equals(fingerprint));*/
 
             if (_assistanceLogic.ProcessAssistance(fingerprint))
             {

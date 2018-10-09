@@ -21,7 +21,7 @@ namespace GymTest.Services
             var users = from m in _context.User
                         select m;
 
-            users = users.Where(s => s.Email.ToLower().Equals(userToken.ToLower()));
+            users = users.Where(s => s.Token.ToLower().Equals(userToken.ToLower()));
 
             if (users.Count() == 1)
             {
