@@ -22,15 +22,14 @@
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
+                    <div class="containerToggle navbar-brand" onclick="showX(this)" data-toggle="collapse" data-target="#main-menu">
+                        <div class="bar1"></div>
+                        <div class="bar2"></div>
+                        <div class="bar3"></div>
+                    </div>
                     <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">GymTest</a>
                 </div>
-                <div class="navbar-collapse collapse">
+                <div id="main-menu" class="collapse">
                     <ul class="nav navbar-nav">
                         <li><a asp-area="" asp-controller="Users" asp-action="Index">Usuarios</a></li>
                         <li><a asp-area="" asp-controller="Payments" asp-action="Index">Pagos</a></li>
@@ -41,8 +40,8 @@
                         <li>
                             <form asp-controller="Home" asp-action="Contact">
                                 <p>
-                                    <input type="text" name="Fingerprint">
-                                    <input type="submit" value="Consultar Huella" class="btn btn-default" />
+                                    <input type="text" name="Fingerprint" size="10">
+                                    <input type="submit" value="Consultar" class="btn btn-default" />
                                 </p>
                             </form>
                         </li>
@@ -68,9 +67,14 @@
             <script src="~/js/jquery-1.12.4.js" asp-append-version="true"></script>
             <script src="~/js/jquery-ui.js" asp-append-version="true"></script>
             <script>
-            $( function() {
-                $( ".datepicker" ).datepicker();
-              } );</script>
+                $(function () {
+                    $(".datepicker").datepicker();
+                });</script>
+            <script>
+                function showX(x) {
+                    x.classList.toggle("change");
+                }
+            </script>
         </environment>
         <environment exclude="Development">
             <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
