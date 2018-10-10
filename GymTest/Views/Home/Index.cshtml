@@ -1,7 +1,12 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
+<form asp-controller="Home" asp-action="Contact">
+    <p>
+        <input type="text" name="Fingerprint" size="10" autofocus>
+        <input type="submit" value="Consultar" class="btn btn-default" />
+    </p>
+</form>
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
     <ol class="carousel-indicators">
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
