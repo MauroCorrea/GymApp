@@ -47,10 +47,21 @@ namespace GymTest.Controllers
         }
 
         // GET: Payments/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
             ViewData["MovementTypeId"] = new SelectList(_context.MovementType, "MovementTypeId", "Description");
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber");
+
+            if (id != null)
+            {
+                var users = from u in _context.User select u;
+                users = users.Where(u => u.UserId.Equals(id));
+
+                ViewData["UserId"] = new SelectList(users, "UserId", "DocumentNumber");
+            }
+            else
+            {
+                ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber");
+            }
             return View();
         }
 
