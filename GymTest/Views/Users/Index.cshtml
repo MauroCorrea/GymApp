@@ -1,49 +1,58 @@
 ﻿@model IEnumerable<GymTest.Models.User>
 
-    @{
+@{
     ViewData["Title"] = "Index";
-    }
-    <br />
-    <h2>Administración de Usuarios</h2>
+}
+<br />
+<h2>Administración de Usuarios</h2>
 
+<p>
+    <a asp-action="Create" class="btn btn-primary">Nuevo Usuario</a>
+</p>
+
+<form asp-controller="Users" asp-action="Index">
     <p>
-        <a asp-action="Create" class="btn btn-primary">Nuevo Usuario</a>
+        Filtro inteligente: <input type="text" name="SearchString">
+        <input type="submit" value="Filtrar" />
     </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Token)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FullName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.BirthDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DocumentNumber)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Email)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Address)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Phones)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.SignInDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Commentaries)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model) {
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Token)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BirthDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DocumentNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phones)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SignInDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Commentaries)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Token)
@@ -80,6 +89,6 @@
                     </div>
                 </td>
             </tr>
-            }
-        </tbody>
-    </table>
+        }
+    </tbody>
+</table>

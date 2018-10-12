@@ -20,9 +20,19 @@ namespace GymTest.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.User.ToListAsync());
+            var users = from m in _context.User
+                        select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                users = users.Where(s => s.FullName.ToLower().Contains(searchString.ToLower()) ||
+                                    s.DocumentNumber.ToLower().Contains(searchString.ToLower()));
+
+            }
+            return View(await users.ToListAsync());
+
         }
 
         // GET: Users/Details/5
