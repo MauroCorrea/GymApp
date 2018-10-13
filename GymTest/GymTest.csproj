@@ -24,4 +24,10 @@
   <ItemGroup>
     <Folder Include="Services\" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Remove="wwwroot\images\mustpay.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\images\mustpay.gif" />
+  </ItemGroup>
 </Project>

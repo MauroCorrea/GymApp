@@ -34,6 +34,9 @@ namespace GymTest
             //*******Services Injection*******
             services.AddScoped<IAssistanceLogic, AssistanceLogicImpl>();
 
+            //*******Services Injection*******
+            services.AddScoped<ISendEmail, SendEmailImpl>();
+
             //*******Database context implementation*******
             // Windows
             //services.AddDbContext<GymTestContext>(options =>

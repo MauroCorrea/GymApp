@@ -4,4 +4,11 @@
 <h2>@ViewData["Title"]</h2>
 <h3>@ViewData["Message"]</h3>
 
-<img src="~/images/hello.gif" alt="Funny image">
+@if (ViewData["ImgCondition"].Equals("OK"))
+{
+    <img src="~/images/hello.gif" alt="Funny image" id="imgOK">
+}
+else
+{
+    <img src="~/images/mustpay.gif" alt="Funny image" id="imgPAY">
+}

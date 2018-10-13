@@ -17,10 +17,13 @@ namespace GymTest.Controllers
 
         private readonly IAssistanceLogic _assistanceLogic;
 
-        public HomeController(GymTestContext context, IAssistanceLogic assistanceLogic)
+        private readonly ISendEmail _sendEmail;
+
+        public HomeController(GymTestContext context, IAssistanceLogic assistanceLogic, ISendEmail sendEmail)
         {
             _context = context;
             _assistanceLogic = assistanceLogic;
+            _sendEmail = sendEmail;
         }
 
         public IActionResult Index()
@@ -48,6 +51,9 @@ namespace GymTest.Controllers
                 //ass = ass.Where(a => a.UserId.Equals(users.FirstOrDefault().UserId));
 
                 ViewData["Message"] = "Lo Encontramos!!";
+                ViewData["ImgCondition"] = "OK";
+                //_sendEmail.SendEmail("mauro.correa1988@gmail.com"); - envio de mail
+
                 //Assistance assistance = new Assistance();
                 //assistance.User = users.FirstOrDefault();
                 //assistance.AssistanceDate = DateTime.Now;
@@ -57,6 +63,7 @@ namespace GymTest.Controllers
             else
             {
                 ViewData["Message"] = "No lo encontramos :(";
+                ViewData["ImgCondition"] = "PAY";
             }
 
             return View();
@@ -71,6 +78,10 @@ namespace GymTest.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public bool getTrue(){
+            return true;
         }
     }
 }
