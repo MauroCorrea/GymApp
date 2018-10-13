@@ -9,7 +9,7 @@ namespace GymTest.Models
         [Required]
         public int AssistanceId { get; set; }
 
-        [Display(Name = "Fecha asistencia")]
+        [Display(Name = "Fecha Asistencia")]
         [DataType(DataType.Date)]
         public DateTime AssistanceDate { get; set; }
 

@@ -13,7 +13,7 @@
 <form asp-controller="Users" asp-action="Index">
     <p>
         Filtro inteligente: <input type="text" name="SearchString">
-        <input type="submit" value="Filtrar" />
+        <input type="submit" value="Filtrar" class="btn btn-default"/>
     </p>
 </form>
 
@@ -21,13 +21,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Token)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.FullName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BirthDate)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DocumentNumber)
@@ -41,12 +35,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Phones)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SignInDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Commentaries)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -55,13 +43,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Token)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.FullName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BirthDate)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DocumentNumber)
@@ -76,14 +58,8 @@
                     @Html.DisplayFor(modelItem => item.Phones)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.SignInDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Commentaries)
-                </td>
-                <td>
-                    <div class="btn-group-vertical">
-                        <a asp-action="Edit" asp-route-id="@item.UserId" class="btn btn-primary">Editar</a>
+                    <div class="btn-group">
+                        <a asp-action="Edit" asp-route-id="@item.UserId" class="btn btn-primary">Modificar</a>
                         <a asp-action="Details" asp-route-id="@item.UserId" class="btn btn-primary">Detalles</a>
                         <a asp-action="Delete" asp-route-id="@item.UserId" class="btn btn-danger">Eliminar</a>
                     </div>

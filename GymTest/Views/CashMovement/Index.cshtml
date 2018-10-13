@@ -7,7 +7,7 @@
 <h2>Movimientos de caja</h2>
 
 <p>
-    <a asp-action="Create">Crear movimiento de caja</a>
+    <a asp-action="Create" class="btn btn-primary">Crear movimiento de caja</a>
 </p>
 <table class="table">
     <thead>
@@ -43,9 +43,11 @@
                 @Html.DisplayFor(modelItem => item.CashCategory.CashCategoryDescription)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.CashMovementId" class="btn btn-primary">Modificar</a> 
-                <a asp-action="Details" asp-route-id="@item.CashMovementId" class="btn btn-primary">Detalle</a> 
-                <a asp-action="Delete" asp-route-id="@item.CashMovementId" class="btn btn-danger">Eliminar</a>
+                <div class="btn-group">
+                    <a asp-action="Edit" asp-route-id="@item.CashMovementId" class="btn btn-primary">Modificar</a>
+                    <a asp-action="Details" asp-route-id="@item.CashMovementId" class="btn btn-primary">Detalle</a>
+                    <a asp-action="Delete" asp-route-id="@item.CashMovementId" class="btn btn-danger">Eliminar</a>
+                </div>
             </td>
         </tr>
 }
