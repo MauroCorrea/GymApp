@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Linq;
 using GymTest.Data;
 
 namespace GymTest.Models
@@ -21,23 +22,30 @@ namespace GymTest.Models
                 serviceProvider.GetRequiredService<DbContextOptions<GymTestContext>>()))
             {
                 // Look for any movies.
-                if (true) // levantar la info del appsettings
+                //if (true) // levantar la info del appsettings
+                //{
+                //    return;   // DB has been seeded
+                //}
+
+                var moveTypes = from m in context.MovementType
+                                select m;
+
+                if (moveTypes.Count() != 2)
                 {
-                    return;   // DB has been seeded
+                    context.MovementType.AddRange(
+                        new MovementType
+                        {
+                            Description = "Mensual",
+                            MovementTypeId = 1
+                        },
+                        new MovementType
+                        {
+                            Description = "Por asistencia",
+                            MovementTypeId = 2
+                        }
+                    );
                 }
 
-                //context.CashCategories.AddRange(
-                //    new CashCategory
-                //     {
-                //    CashCategoryDescription = "Categoria 1",
-                //    CashCategoryId = 1
-                //     }, 
-                //    new CashCategory
-                //     {
-                //    CashCategoryDescription = "Categoria 2",
-                //    CashCategoryId = 2
-                //     }
-                //);
                 context.SaveChanges();
             }
         }

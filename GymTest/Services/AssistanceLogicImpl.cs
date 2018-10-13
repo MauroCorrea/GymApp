@@ -80,12 +80,12 @@ namespace GymTest.Services
                 //error: solo 1 usuario deber identificado por token
                 return objectToReturn;
             }
-            //TODO: Creamos asistencia en caso de devolver solo true? que pasa si aunque sea false, el usuario le permiten entrenar/bailar?
-            //Assistance assistance = new Assistance();
-            //assistance.User = users.FirstOrDefault();
-            //assistance.AssistanceDate = DateTime.Now;
-            //_context.Assistance.Add(assistance);
-            //_context.SaveChangesAsync();
+            //TODO: Creamos asistencia en caso de que el usuario pueda entrar. Caso contrario, queda a criterio del lugar si pasa o no.
+            Assistance assistance = new Assistance();
+            assistance.User = users.First();
+            assistance.AssistanceDate = DateTime.Now;
+            _context.Assistance.Add(assistance);
+            _context.SaveChangesAsync();
 
             return true;
         }
