@@ -20,7 +20,7 @@ namespace GymTest.Controllers
         }
 
         // GET: Assistances
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int userId)
         {
             var gymTestContext = _context.Assistance.Include(a => a.User);
             return View(await gymTestContext.ToListAsync());
