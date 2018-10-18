@@ -1,11 +1,9 @@
 ﻿@model GymTest.Models.User
-
 @{
     ViewData["Title"] = "Details";
 }
 <br />
 <h2>Detalles Usuario</h2>
-
 <div>
     <h4>Usuario</h4>
     <hr />
@@ -69,5 +67,6 @@
 <div>
     <a asp-action="Edit" asp-route-id="@Model.UserId" class="btn btn-default">Editar Usuario</a> |
     <a asp-controller="Payments" asp-action="Create" asp-route-id="@Model.UserId" class="btn btn-default">Agregar Pago</a> |
+    <a asp-controller="Assistances" asp-action="Index" asp-route-id="@Model.UserId" class="btn btn-default">Ver Asistencias</a> |
     <a asp-action="Index" class="btn btn-default">Volver</a>
 </div>

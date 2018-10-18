@@ -20,10 +20,18 @@ namespace GymTest.Controllers
         }
 
         // GET: Assistances
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
-            var gymTestContext = _context.Assistance.Include(a => a.User);
-            return View(await gymTestContext.ToListAsync());
+            var ret = from ass in _context.Assistance.Include("User")
+                      select ass;
+
+            if (id > 0)
+            {
+                Console.WriteLine("Este es el parametro userId" + id);
+                ret = ret.Where(x => x.UserId == id);
+            }
+
+            return View(await ret.ToListAsync());
         }
 
         // GET: Assistances/Details/5
