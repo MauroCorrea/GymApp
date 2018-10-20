@@ -2,6 +2,7 @@
 using System.Linq;
 using GymTest.Data;
 using GymTest.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace GymTest.Services
 {
@@ -10,9 +11,12 @@ namespace GymTest.Services
 
         private readonly GymTestContext _context;
 
-        public AssistanceLogicImpl(GymTestContext context)
+        public IConfiguration Configuration { get; }
+
+        public AssistanceLogicImpl(GymTestContext context, IConfiguration configuration)
         {
             _context = context;
+            Configuration = configuration;
         }
 
         public bool ProcessAssistance(string userToken)
@@ -38,6 +42,7 @@ namespace GymTest.Services
                     {
                         switch (newestPayment.MovementTypeId)
                         {
+                            #region Mensual
                             case (int)PaymentTypeEnum.Monthly:
                                 var monthsPayed = newestPayment.QuantityMovmentType;
 
@@ -50,6 +55,8 @@ namespace GymTest.Services
                                     return objectToReturn;
 
                                 break;
+                            #endregion
+                            #region Por asistencias
                             case (int)PaymentTypeEnum.ByAssistances:
                                 var ass = from a in _context.Assistance select a;
 
@@ -59,8 +66,25 @@ namespace GymTest.Services
                                 if (ass.Count() >= newestPayment.QuantityMovmentType)
                                     return objectToReturn;
                                 break;
+                            #endregion
+
                             default:
                                 return objectToReturn;
+                        }
+                        var lastAsistance = _context.Assistance.
+                                                    Where(a => a.UserId == userid).
+                                                    OrderByDescending(a => a.AssistanceDate).FirstOrDefault();
+                        if (lastAsistance == null ||
+                            (DateTime.Now - lastAsistance.AssistanceDate).TotalHours > Configuration.get)
+                        {
+                            //Creamos asistencia en caso de que el usuario pueda entrar. Caso contrario, queda a criterio del lugar si pasa o no.
+                            Assistance assistance = new Assistance
+                            {
+                                User = users.First(),
+                                AssistanceDate = DateTime.Now
+                            };
+                            _context.Assistance.Add(assistance);
+                            _context.SaveChangesAsync();
                         }
                     }
                     else//error: ultimo pago sin tipo de membresía
@@ -80,12 +104,6 @@ namespace GymTest.Services
                 //error: solo 1 usuario deber identificado por token
                 return objectToReturn;
             }
-            //TODO: Creamos asistencia en caso de que el usuario pueda entrar. Caso contrario, queda a criterio del lugar si pasa o no.
-            Assistance assistance = new Assistance();
-            assistance.User = users.First();
-            assistance.AssistanceDate = DateTime.Now;
-            _context.Assistance.Add(assistance);
-            _context.SaveChangesAsync();
 
             return true;
         }
