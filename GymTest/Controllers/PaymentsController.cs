@@ -97,7 +97,7 @@ namespace GymTest.Controllers
                 return NotFound();
             }
             ViewData["MovementTypeId"] = new SelectList(_context.MovementType, "MovementTypeId", "Description", payment.MovementTypeId);
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber", payment.UserId);
+            ViewData["UserId"] = new SelectList(_context.User.Where(u => u.UserId == payment.UserId), "UserId", "FullName", payment.UserId);
             return View(payment);
         }
 
@@ -134,7 +134,7 @@ namespace GymTest.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["MovementTypeId"] = new SelectList(_context.MovementType, "MovementTypeId", "Description", payment.MovementTypeId);
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber", payment.UserId);
+            ViewData["UserId"] = new SelectList(_context.User.Where(u => u.UserId == payment.UserId), "UserId", "DocumentNumber", payment.UserId);
             return View(payment);
         }
 
