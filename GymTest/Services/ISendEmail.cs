@@ -1,8 +1,9 @@
-﻿using System;
+﻿using System.Collections.Generic;
+
 namespace GymTest.Services
 {
     public interface ISendEmail
     {
-        void SendEmail(string mailTo);
+        void SendEmail(Dictionary<string, string> bodyData, string templateName, string subject, List<string> receipts);
     }
 }

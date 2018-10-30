@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using GymTest.Data;
 using Microsoft.EntityFrameworkCore;
 using GymTest.Services;
+using GymTest.Models;
 
 namespace GymTest
 {
@@ -14,10 +15,10 @@ namespace GymTest
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfiguration _configuration { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -28,6 +29,9 @@ namespace GymTest
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+
+            services.Configure<AppSettings>(_configuration.GetSection("AppSettings"));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 

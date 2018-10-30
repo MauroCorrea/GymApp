@@ -17,13 +17,10 @@ namespace GymTest.Controllers
 
         private readonly IAssistanceLogic _assistanceLogic;
 
-        private readonly ISendEmail _sendEmail;
-
-        public HomeController(GymTestContext context, IAssistanceLogic assistanceLogic, ISendEmail sendEmail)
+        public HomeController(GymTestContext context, IAssistanceLogic assistanceLogic)
         {
             _context = context;
             _assistanceLogic = assistanceLogic;
-            _sendEmail = sendEmail;
         }
 
         public IActionResult Index()
@@ -40,25 +37,14 @@ namespace GymTest.Controllers
 
         public IActionResult Contact(string fingerprint)
         {
-            /*var users = from m in _context.User
-                        select m;
-
-            users = users.Where(s => s.DocumentNumber.Equals(fingerprint));*/
 
             if (_assistanceLogic.ProcessAssistance(fingerprint))
             {
-                //var ass = from a in _context.Assistance select a;
-                //ass = ass.Where(a => a.UserId.Equals(users.FirstOrDefault().UserId));
-
                 ViewData["Message"] = "Lo Encontramos!!";
                 ViewData["ImgCondition"] = "OK";
-                //_sendEmail.SendEmail("mauro.correa1988@gmail.com"); - envio de mail
 
-                //Assistance assistance = new Assistance();
-                //assistance.User = users.FirstOrDefault();
-                //assistance.AssistanceDate = DateTime.Now;
-                //_context.Assistance.Add(assistance);
-                //_context.SaveChangesAsync();
+                _assistanceLogic.ProcessAssistanceNotification(fingerprint);
+
             }
             else
             {
@@ -80,7 +66,8 @@ namespace GymTest.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public bool getTrue(){
+        public bool getTrue()
+        {
             return true;
         }
     }

@@ -3,6 +3,7 @@ using System.Linq;
 using GymTest.Data;
 using GymTest.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace GymTest.Services
 {
@@ -11,12 +12,18 @@ namespace GymTest.Services
 
         private readonly GymTestContext _context;
 
-        public IConfiguration Configuration { get; }
+        public IConfiguration _configuration { get; }
 
-        public AssistanceLogicImpl(GymTestContext context, IConfiguration configuration)
+        private readonly ISendEmail _sendEmail;
+
+        private readonly IOptions<AppSettings> _appSettings;
+
+        public AssistanceLogicImpl(GymTestContext context, IConfiguration configuration, IOptions<AppSettings> app, ISendEmail sendEmail)
         {
+            _appSettings = app;
             _context = context;
-            Configuration = configuration;
+            _configuration = configuration;
+            _sendEmail = sendEmail;
         }
 
         public bool ProcessAssistance(string userToken)
@@ -75,7 +82,7 @@ namespace GymTest.Services
                                                     Where(a => a.UserId == userid).
                                                     OrderByDescending(a => a.AssistanceDate).FirstOrDefault();
                         if (lastAsistance == null ||
-                            (DateTime.Now - lastAsistance.AssistanceDate).TotalHours > Configuration.get)
+                            (DateTime.Now - lastAsistance.AssistanceDate).TotalHours > int.Parse(_appSettings.Value.AssistanceConfiguration_DiffHours))
                         {
                             //Creamos asistencia en caso de que el usuario pueda entrar. Caso contrario, queda a criterio del lugar si pasa o no.
                             Assistance assistance = new Assistance
@@ -107,5 +114,53 @@ namespace GymTest.Services
 
             return true;
         }
+
+        public void ProcessAssistanceNotification(string fingerprint)
+        {
+            var users = from m in _context.User
+                        select m;
+
+            users = users.Where(s => s.Token.ToLower().Equals(fingerprint.ToLower()));
+
+            if (users.Count() == 1)
+            {
+                var user = users.First();
+
+                var bodyData = new System.Collections.Generic.Dictionary<string, string>
+                {
+                    { "UserName", user.FullName },
+                    { "Title", "Disfrute de la sesión!" },
+                    { "message", "Estamos a sus órdenes." }
+                };
+
+                _sendEmail.SendEmail(bodyData,
+                                     "AssistanceTemplate",
+                                     "Notificación de asistencia" + user.FullName,
+                                     new System.Collections.Generic.List<string>() { user.Email }
+                                    );
+
+            }
+        }
+
+        public void ProcessWelcomeNotification(string fingerprint)
+        {
+            var users = from m in _context.User
+                        select m;
+
+            users = users.Where(s => s.Token.ToLower().Equals(fingerprint.ToLower()));
+
+            if (users.Count() == 1)
+            {
+                var user = users.First();
+
+                _sendEmail.SendEmail(new System.Collections.Generic.Dictionary<string, string>(),
+                                     "AssistanceTemplate",
+                                     "Notificación de asistencia" + user.FullName,
+                                     new System.Collections.Generic.List<string>() { user.Email }
+                                    );
+
+            }
+        }
+
     }
 }
