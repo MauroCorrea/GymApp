@@ -21,11 +21,6 @@ namespace GymTest.Models
             using (var context = new GymTestContext(
                 serviceProvider.GetRequiredService<DbContextOptions<GymTestContext>>()))
             {
-                // Look for any movies.
-                //if (true) // levantar la info del appsettings
-                //{
-                //    return;   // DB has been seeded
-                //}
 
                 var moveTypes = from m in context.MovementType
                                 select m;
