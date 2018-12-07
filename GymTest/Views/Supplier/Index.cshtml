@@ -1,0 +1,38 @@
+@model IEnumerable<GymTest.Models.Supplier>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SupplierDescription)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SupplierDescription)
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <a asp-action="Edit" asp-route-id="@item.SupplierId" class="btn btn-primary">Modificar</a>
+                        <a asp-action="Details" asp-route-id="@item.SupplierId" class="btn btn-primary">Detalles</a>
+                        <a asp-action="Delete" asp-route-id="@item.SupplierId" class="btn btn-danger">Eliminar</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

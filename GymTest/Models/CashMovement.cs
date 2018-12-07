@@ -21,13 +21,29 @@ namespace GymTest.Models
         [Required]
         public int CashMovementTypeId { get; set; }
 
+        [Required(ErrorMessage = "La fecha de movimiento es obligatoria")]
+        [Display(Name = "Fecha de movimiento")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        public DateTime CashMovementDate { get; set; }
+
+        [Display(Name = "Tipo")]
         public virtual CashMovementType CashMovementType { get; set; }
 
         [Display(Name = "Categoría")]
         [Required]
         public int CashCategoryId { get; set; }
 
+        [Display(Name = "Categoría")]
         public virtual CashCategory CashCategory { get; set; }
+
+
+        [Display(Name = "Proveedor")]
+        [Required]
+        public int SupplierId { get; set; }
+
+        [Display(Name = "Proveedor")]
+        public virtual Supplier Supplier { get; set; }
 
         public CashMovement()
         {

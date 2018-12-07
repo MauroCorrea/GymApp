@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +20,10 @@ namespace GymTest.Controllers
         // GET: CashMovement
         public async Task<IActionResult> Index()
         {
-            var gymTestContext = _context.CashMovement.Include(c => c.CashCategory).Include(c => c.CashMovementType);
+            var gymTestContext = _context.CashMovement
+                                         .Include(c => c.CashCategory)
+                                         .Include(c => c.CashMovementType)
+                                         .Include(c => c.Supplier);
             return View(await gymTestContext.ToListAsync());
         }
 
@@ -37,6 +38,7 @@ namespace GymTest.Controllers
             var cashMovement = await _context.CashMovement
                 .Include(c => c.CashCategory)
                 .Include(c => c.CashMovementType)
+                .Include(c => c.Supplier)
                 .FirstOrDefaultAsync(m => m.CashMovementId == id);
             if (cashMovement == null)
             {
@@ -51,6 +53,7 @@ namespace GymTest.Controllers
         {
             ViewData["CashCategoryId"] = new SelectList(_context.CashCategory, "CashCategoryId", "CashCategoryDescription");
             ViewData["CashMovementTypeId"] = new SelectList(_context.Set<CashMovementType>(), "CashMovementTypeId", "CashMovementTypeDescription");
+            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "SupplierDescription");
             return View();
         }
 
@@ -59,7 +62,7 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CashMovementId,CashMovementDetails,Amount,CashMovementTypeId,CashCategoryId")] CashMovement cashMovement)
+        public async Task<IActionResult> Create([Bind("CashMovementId,CashMovementDetails,Amount,CashMovementTypeId,CashCategoryId,SupplierId")] CashMovement cashMovement)
         {
             if (ModelState.IsValid)
             {
@@ -69,6 +72,7 @@ namespace GymTest.Controllers
             }
             ViewData["CashCategoryId"] = new SelectList(_context.CashCategory, "CashCategoryId", "CashCategoryDescription", cashMovement.CashCategoryId);
             ViewData["CashMovementTypeId"] = new SelectList(_context.Set<CashMovementType>(), "CashMovementTypeId", "CashMovementTypeDescription", cashMovement.CashMovementTypeId);
+            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "SupplierDescription", cashMovement.SupplierId);
             return View(cashMovement);
         }
 
@@ -87,6 +91,7 @@ namespace GymTest.Controllers
             }
             ViewData["CashCategoryId"] = new SelectList(_context.CashCategory, "CashCategoryId", "CashCategoryDescription", cashMovement.CashCategoryId);
             ViewData["CashMovementTypeId"] = new SelectList(_context.Set<CashMovementType>(), "CashMovementTypeId", "CashMovementTypeDescription", cashMovement.CashMovementTypeId);
+            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "SupplierDescription", cashMovement.SupplierId);
             return View(cashMovement);
         }
 
@@ -95,7 +100,7 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CashMovementId,CashMovementDetails,Amount,CashMovementTypeId,CashCategoryId")] CashMovement cashMovement)
+        public async Task<IActionResult> Edit(int id, [Bind("CashMovementId,CashMovementDetails,Amount,CashMovementTypeId,CashCategoryId,SupplierId")] CashMovement cashMovement)
         {
             if (id != cashMovement.CashMovementId)
             {
@@ -124,6 +129,7 @@ namespace GymTest.Controllers
             }
             ViewData["CashCategoryId"] = new SelectList(_context.CashCategory, "CashCategoryId", "CashCategoryDescription", cashMovement.CashCategoryId);
             ViewData["CashMovementTypeId"] = new SelectList(_context.Set<CashMovementType>(), "CashMovementTypeId", "CashMovementTypeDescription", cashMovement.CashMovementTypeId);
+            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "SupplierDescription", cashMovement.SupplierId);
             return View(cashMovement);
         }
 
@@ -138,6 +144,7 @@ namespace GymTest.Controllers
             var cashMovement = await _context.CashMovement
                 .Include(c => c.CashCategory)
                 .Include(c => c.CashMovementType)
+                .Include(c => c.Supplier)
                 .FirstOrDefaultAsync(m => m.CashMovementId == id);
             if (cashMovement == null)
             {

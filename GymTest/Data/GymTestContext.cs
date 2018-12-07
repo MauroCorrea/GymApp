@@ -23,5 +23,7 @@ namespace GymTest.Data
         public DbSet<GymTest.Models.CashMovementType> CashMovementType { get; set; }
 
         public DbSet<GymTest.Models.MovementType> MovementType { get; set; }
+
+        public DbSet<GymTest.Models.Supplier> Supplier { get; set; }
     }
 }
