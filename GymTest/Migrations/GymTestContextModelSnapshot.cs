@@ -56,16 +56,22 @@ namespace GymTest.Migrations
 
                     b.Property<int>("CashCategoryId");
 
+                    b.Property<DateTime>("CashMovementDate");
+
                     b.Property<string>("CashMovementDetails")
                         .HasMaxLength(200);
 
                     b.Property<int>("CashMovementTypeId");
+
+                    b.Property<int>("SupplierId");
 
                     b.HasKey("CashMovementId");
 
                     b.HasIndex("CashCategoryId");
 
                     b.HasIndex("CashMovementTypeId");
+
+                    b.HasIndex("SupplierId");
 
                     b.ToTable("CashMovement");
                 });
@@ -106,6 +112,8 @@ namespace GymTest.Migrations
                     b.Property<float?>("Amount")
                         .IsRequired();
 
+                    b.Property<DateTime>("LimitUsableDate");
+
                     b.Property<int>("MovementTypeId");
 
                     b.Property<DateTime>("PaymentDate");
@@ -121,6 +129,20 @@ namespace GymTest.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Payment");
+                });
+
+            modelBuilder.Entity("GymTest.Models.Supplier", b =>
+                {
+                    b.Property<int>("SupplierId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("SupplierDescription")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.HasKey("SupplierId");
+
+                    b.ToTable("Supplier");
                 });
 
             modelBuilder.Entity("GymTest.Models.User", b =>
@@ -178,6 +200,11 @@ namespace GymTest.Migrations
                     b.HasOne("GymTest.Models.CashMovementType", "CashMovementType")
                         .WithMany()
                         .HasForeignKey("CashMovementTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("GymTest.Models.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
