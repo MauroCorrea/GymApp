@@ -47,6 +47,9 @@ namespace GymTest.Services
                     var newestPayment = payments.OrderByDescending(p => p.PaymentDate).First();
                     if (newestPayment.MovementTypeId > 0)
                     {
+                        if (newestPayment.LimitUsableDate > DateTime.Now)
+                            return objectToReturn;
+
                         switch (newestPayment.MovementTypeId)
                         {
                             #region Mensual
