@@ -8,6 +8,7 @@ using GymTest.Data;
 using Microsoft.EntityFrameworkCore;
 using GymTest.Services;
 using GymTest.Models;
+using System.Globalization;
 
 namespace GymTest
 {
@@ -30,6 +31,10 @@ namespace GymTest
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.Configure<IISOptions>(options =>
+            {
+                options.ForwardClientCertificate = false;
+            });
 
             services.Configure<AppSettings>(_configuration.GetSection("AppSettings"));
 
@@ -73,6 +78,10 @@ namespace GymTest
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            var cultureInfo = new CultureInfo("es-UY");
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
         }
     }
 }
