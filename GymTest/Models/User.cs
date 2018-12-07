@@ -16,6 +16,7 @@ namespace GymTest.Models
         public string FullName { get; set; }
 
         [Display(Name = "Fecha Nacimiento")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
 
@@ -39,6 +40,7 @@ namespace GymTest.Models
         [Required(ErrorMessage = "La fecha de ingreso es obligatoria")]
         [Display(Name = "Fecha Ingreso")]
         [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime SignInDate { get; set; }
 
         [StringLength(200)]

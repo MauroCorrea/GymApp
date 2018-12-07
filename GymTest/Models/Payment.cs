@@ -11,13 +11,22 @@ namespace GymTest.Models
 
         [Required(ErrorMessage = "La fecha de pago es obligatoria")]
         [Display(Name = "Fecha Pago")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         [DataType(DataType.Date)]
         public DateTime PaymentDate { get; set; }
+
+
+        [Required(ErrorMessage = "La fecha límite de uso es obligatoria")]
+        [Display(Name = "Fecha límite")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        public DateTime LimitUsableDate { get; set; }
 
         [ForeignKey("MovmentType")]
         [Display(Name = "Tipo Pago")]
         public int MovementTypeId { get; set; }
 
+        [Display(Name = "Tipo Pago")]
         public virtual MovementType MovmentType { get; set; }
 
         [Required]
