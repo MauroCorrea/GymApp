@@ -25,5 +25,7 @@ namespace GymTest.Data
         public DbSet<GymTest.Models.MovementType> MovementType { get; set; }
 
         public DbSet<GymTest.Models.Supplier> Supplier { get; set; }
+
+        public DbSet<GymTest.Models.MedicalEmergency> MedicalEmergency { get; set; }
     }
 }

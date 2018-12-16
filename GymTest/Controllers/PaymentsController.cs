@@ -56,11 +56,11 @@ namespace GymTest.Controllers
                 var users = from u in _context.User select u;
                 users = users.Where(u => u.UserId.Equals(id));
 
-                ViewData["UserId"] = new SelectList(users, "UserId", "DocumentNumber");
+                ViewData["UserId"] = new SelectList(users, "UserId", "FullName");
             }
             else
             {
-                ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber");
+                ViewData["UserId"] = new SelectList(_context.User, "UserId", "FullName");
             }
             return View();
         }
@@ -70,7 +70,7 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PaymentId,PaymentDate,MovementTypeId,QuantityMovmentType,Amount,UserId")] Payment payment)
+        public async Task<IActionResult> Create([Bind("PaymentId,PaymentDate,MovementTypeId,QuantityMovmentType,Amount,UserId,LimitUsableDate")] Payment payment)
         {
             if (ModelState.IsValid)
             {
@@ -79,7 +79,7 @@ namespace GymTest.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["MovementTypeId"] = new SelectList(_context.MovementType, "MovementTypeId", "Description", payment.MovementTypeId);
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber", payment.UserId);
+            ViewData["UserId"] = new SelectList(_context.User, "UserId", "FullName", payment.UserId);
             return View(payment);
         }
 
@@ -106,7 +106,7 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PaymentId,PaymentDate,MovementTypeId,QuantityMovmentType,Amount,UserId")] Payment payment)
+        public async Task<IActionResult> Edit(int id, [Bind("PaymentId,PaymentDate,MovementTypeId,QuantityMovmentType,Amount,UserId,LimitUsableDate")] Payment payment)
         {
             if (id != payment.PaymentId)
             {
@@ -134,7 +134,7 @@ namespace GymTest.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["MovementTypeId"] = new SelectList(_context.MovementType, "MovementTypeId", "Description", payment.MovementTypeId);
-            ViewData["UserId"] = new SelectList(_context.User.Where(u => u.UserId == payment.UserId), "UserId", "DocumentNumber", payment.UserId);
+            ViewData["UserId"] = new SelectList(_context.User.Where(u => u.UserId == payment.UserId), "UserId", "FullName", payment.UserId);
             return View(payment);
         }
 
