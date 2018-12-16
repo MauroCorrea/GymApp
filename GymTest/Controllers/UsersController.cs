@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using GymTest.Models;
 using GymTest.Data;
 
@@ -42,6 +43,7 @@ namespace GymTest.Controllers
             }
 
             var user = await _context.User
+                .Include(c => c.MedicalEmergency)
                 .FirstOrDefaultAsync(m => m.UserId == id);
             if (user == null)
             {
@@ -54,6 +56,7 @@ namespace GymTest.Controllers
         // GET: Users/Create
         public IActionResult Create()
         {
+            ViewData["MedicalEmergencyId"] = new SelectList(_context.Set<MedicalEmergency>(), "MedicalEmergencyId", "MedicalEmergencyDescription");
             return View();
         }
 
@@ -62,7 +65,7 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserId,Token,FullName,BirthDate,DocumentNumber,Email,Address,Phones,SignInDate,Commentaries")] User user)
+        public async Task<IActionResult> Create([FromForm]User user) //[Bind("UserId,Token,FullName,BirthDate,DocumentNumber,Email,Address,Phones,SignInDate,Commentaries")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -70,6 +73,7 @@ namespace GymTest.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["MedicalEmergencyId"] = new SelectList(_context.Set<MedicalEmergency>(), "MedicalEmergencyId", "MedicalEmergencyDescription", user.MedicalEmergencyId);
             return View(user);
         }
 
@@ -86,6 +90,7 @@ namespace GymTest.Controllers
             {
                 return NotFound();
             }
+            ViewData["MedicalEmergencyId"] = new SelectList(_context.Set<MedicalEmergency>(), "MedicalEmergencyId", "MedicalEmergencyDescription", user.MedicalEmergencyId);
             return View(user);
         }
 
@@ -94,7 +99,7 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserId,Token,FullName,BirthDate,DocumentNumber,Email,Address,Phones,SignInDate,Commentaries")] User user)
+        public async Task<IActionResult> Edit(int id, [FromForm]User user) //[Bind("UserId,Token,FullName,BirthDate,DocumentNumber,Email,Address,Phones,SignInDate,Commentaries")] User user)
         {
             if (id != user.UserId)
             {
@@ -121,6 +126,7 @@ namespace GymTest.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["MedicalEmergencyId"] = new SelectList(_context.Set<MedicalEmergency>(), "MedicalEmergencyId", "MedicalEmergencyDescription", user.MedicalEmergencyId);
             return View(user);
         }
 
@@ -133,6 +139,7 @@ namespace GymTest.Controllers
             }
 
             var user = await _context.User
+                .Include(c => c.MedicalEmergency)
                 .FirstOrDefaultAsync(m => m.UserId == id);
             if (user == null)
             {

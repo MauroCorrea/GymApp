@@ -1,0 +1,27 @@
+@model GymTest.Models.MedicalEmergency
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Eliminar</h2>
+
+<h3>Está seguro que desea eliminar esta emergencia médica?</h3>
+<div>
+    <h4>Emergencia médica</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.MedicalEmergencyDescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MedicalEmergencyDescription)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="MedicalEmergencyId" />
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-default">Regresar</a>
+    </form>
+</div>

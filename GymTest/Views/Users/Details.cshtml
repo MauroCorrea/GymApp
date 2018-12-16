@@ -51,10 +51,58 @@
             @Html.DisplayFor(model => model.Phones)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.ContactFullName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContactFullName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ContactPhones)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContactPhones)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.SignInDate)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.SignInDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MedicalEmergency)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MedicalEmergency.MedicalEmergencyDescription)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HealthPhysicalProblems)
+        </dt>
+        <dd>
+            @Html.Raw(Html.Encode(Model.HealthPhysicalProblems).Replace("\n", "<br />"))
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HealthHeartProblems)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HealthHeartProblems)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HealthCronicalProblems)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HealthCronicalProblems)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HealthRegularPills)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HealthRegularPills)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Target)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Target)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Commentaries)
@@ -62,6 +110,7 @@
         <dd>
             @Html.DisplayFor(model => model.Commentaries)
         </dd>
+
     </dl>
 </div>
 <div>

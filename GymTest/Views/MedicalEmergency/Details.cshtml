@@ -1,0 +1,24 @@
+@model GymTest.Models.MedicalEmergency
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Detalle</h2>
+
+<div>
+    <h4>Emergencia médica</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.MedicalEmergencyDescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MedicalEmergencyDescription)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.MedicalEmergencyId" class="btn btn-default">Modificar</a> |
+    <a asp-action="Index" class="btn btn-default">Regresar</a>
+</div>

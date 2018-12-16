@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace GymTest.Models
 {
     public class User
@@ -37,13 +39,54 @@ namespace GymTest.Models
         [Display(Name = "Teléfono")]
         public string Phones { get; set; }
 
+        [Display(Name = "Nombre de contacto")]
+        [StringLength(100, MinimumLength = 6, ErrorMessage = "El nombre de usuario debe ser entre 6 y 100 caracteres de largo")]
+        public string ContactFullName { get; set; }
+
+        [StringLength(200)]
+        [Display(Name = "Teléfono de contacto")]
+        public string ContactPhones { get; set; }
+
         [Required(ErrorMessage = "La fecha de ingreso es obligatoria")]
         [Display(Name = "Fecha Ingreso")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime SignInDate { get; set; }
 
+        [ForeignKey("MedicalEmergencyId")]
+        [Display(Name = "Emergencia médica")]
+        public int MedicalEmergencyId { get; set; }
+
+        public virtual MedicalEmergency MedicalEmergency { get; set; }
+
+        [StringLength(1000)]
+        [DataType(DataType.MultilineText)]
+        [Display(Name = "Problemas físicos")]
+        public string HealthPhysicalProblems { get; set; }
+
+        [StringLength(1000)]
+        [DataType(DataType.MultilineText)]
+        [Display(Name = "Problemas cardiovasculares/corazón")]
+        public string HealthHeartProblems { get; set; }
+
+        [StringLength(1000)]
+        [DataType(DataType.MultilineText)]
+        [Display(Name = "Enfermedades crónicas")]
+        public string HealthCronicalProblems { get; set; }
+
+        [StringLength(1000)]
+        [DataType(DataType.MultilineText)]
+        [Display(Name = "Medicación regular")]
+        public string HealthRegularPills { get; set; }
+
+
         [StringLength(200)]
+        [DataType(DataType.MultilineText)]
+        [Display(Name = "Objetivos buscados")]
+        public string Target { get; set; }
+
+        [StringLength(200)]
+        [DataType(DataType.MultilineText)]
         [Display(Name = "Comentarios")]
         public string Commentaries { get; set; }
 
