@@ -24,7 +24,7 @@ namespace GymTest.Models
 
                 LoadMoveTypes(context);
 
-                LoadUsers(context);
+                // LoadUsers(context);
 
                 LoadCashCategories(context);
 
