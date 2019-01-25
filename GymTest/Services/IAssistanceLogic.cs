@@ -1,10 +1,11 @@
-﻿using System;
+﻿using GymTest.Models;
+
 namespace GymTest.Services
 {
     public interface IAssistanceLogic
     {
-        bool ProcessAssistance(string userToken);
-        void ProcessAssistanceNotification(string fingerprint);
-        void ProcessWelcomeNotification(string fingerprint);
+        AssistanceInformation ProcessAssistance(string userToken);
+        void ProcessAssistanceNotification(int userId);
+        void ProcessWelcomeNotification(int userId);
     }
 }

@@ -25,7 +25,7 @@ namespace GymTest.Services
             _env = env;
         }
 
-        private string createEmailBody(Dictionary<string, string> bodyData, string templateName)
+        private string CreateEmailBody(Dictionary<string, string> bodyData, string templateName)
         {
             string body = string.Empty;
             //using streamreader for reading my htmltemplate  
@@ -54,31 +54,40 @@ namespace GymTest.Services
 
         public void SendEmail(Dictionary<string, string> bodyData, string templateName, string subject, List<string> receipts)
         {
-            MailMessage correo = new MailMessage
+            try
             {
-                From = new MailAddress(_appSettings.Value.EmailConfiguration_Username)
-            };
-            foreach (var receipt in receipts)
-            {
-                correo.To.Add(receipt);
+                MailMessage correo = new MailMessage
+                {
+                    From = new MailAddress(_appSettings.Value.EmailConfiguration_Username)
+                };
+                foreach (var receipt in receipts)
+                {
+                    correo.To.Add(receipt);
+                }
+                correo.Subject = subject;
+                correo.Body = CreateEmailBody(bodyData, templateName);
+                correo.IsBodyHtml = true;
+                correo.Priority = MailPriority.Normal;
+
+                SmtpClient smtp = new SmtpClient
+                {
+                    Host = _appSettings.Value.EmailConfiguration_Host,
+                    Port = int.Parse(_appSettings.Value.EmailConfiguration_Port),
+                    EnableSsl = true,
+                    UseDefaultCredentials = true
+                };
+                string sCuentaCorreo = _appSettings.Value.EmailConfiguration_Username;
+                string pwd = _appSettings.Value.EmailConfiguration_Password;
+                smtp.Credentials = new NetworkCredential(sCuentaCorreo, pwd);
+
+                smtp.Send(correo);
             }
-            correo.Subject = subject;
-            correo.Body = createEmailBody(bodyData, templateName);
-            correo.IsBodyHtml = true;
-            correo.Priority = MailPriority.Normal;
-
-            SmtpClient smtp = new SmtpClient
+            catch (Exception ex)
             {
-                Host = _appSettings.Value.EmailConfiguration_Host,
-                Port = int.Parse(_appSettings.Value.EmailConfiguration_Port),
-                EnableSsl = true,
-                UseDefaultCredentials = true
-            };
-            string sCuentaCorreo = _appSettings.Value.EmailConfiguration_Username;
-            string pwd = _appSettings.Value.EmailConfiguration_Password;
-            smtp.Credentials = new NetworkCredential(sCuentaCorreo, pwd);
+                // TODO: log error
+                var messageError = ex.Message;
 
-            smtp.Send(correo);
+            }
         }
     }
 }

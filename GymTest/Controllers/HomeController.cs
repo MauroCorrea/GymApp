@@ -37,22 +37,9 @@ namespace GymTest.Controllers
 
         public IActionResult Contact(string fingerprint)
         {
+            var assistanceInfo = _assistanceLogic.ProcessAssistance(fingerprint);
 
-            if (_assistanceLogic.ProcessAssistance(fingerprint))
-            {
-                ViewData["Message"] = "Lo Encontramos!!";
-                ViewData["ImgCondition"] = "OK";
-
-                _assistanceLogic.ProcessAssistanceNotification(fingerprint);
-
-            }
-            else
-            {
-                ViewData["Message"] = "No lo encontramos :(";
-                ViewData["ImgCondition"] = "PAY";
-            }
-
-            return View();
+            return View(assistanceInfo);
         }
 
         public IActionResult Privacy()

@@ -1,16 +1,53 @@
-﻿@{
-    ViewData["Title"] = "Bienvenido!!!";
+﻿@model GymTest.Models.AssistanceInformation
+
+@{
+    ViewData["Title"] = "Información de asistencia";
 }
+
 <h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
 
-<meta http-equiv="Refresh" content="5; url=/home" />
+<h3>@Model.Message</h3>
 
-@if (ViewData["ImgCondition"].Equals("OK"))
+
+@if (Model.AdditionalData != null && Model.AdditionalData.Length > 0)
 {
-    <img src="~/images/hello.gif" alt="Funny image" id="imgOK">
+    <h4>@Model.AdditionalData</h4>
 }
-else
+
+@if (Model.User != null)
 {
-    <img src="~/images/mustpay.gif" alt="Funny image" id="imgPAY">
+    <div>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.User.FullName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.User.FullName)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.User.DocumentNumber)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.User.DocumentNumber)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.User.SignInDate)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.User.SignInDate)
+            </dd>
+        </dl>
+    </div>
 }
+<meta http-equiv="Refresh" content="10; url=/home" />
+
+
+@*   if (ViewData["ImgCondition"].Equals("OK"))
+    {
+        <img src="~/images/hello.gif" alt="Funny image" id="imgOK">
+    }
+    else
+    {
+        <img src="~/images/mustpay.gif" alt="Funny image" id="imgPAY">
+    }*@
