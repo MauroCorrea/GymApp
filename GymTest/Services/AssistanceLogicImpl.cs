@@ -102,10 +102,8 @@ namespace GymTest.Services
                                                     Where(a => a.UserId == objectToReturn.User.UserId).
                                                     OrderByDescending(a => a.AssistanceDate).FirstOrDefault();
 
-                        var prueba = (DateTime.Now - lastAsistance.AssistanceDate).TotalHours;
-
                         if (lastAsistance == null ||
-                            prueba > int.Parse(_appSettings.Value.AssistanceConfiguration_DiffHours))
+                            (DateTime.Now - lastAsistance.AssistanceDate).TotalHours > int.Parse(_appSettings.Value.AssistanceConfiguration_DiffHours))
                         {
                             //Creamos asistencia en caso de que el usuario pueda entrar. Caso contrario, queda a criterio del lugar si pasa o no.
                             Assistance assistance = new Assistance
