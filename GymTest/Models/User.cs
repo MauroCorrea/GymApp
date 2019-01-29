@@ -53,6 +53,7 @@ namespace GymTest.Models
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime SignInDate { get; set; }
 
+        [Required(ErrorMessage = "Campo emergencia médica es obligatorio")]
         [ForeignKey("MedicalEmergencyId")]
         [Display(Name = "Emergencia médica")]
         public int MedicalEmergencyId { get; set; }
