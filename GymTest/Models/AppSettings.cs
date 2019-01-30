@@ -16,12 +16,15 @@ namespace GymTest.Models
 
         public string AssistanceConfiguration_DiffHours { get; set; }
 
+        public string Client { get; set; }
+
     }
 
     public class Logging
     {
         public LogLevel LogLevel;
     }
+
     public class LogLevel
     {
         public string Default { get; set; }

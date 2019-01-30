@@ -49,6 +49,8 @@ namespace GymTest.Services
                 }
             }
 
+            body = body.Replace("{client}", _appSettings.Value.Client);
+
             return body;
         }
 

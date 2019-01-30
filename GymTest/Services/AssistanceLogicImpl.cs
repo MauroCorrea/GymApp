@@ -2,7 +2,6 @@
 using System.Linq;
 using GymTest.Data;
 using GymTest.Models;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
 namespace GymTest.Services
@@ -12,17 +11,14 @@ namespace GymTest.Services
 
         private readonly GymTestContext _context;
 
-        public IConfiguration _configuration { get; }
-
         private readonly ISendEmail _sendEmail;
 
         private readonly IOptions<AppSettings> _appSettings;
 
-        public AssistanceLogicImpl(GymTestContext context, IConfiguration configuration, IOptions<AppSettings> app, ISendEmail sendEmail)
+        public AssistanceLogicImpl(GymTestContext context, IOptions<AppSettings> app, ISendEmail sendEmail)
         {
             _appSettings = app;
             _context = context;
-            _configuration = configuration;
             _sendEmail = sendEmail;
         }
 

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GymTest.Data;
 using GymTest.Models;
+using GymTest.Services;
 
 namespace GymTest.Controllers
 {
@@ -14,9 +15,16 @@ namespace GymTest.Controllers
     {
         private readonly GymTestContext _context;
 
-        public PaymentsController(GymTestContext context)
+        private readonly ISendEmail _sendEmail;
+
+        private readonly IPaymentLogic _paymentLogic;
+
+        public PaymentsController(GymTestContext context, ISendEmail sendEmail, IPaymentLogic payLogic)
         {
             _context = context;
+            _sendEmail = sendEmail;
+            _paymentLogic = payLogic;
+
         }
 
         // GET: Payments
@@ -74,9 +82,10 @@ namespace GymTest.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(payment);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (_paymentLogic.ProcessPayment(payment,
+                        _context.User.Where(u => u.UserId == payment.UserId).First().FullName,
+                        _context.User.Where(u => u.UserId == payment.UserId).First().Email))
+                    return RedirectToAction(nameof(Index));
             }
             ViewData["MovementTypeId"] = new SelectList(_context.MovementType, "MovementTypeId", "Description", payment.MovementTypeId);
             ViewData["UserId"] = new SelectList(_context.User, "UserId", "FullName", payment.UserId);
@@ -117,8 +126,10 @@ namespace GymTest.Controllers
             {
                 try
                 {
-                    _context.Update(payment);
-                    await _context.SaveChangesAsync();
+                    if (_paymentLogic.ProcessPayment(payment,
+                    _context.User.Where(u => u.UserId == payment.UserId).First().FullName,
+                        _context.User.Where(u => u.UserId == payment.UserId).First().Email))
+                        return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -131,7 +142,6 @@ namespace GymTest.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             ViewData["MovementTypeId"] = new SelectList(_context.MovementType, "MovementTypeId", "Description", payment.MovementTypeId);
             ViewData["UserId"] = new SelectList(_context.User.Where(u => u.UserId == payment.UserId), "UserId", "FullName", payment.UserId);
