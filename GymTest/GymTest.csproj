@@ -28,11 +28,13 @@
         <Content Remove="wwwroot\images\mustpay.gif" />
         <Content Remove="wwwroot\css\jquery-ui.css" />
         <Content Remove="wwwroot\images\ui-icons_444444_256x240.png" />
+        <Content Remove="wwwroot\css\style.css" />
     </ItemGroup>
     <ItemGroup>
         <None Include="wwwroot\images\mustpay.gif" />
         <None Include="wwwroot\Templates\AssistanceTemplate.html" />
         <None Include="wwwroot\css\jquery-ui.css" />
         <None Include="wwwroot\images\ui-icons_444444_256x240.png" />
+        <None Include="wwwroot\css\style.css" />
     </ItemGroup>
 </Project>
