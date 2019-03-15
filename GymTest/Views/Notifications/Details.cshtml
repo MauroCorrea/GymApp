@@ -1,0 +1,42 @@
+@model GymTest.Models.Notification
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Notification</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Everyone)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Everyone)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Send)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Send)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.To)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.To)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Message)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Message)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.NotificationId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

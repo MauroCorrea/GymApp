@@ -10,6 +10,8 @@
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.3" />
         <PackageReference Include="jQuery.UI.Combined" Version="1.12.1" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.1" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.1" />
     </ItemGroup>
     <ItemGroup>
         <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.1.1" />
@@ -23,6 +25,7 @@
     <ItemGroup>
         <Folder Include="Services\" />
         <Folder Include="wwwroot\Templates\" />
+        <Folder Include="Views\GeneralAdministration\" />
     </ItemGroup>
     <ItemGroup>
         <Content Remove="wwwroot\images\mustpay.gif" />
