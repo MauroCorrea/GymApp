@@ -22,7 +22,7 @@ namespace GymTest.Services
             _sendEmail = sendEmail;
         }
 
-        public AssistanceInformation ProcessAssistance(string userToken)
+        public AssistanceInformation ProcessAssistance(string userToken, DateTime? assistanceDate = null)
         {
             var objectToReturn = new AssistanceInformation();
             var users = from m in _context.User
@@ -98,14 +98,16 @@ namespace GymTest.Services
                                                     Where(a => a.UserId == objectToReturn.User.UserId).
                                                     OrderByDescending(a => a.AssistanceDate).FirstOrDefault();
 
+                        DateTime realAssistanceDate = assistanceDate.HasValue ? (DateTime)assistanceDate : DateTime.Now;
+
                         if (lastAsistance == null ||
-                            (DateTime.Now - lastAsistance.AssistanceDate).TotalHours > int.Parse(_appSettings.Value.AssistanceConfiguration_DiffHours))
+                            (realAssistanceDate - lastAsistance.AssistanceDate).TotalHours > int.Parse(_appSettings.Value.AssistanceConfiguration_DiffHours))
                         {
                             //Creamos asistencia en caso de que el usuario pueda entrar. Caso contrario, queda a criterio del lugar si pasa o no.
                             Assistance assistance = new Assistance
                             {
                                 User = users.First(),
-                                AssistanceDate = DateTime.Now
+                                AssistanceDate = realAssistanceDate
                             };
                             _context.Assistance.Add(assistance);
                             _context.SaveChangesAsync();

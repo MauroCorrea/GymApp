@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GymTest.Models;
 using GymTest.Data;
+using GymTest.Services;
 
 namespace GymTest.Controllers
 {
@@ -14,9 +15,12 @@ namespace GymTest.Controllers
     {
         private readonly GymTestContext _context;
 
-        public AssistancesController(GymTestContext context)
+        private readonly IAssistanceLogic _assistanceLogic;
+
+        public AssistancesController(GymTestContext context, IAssistanceLogic assistanceLogic)
         {
             _context = context;
+            _assistanceLogic = assistanceLogic;
         }
 
         // GET: Assistances
@@ -75,8 +79,14 @@ namespace GymTest.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(assistance);
-                await _context.SaveChangesAsync();
+                //_context.Add(assistance);
+                //await _context.SaveChangesAsync();
+                //return RedirectToAction(nameof(Index));
+                var users = from u in _context.User select u;
+                var currentUser = users.Where(u => u.UserId.Equals(assistance.UserId)).FirstOrDefault();
+
+                var assistanceInfo = _assistanceLogic.ProcessAssistance(currentUser.Token, assistance.AssistanceDate);
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber", assistance.UserId);
