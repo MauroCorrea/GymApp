@@ -110,7 +110,7 @@ namespace GymTest.Services
                                 AssistanceDate = realAssistanceDate
                             };
                             _context.Assistance.Add(assistance);
-                            _context.SaveChangesAsync();
+                            _context.SaveChanges();
 
                             if (newestPayment.MovementTypeId == (int)PaymentTypeEnum.ByAssistances)
                             {
