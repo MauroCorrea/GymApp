@@ -32,6 +32,10 @@
         <Content Remove="wwwroot\css\jquery-ui.css" />
         <Content Remove="wwwroot\images\ui-icons_444444_256x240.png" />
         <Content Remove="wwwroot\Templates\AssistanceTemplate.html" />
+        <Content Remove="wwwroot\images\img2.jpg" />
+        <Content Remove="wwwroot\images\img1.jpg" />
+        <Content Remove="wwwroot\images\gym1.jpg" />
+        <Content Remove="wwwroot\images\gym2.jpg" />
     </ItemGroup>
     <ItemGroup>
         <None Include="wwwroot\images\mustpay.gif" />

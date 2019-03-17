@@ -28,11 +28,15 @@ namespace GymTest.Controllers
             return View();
         }
 
-        public IActionResult About()
+        public void About(string fingerprint)
         {
-            ViewData["Message"] = "Your application description page.";
+            if (string.IsNullOrEmpty(fingerprint))
+                fingerprint = string.Empty;
 
-            return View();
+            if (Request.Form["1"] != "")
+                fingerprint += 1;
+
+          
         }
 
         public IActionResult Contact(string fingerprint)
