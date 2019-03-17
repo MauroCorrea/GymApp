@@ -7,16 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GymTest.Data;
 using GymTest.Models;
+using GymTest.Services;
 
 namespace GymTest.Controllers
 {
     public class NotificationsController : Controller
     {
         private readonly GymTestContext _context;
+        private readonly ISendEmail _sendEmail;
 
-        public NotificationsController(GymTestContext context)
+        public NotificationsController(GymTestContext context, ISendEmail sendEmail)
         {
             _context = context;
+            _sendEmail = sendEmail;
         }
 
         // GET: Notifications
@@ -35,6 +38,7 @@ namespace GymTest.Controllers
 
             var notification = await _context.Notification
                 .FirstOrDefaultAsync(m => m.NotificationId == id);
+
             if (notification == null)
             {
                 return NotFound();
@@ -59,10 +63,53 @@ namespace GymTest.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(notification);
+
+                SendNotification(notification);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(notification);
+        }
+
+        private void SendNotification(Notification notification)
+        {
+            if (string.IsNullOrEmpty(notification.To))
+            {
+                notification.Everyone = true;
+                var users = from u in _context.User select u;
+                foreach (User user in users)
+                {
+                    SendMail(user.FullName, notification.Message, user.Email);
+                }
+            }
+            else
+            {
+                notification.Everyone = false;
+                List<String> emailList = notification.To.Split(';').ToList();
+                foreach (string email in emailList)
+                {
+                    SendMail(string.Empty, notification.Message, email);
+                }
+            }
+
+            notification.Send = true;
+        }
+
+        private void SendMail(string userName, string message, string email)
+        {
+            var bodyData = new System.Collections.Generic.Dictionary<string, string>
+                {
+                    { "UserName", userName },
+                    { "Title", "Aviso Importante" },
+                    { "message", message }
+                };
+
+            _sendEmail.SendEmail(bodyData,
+                                 "AssistanceTemplate",
+                                 "Notificación de Aviso" + userName,
+                                 new System.Collections.Generic.List<string>() { email }
+                                );
         }
 
         // GET: Notifications/Edit/5
@@ -98,6 +145,9 @@ namespace GymTest.Controllers
                 try
                 {
                     _context.Update(notification);
+
+                    SendNotification(notification);
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
