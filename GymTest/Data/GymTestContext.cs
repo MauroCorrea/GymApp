@@ -5,13 +5,10 @@ namespace GymTest.Data
 {
     public class GymTestContext : DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql("Host=localhost;Database=spcolonna;Username=spcolonna;Password=");
-    
-        public GymTestContext (DbContextOptions<GymTestContext> options)
+        public GymTestContext(DbContextOptions<GymTestContext> options)
             : base(options)
-            {
-            }
+        {
+        }
 
         public DbSet<GymTest.Models.User> User { get; set; }
 

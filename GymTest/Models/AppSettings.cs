@@ -12,7 +12,7 @@ namespace GymTest.Models
         public string EmailConfiguration_Username { get; set; }
         public string EmailConfiguration_Password { get; set; }
 
-        public string ConnectionStrings_GymTestContext { get; set; }
+        public MySQLConfiguration MySQLConfiguration { get; set; }
 
         public string AssistanceConfiguration_DiffHours { get; set; }
 
@@ -23,6 +23,12 @@ namespace GymTest.Models
     public class Logging
     {
         public LogLevel LogLevel;
+    }
+
+    public class MySQLConfiguration
+    {
+        public string ConnectionString { get; set; }
+        public string Version { get; set; }
     }
 
     public class LogLevel

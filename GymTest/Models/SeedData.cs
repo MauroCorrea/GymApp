@@ -24,7 +24,7 @@ namespace GymTest.Models
 
                 LoadMoveTypes(context);
 
-                // LoadUsers(context);
+                //LoadUsers(context);
 
                 LoadCashCategories(context);
 
@@ -32,7 +32,31 @@ namespace GymTest.Models
 
                 LoadCashMovementTypes(context);
 
+                LoadMedicalEmergencies(context);
+
                 context.SaveChanges();
+            }
+        }
+
+        private static void LoadMedicalEmergencies(GymTestContext context)
+        {
+            var list = from m in context.MedicalEmergency
+                       select m;
+
+            if (list.Count() <= 0)
+            {
+                context.MedicalEmergency.AddRange(
+                    new MedicalEmergency
+                    {
+                        MedicalEmergencyDescription = "SEMM",
+                        MedicalEmergencyId = 1
+                    },
+                    new MedicalEmergency
+                    {
+                        MedicalEmergencyDescription = "SUAT",
+                        MedicalEmergencyId = 2
+                    }
+                );
             }
         }
 
@@ -76,8 +100,13 @@ namespace GymTest.Models
                         FullName = "Nombre Apellido",
                         Phones = "099123456",
                         SignInDate = DateTime.Now,
-                        Token = "123123"
-
+                        Token = "123123",
+                        ContactFullName = "Seba Perez",
+                        ContactPhones = "220098765",
+                        HealthCronicalProblems = "Ninguno",
+                        HealthHeartProblems = "Ninguno",
+                        HealthPhysicalProblems = "Ninguno",
+                        HealthRegularPills = "Ninguno"
                     }
                 );
             }

@@ -36,7 +36,10 @@ namespace GymTest
                 options.ForwardClientCertificate = false;
             });
 
-            services.Configure<AppSettings>(_configuration.GetSection("AppSettings"));
+            var appsettings = _configuration.GetSection("AppSettings");
+            var settings = appsettings.Get<AppSettings>();
+
+            services.Configure<AppSettings>(appsettings);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -50,12 +53,17 @@ namespace GymTest
             services.AddScoped<IPaymentLogic, PaymentLogicImpl>();
 
             //*******Database context implementation*******
-            // Windows
-            //services.AddDbContext<GymTestContext>(options =>
-            //        options.UseSqlServer(Configuration.GetConnectionString("GymTestContext")));
-            //MAC
             services.AddDbContext<GymTestContext>(options =>
-                    options.UseSqlite("Data Source=GymApp.db"));
+                options.UseMySql(settings.MySQLConfiguration.ConnectionString,
+                        mysqlOptions =>
+                        {
+                            //mysqlOptions.MaxBatchSize(_configuration..EfBatchSize);
+                            mysqlOptions.ServerVersion((settings.MySQLConfiguration.Version)
+                            );
+                            //if (AppConfig.EfRetryOnFailure > 0)
+                            //mysqlOptions.EnableRetryOnFailure(AppConfig.EfRetryOnFailure, TimeSpan.FromSeconds(5), null);
+                        }
+                ));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,7 +76,7 @@ namespace GymTest
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
+                //app.UseHsts();
             }
 
             app.UseHttpsRedirection();
