@@ -18,16 +18,17 @@ namespace GymTest.Models
         public string FullName { get; set; }
 
         [Display(Name = "Fecha Nacimiento")]
+        [Required(ErrorMessage = "Campo Fecha de nacimiento de usuario es obligatorio")]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         [DataType(DataType.Date)]
         public DateTime BirthDate { get; set; }
 
-        [Required(ErrorMessage = "Campo número de documento es obligatorio")]
         [StringLength(20)]
         [Display(Name = "Núm. Documento")]
         public string DocumentNumber { get; set; }
 
         [StringLength(50)]
+        [Required(ErrorMessage = "Correo electrónico de usuario es obligatorio")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
@@ -36,22 +37,24 @@ namespace GymTest.Models
         public string Address { get; set; }
 
         [StringLength(200)]
+        [Required(ErrorMessage = "Teléfono de usuario es obligatorio")]
         [Display(Name = "Teléfono")]
         public string Phones { get; set; }
 
         [Display(Name = "Nombre de contacto")]
+        [Required(ErrorMessage = "Dato de contacto es obligatorio")]
         [StringLength(100, MinimumLength = 6, ErrorMessage = "El nombre de usuario debe ser entre 6 y 100 caracteres de largo")]
         public string ContactFullName { get; set; }
 
         [StringLength(200)]
+        [Required(ErrorMessage = "Dato de contacto es obligatorio")]
         [Display(Name = "Teléfono de contacto")]
         public string ContactPhones { get; set; }
 
-        [Required(ErrorMessage = "La fecha de ingreso es obligatoria")]
         [Display(Name = "Fecha Ingreso")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime SignInDate { get; set; }
+        public DateTime? SignInDate { get; set; }
 
         [Required(ErrorMessage = "Campo emergencia médica es obligatorio")]
         [ForeignKey("MedicalEmergencyId")]
