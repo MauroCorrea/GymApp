@@ -62,7 +62,7 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CashMovementId,CashMovementDetails,Amount,CashMovementTypeId,CashCategoryId,SupplierId")] CashMovement cashMovement)
+        public async Task<IActionResult> Create([Bind("CashMovementId,CashMovementDate,CashMovementDetails,Amount,CashMovementTypeId,CashCategoryId,SupplierId")] CashMovement cashMovement)
         {
             if (ModelState.IsValid)
             {
@@ -100,7 +100,7 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CashMovementId,CashMovementDetails,Amount,CashMovementTypeId,CashCategoryId,SupplierId")] CashMovement cashMovement)
+        public async Task<IActionResult> Edit(int id, [Bind("CashMovementId,CashMovementDate,CashMovementDetails,Amount,CashMovementTypeId,CashCategoryId,SupplierId")] CashMovement cashMovement)
         {
             if (id != cashMovement.CashMovementId)
             {

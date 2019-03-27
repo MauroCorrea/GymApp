@@ -18,7 +18,7 @@ namespace GymTest.Models
         public float? Amount { get; set; }
 
         [Display(Name = "Tipo")]
-        [Required]
+        [Required(ErrorMessage = "Campo Tipo es obligatorio")]
         public int CashMovementTypeId { get; set; }
 
         [Required(ErrorMessage = "La fecha de movimiento es obligatoria")]
@@ -31,7 +31,7 @@ namespace GymTest.Models
         public virtual CashMovementType CashMovementType { get; set; }
 
         [Display(Name = "Categoría")]
-        [Required]
+        [Required(ErrorMessage = "Campo Categoría es obligatorio")]
         public int CashCategoryId { get; set; }
 
         [Display(Name = "Categoría")]
@@ -39,7 +39,7 @@ namespace GymTest.Models
 
 
         [Display(Name = "Proveedor")]
-        [Required]
+        [Required(ErrorMessage = "Campo Proveedor es obligatorio")]
         public int SupplierId { get; set; }
 
         [Display(Name = "Proveedor")]
