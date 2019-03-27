@@ -10,8 +10,8 @@ namespace GymTest.Models
         public int AssistanceId { get; set; }
 
         [Display(Name = "Fecha Asistencia")]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy HH:mm}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.DateTime)]
         public DateTime AssistanceDate { get; set; }
 
         [ForeignKey("User")]

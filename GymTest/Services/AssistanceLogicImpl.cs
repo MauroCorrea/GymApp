@@ -100,8 +100,12 @@ namespace GymTest.Services
 
                         DateTime realAssistanceDate = assistanceDate.HasValue ? (DateTime)assistanceDate : DateTime.Now;
 
+                        double diffTimeSecs = int.Parse(_appSettings.Value.AssistanceConfiguration_DiffHours) * 60 * 60
+                            + int.Parse(_appSettings.Value.AssistanceConfiguration_DiffMins) * 60
+                            + int.Parse(_appSettings.Value.AssistanceConfiguration_DiffSecs);
+
                         if (lastAsistance == null ||
-                            (realAssistanceDate - lastAsistance.AssistanceDate).TotalHours > int.Parse(_appSettings.Value.AssistanceConfiguration_DiffHours))
+                            (realAssistanceDate - lastAsistance.AssistanceDate).TotalSeconds > diffTimeSecs)
                         {
                             //Creamos asistencia en caso de que el usuario pueda entrar. Caso contrario, queda a criterio del lugar si pasa o no.
                             Assistance assistance = new Assistance
