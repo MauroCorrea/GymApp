@@ -6,6 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using GymTest.Models;
 using GymTest.Data;
 
+using OfficeOpenXml;
+using System.IO;
+using System;
+using Microsoft.AspNetCore.Http;
+
 namespace GymTest.Controllers
 {
     public class CashMovementController : Controller
@@ -24,7 +29,65 @@ namespace GymTest.Controllers
                                          .Include(c => c.CashCategory)
                                          .Include(c => c.CashMovementType)
                                          .Include(c => c.Supplier);
-            return View(await gymTestContext.ToListAsync());
+           return View(await gymTestContext.ToListAsync());
+        }
+
+        public IActionResult ExportToExcel()
+        {
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string Ruta_Publica_Excel = (path + "/MovimientosDeCaja_" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".xlsx");
+
+            ExcelPackage Package = new ExcelPackage(new System.IO.FileInfo(Ruta_Publica_Excel));
+            var Hoja_1 = Package.Workbook.Worksheets.Add("Contenido_1");
+
+            /*------------------------------------------------------*/
+            int rowNum = 2;
+            int originalRowNum = rowNum;
+
+            Hoja_1.Cells["B" + rowNum].Value = "Detalles";
+            Hoja_1.Cells["C" + rowNum].Value = "Tipo";
+            Hoja_1.Cells["D" + rowNum].Value = "Categoría";
+            Hoja_1.Cells["E" + rowNum].Value = "Fecha";
+            Hoja_1.Cells["F" + rowNum].Value = "Monto";
+            Hoja_1.Cells["G" + rowNum].Value = "Proveedor";
+
+            Hoja_1.Cells["B" + rowNum + ":G" + rowNum].Style.Font.Bold = true;
+            Hoja_1.Cells["B" + rowNum + ":G" + rowNum].Style.Font.Size = 15;
+
+            foreach (CashMovement row in _context.CashMovement)
+            {
+                row.CashMovementType = _context.CashMovementType.Where(x => x.CashMovementTypeId == row.CashMovementTypeId).First();
+                row.CashCategory = _context.CashCategory.Where(x => x.CashCategoryId == row.CashCategoryId).First();
+                row.Supplier = _context.Supplier.Where(x => x.SupplierId == row.SupplierId).First();
+
+                rowNum++;
+                Hoja_1.Cells["B" + rowNum].Value = row.CashMovementDetails;
+                Hoja_1.Cells["C" + rowNum].Value = row.CashMovementType.CashMovementTypeDescription;
+                Hoja_1.Cells["D" + rowNum].Value = row.CashCategory.CashCategoryDescription;
+                Hoja_1.Cells["E" + rowNum].Value = row.CashMovementDate.ToString();
+                Hoja_1.Cells["F" + rowNum].Value = row.CashMovementTypeId == 1 ? row.Amount : (row.Amount * (-1));
+                Hoja_1.Cells["G" + rowNum].Value = row.Supplier.SupplierDescription;
+            }
+
+            Hoja_1.Cells["F" + (rowNum + 1)].Formula = "SUM(F" + (originalRowNum + 1) + ":F" + rowNum + ")";
+
+
+            /*------------------------------------------------------*/
+
+            Package.Save();
+
+            /*------------------------------------------------------*/
+            /*Response.ContentType = "application/force-download";
+            Response.ContentType = "application/vnd.ms-excel";
+            Response.ContentType = "application/download";
+
+          
+            Response.Headers.Add("content-disposition", string.Format("attachment;  filename={0}", "ExcelWeb.xlsx"));
+            await Response.Body.WriteAsync(Package.GetAsByteArray());
+            await Response.Body.FlushAsync();*/
+            /*------------------------------------------------------*/
+
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: CashMovement/Details/5

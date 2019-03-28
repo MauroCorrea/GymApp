@@ -78,7 +78,7 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PaymentId,PaymentDate,MovementTypeId,QuantityMovmentType,Amount,UserId,LimitUsableDate")] Payment payment)
+        public IActionResult Create([Bind("PaymentId,PaymentDate,MovementTypeId,QuantityMovmentType,Amount,UserId,LimitUsableDate")] Payment payment)
         {
             if (ModelState.IsValid)
             {
@@ -115,7 +115,7 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PaymentId,PaymentDate,MovementTypeId,QuantityMovmentType,Amount,UserId,LimitUsableDate")] Payment payment)
+        public IActionResult Edit(int id, [Bind("PaymentId,PaymentDate,MovementTypeId,QuantityMovmentType,Amount,UserId,LimitUsableDate")] Payment payment)
         {
             if (id != payment.PaymentId)
             {

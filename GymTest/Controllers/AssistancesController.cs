@@ -75,7 +75,7 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AssistanceId,AssistanceDate,UserId")] Assistance assistance)
+        public IActionResult Create([Bind("AssistanceId,AssistanceDate,UserId")] Assistance assistance)
         {
             if (ModelState.IsValid)
             {
