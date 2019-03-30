@@ -7,9 +7,7 @@ using GymTest.Models;
 using GymTest.Data;
 
 using OfficeOpenXml;
-using System.IO;
 using System;
-using Microsoft.AspNetCore.Http;
 
 namespace GymTest.Controllers
 {
@@ -29,7 +27,7 @@ namespace GymTest.Controllers
                                          .Include(c => c.CashCategory)
                                          .Include(c => c.CashMovementType)
                                          .Include(c => c.Supplier);
-           return View(await gymTestContext.ToListAsync());
+            return View(await gymTestContext.ToListAsync());
         }
 
         public IActionResult ExportToExcel()
