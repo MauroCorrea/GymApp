@@ -138,7 +138,11 @@ namespace GymTest.Models
                 context.CashMovementType.AddRange(
                     new CashMovementType
                     {
-                        CashMovementTypeDescription = "Tipo de Movimiento 1"
+                        CashMovementTypeDescription = "Entrada"
+                    },
+                    new CashMovementType
+                    {
+                        CashMovementTypeDescription = "Salida"
                     }
                 );
             }

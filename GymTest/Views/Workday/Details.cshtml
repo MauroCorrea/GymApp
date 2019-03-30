@@ -1,0 +1,42 @@
+@model GymTest.Models.Workday
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Workday</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Resource)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Resource.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkingDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.WorkingDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.QuantityOne)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.QuantityOne)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.QuantityTwo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.QuantityTwo)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.WorkdayId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -11,6 +11,7 @@
         <PackageReference Include="jQuery.UI.Combined" Version="1.12.1" />
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.4" />
         <PackageReference Include="EPPlus.Core" Version="1.5.4" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     </ItemGroup>
     <ItemGroup>
         <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.1.1" />
@@ -23,11 +24,13 @@
         <Compile Remove="Migrations\20190327030808_InitialCreate.cs" />
         <Compile Remove="Migrations\20190327032849_InitialCreate.cs" />
         <Compile Remove="Migrations\20190327034445_InitialCreate.cs" />
+        <Compile Remove="Migrations\20190330041033_InitialCreate.cs" />
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Services\" />
         <Folder Include="wwwroot\Templates\" />
         <Folder Include="Views\GeneralAdministration\" />
+        <Folder Include="Views\Payroll\" />
     </ItemGroup>
     <ItemGroup>
         <Content Remove="wwwroot\images\mustpay.gif" />

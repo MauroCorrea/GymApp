@@ -1,0 +1,45 @@
+@model GymTest.Models.Workday
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Workday</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Resource)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Resource.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkingDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.WorkingDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.QuantityOne)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.QuantityOne)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.QuantityTwo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.QuantityTwo)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="WorkdayId" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>
