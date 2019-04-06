@@ -1,0 +1,30 @@
+@model GymTest.Models.CashSubcategory
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Detalles</h2>
+
+<div>
+    <h4>Subcategoría</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CashSubcategoryDescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CashSubcategoryDescription)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CashCategory)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CashCategory.CashCategoryDescription)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.CashSubcategoryId" class="btn btn-default">Modificar</a> |
+    <a asp-action="Index" class="btn btn-default">Regresar</a>
+</div>

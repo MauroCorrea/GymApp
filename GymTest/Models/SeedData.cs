@@ -28,6 +28,8 @@ namespace GymTest.Models
 
                 LoadCashCategories(context);
 
+                LoadCashSubcategories(context);
+
                 LoadSuppliers(context);
 
                 LoadCashMovementTypes(context);
@@ -107,6 +109,23 @@ namespace GymTest.Models
                         HealthHeartProblems = "Ninguno",
                         HealthPhysicalProblems = "Ninguno",
                         HealthRegularPills = "Ninguno"
+                    }
+                );
+            }
+        }
+
+        private static void LoadCashSubcategories(GymTestContext context)
+        {
+            var list = from m in context.CashSubcategory
+                       select m;
+
+            if (list.Count() < 1)
+            {
+                context.CashSubcategory.AddRange(
+                    new CashSubcategory
+                    {
+                        CashCategoryId = 1,
+                        CashSubcategoryDescription = "Subcategoria 1"
                     }
                 );
             }

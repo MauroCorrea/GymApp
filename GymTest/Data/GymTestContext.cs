@@ -17,6 +17,8 @@ namespace GymTest.Data
 
         public DbSet<GymTest.Models.CashCategory> CashCategory { get; set; }
 
+        public DbSet<GymTest.Models.CashSubcategory> CashSubcategory { get; set; }
+
         public DbSet<GymTest.Models.CashMovement> CashMovement { get; set; }
 
         public DbSet<GymTest.Models.CashMovementType> CashMovementType { get; set; }

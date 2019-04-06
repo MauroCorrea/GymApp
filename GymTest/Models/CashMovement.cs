@@ -37,6 +37,12 @@ namespace GymTest.Models
         [Display(Name = "Categoría")]
         public virtual CashCategory CashCategory { get; set; }
 
+        [Display(Name = "Sub-categoría")]
+        [Required(ErrorMessage = "Campo Categoría es obligatorio")]
+        public int CashSubcategoryId { get; set; }
+
+        [Display(Name = "Sub-categoría")]
+        public virtual CashSubcategory CashSubcategory { get; set; }
 
         [Display(Name = "Proveedor")]
         [Required(ErrorMessage = "Campo Proveedor es obligatorio")]
