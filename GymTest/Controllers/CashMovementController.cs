@@ -5,12 +5,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GymTest.Models;
 using GymTest.Data;
-
 using OfficeOpenXml;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GymTest.Controllers
 {
+    [Authorize]
     public class CashMovementController : Controller
     {
         private readonly GymTestContext _context;

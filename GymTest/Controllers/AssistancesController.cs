@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -8,9 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using GymTest.Models;
 using GymTest.Data;
 using GymTest.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GymTest.Controllers
 {
+    [Authorize]
     public class AssistancesController : Controller
     {
         private readonly GymTestContext _context;
@@ -94,57 +95,57 @@ namespace GymTest.Controllers
         }
 
         // GET: Assistances/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var assistance = await _context.Assistance.FindAsync(id);
-            if (assistance == null)
-            {
-                return NotFound();
-            }
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber", assistance.UserId);
-            return View(assistance);
-        }
+        //    var assistance = await _context.Assistance.FindAsync(id);
+        //    if (assistance == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber", assistance.UserId);
+        //    return View(assistance);
+        //}
 
-        // POST: Assistances/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AssistanceId,AssistanceDate,UserId")] Assistance assistance)
-        {
-            if (id != assistance.AssistanceId)
-            {
-                return NotFound();
-            }
+        //// POST: Assistances/Edit/5
+        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, [Bind("AssistanceId,AssistanceDate,UserId")] Assistance assistance)
+        //{
+        //    if (id != assistance.AssistanceId)
+        //    {
+        //        return NotFound();
+        //    }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(assistance);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AssistanceExists(assistance.AssistanceId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber", assistance.UserId);
-            return View(assistance);
-        }
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(assistance);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!AssistanceExists(assistance.AssistanceId))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber", assistance.UserId);
+        //    return View(assistance);
+        //}
 
         // GET: Assistances/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -172,6 +173,10 @@ namespace GymTest.Controllers
         {
             var assistance = await _context.Assistance.FindAsync(id);
             _context.Assistance.Remove(assistance);
+
+
+            _assistanceLogic.ProcessDelete(assistance.AssistanceDate, assistance.UserId);
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

@@ -6,9 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using GymTest.Models;
 using GymTest.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GymTest.Controllers
 {
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly GymTestContext _context;

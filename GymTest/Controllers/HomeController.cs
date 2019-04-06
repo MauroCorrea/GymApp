@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using GymTest.Models;
-using GymTest.Controllers;
 using GymTest.Services;
 using GymTest.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GymTest.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly GymTestContext _context;
@@ -36,7 +33,7 @@ namespace GymTest.Controllers
             if (Request.Form["1"] != "")
                 fingerprint += 1;
 
-          
+
         }
 
         public IActionResult Contact(string fingerprint)

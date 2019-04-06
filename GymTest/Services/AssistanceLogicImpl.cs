@@ -195,6 +195,29 @@ namespace GymTest.Services
             }
         }
 
+        public void ProcessDelete(DateTime assistanceDate, int userId)
+        {
+            var users = from m in _context.User
+                        select m;
+
+            var user = users.First(u => u.UserId == userId);
+
+            if (user != null)
+            {
+                var bodyData = new System.Collections.Generic.Dictionary<string, string>
+                {
+                    { "UserName", user.FullName },
+                    { "assistanceDate", assistanceDate.ToString("dd/MM/yyyy HH:mm") }
+                };
+
+                _sendEmail.SendEmail(bodyData,
+                                     "AssistanceDeleteTemplate",
+                                     "Notificación de asistencia eliminada" + user.FullName,
+                                     new System.Collections.Generic.List<string>() { user.Email }
+                                    );
+            }
+        }
+
         public void ProcessWelcomeNotification(int userId)
         {
             var users = from m in _context.User

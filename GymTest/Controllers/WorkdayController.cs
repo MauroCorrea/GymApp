@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -8,8 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using GymTest.Data;
 using GymTest.Models;
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace GymTest.Controllers
 {
+    [Authorize]
     public class WorkdayController : Controller
     {
         private readonly GymTestContext _context;
@@ -48,7 +49,7 @@ namespace GymTest.Controllers
         // GET: Workday/Create
         public IActionResult Create()
         {
-            ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "Email");
+            ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "FullName");
             return View();
         }
 
@@ -65,7 +66,7 @@ namespace GymTest.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "Email", workday.ResourceId);
+            ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "FullName", workday.ResourceId);
             return View(workday);
         }
 
@@ -82,7 +83,7 @@ namespace GymTest.Controllers
             {
                 return NotFound();
             }
-            ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "Email", workday.ResourceId);
+            ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "FullName", workday.ResourceId);
             return View(workday);
         }
 
@@ -118,39 +119,39 @@ namespace GymTest.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "Email", workday.ResourceId);
+            ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "FullName", workday.ResourceId);
             return View(workday);
         }
 
         // GET: Workday/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var workday = await _context.Workday
-                .Include(w => w.Resource)
-                .FirstOrDefaultAsync(m => m.WorkdayId == id);
-            if (workday == null)
-            {
-                return NotFound();
-            }
+        //    var workday = await _context.Workday
+        //        .Include(w => w.Resource)
+        //        .FirstOrDefaultAsync(m => m.WorkdayId == id);
+        //    if (workday == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(workday);
-        }
+        //    return View(workday);
+        //}
 
-        // POST: Workday/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var workday = await _context.Workday.FindAsync(id);
-            _context.Workday.Remove(workday);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        //// POST: Workday/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var workday = await _context.Workday.FindAsync(id);
+        //    _context.Workday.Remove(workday);
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private bool WorkdayExists(int id)
         {
