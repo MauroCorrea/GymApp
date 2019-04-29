@@ -186,13 +186,14 @@ namespace GymTest.Services
             if (!string.IsNullOrEmpty(lastPaymentDate))
                 lastPaymentDate = "Su último pago fue realizado el día " + lastPaymentDate + ".";
 
+            var entryInfo = "Su entrada en " + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + " no pudo ser registrada exitosamente.";
+
             var bodyData = new System.Collections.Generic.Dictionary<string, string>
                 {
                     { "UserName", fullName },
                     { "message", details },
-                    { "entryDate", DateTime.Now.ToString("dd/MM/yyyy HH:mm") },
-                    { "lastPaymentDate" , lastPaymentDate }
-
+                    { "entryDateInfo", entryInfo },
+                    { "lastPaymentDateInfo" , lastPaymentDate }
                 };
 
             _sendEmail.SendEmail(bodyData,
