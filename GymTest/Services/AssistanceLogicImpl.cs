@@ -32,7 +32,6 @@ namespace GymTest.Services
 
             if (users.Count() == 1)
             {
-                //TODO: LLENAR EL OBJETO A RETORNAR SEGUN EL ERROR
                 objectToReturn.User = users.First();
 
                 var payments = from m in _context.Payment
@@ -47,6 +46,8 @@ namespace GymTest.Services
                         if (newestPayment.LimitUsableDate.Date < DateTime.Now.Date)
                         {
                             objectToReturn.Message = "Fecha límite de uso sobrepasada. La misma es " + newestPayment.LimitUsableDate.Date.ToShortDateString() + ".";
+                            ProcessNotEntryNotification(objectToReturn.User.FullName, objectToReturn.Message, objectToReturn.User.Email,
+                                newestPayment.PaymentDate.ToString("dd/MM/yyyy HH:mm"));
                             return objectToReturn; // se venció el tiempo de uso del ultimo pago
                         }
 
@@ -64,6 +65,8 @@ namespace GymTest.Services
                                 if (monthsUsed > monthsPayed)
                                 {
                                     objectToReturn.Message = "Pago mensual vencido. Su último fue por " + monthsPayed + " mes(es) y se utilizaron " + monthsUsed + " mes(es).";
+                                    ProcessNotEntryNotification(objectToReturn.User.FullName, objectToReturn.Message, objectToReturn.User.Email,
+                                        newestPayment.PaymentDate.ToString("dd/MM/yyyy HH:mm"));
                                     return objectToReturn; // el pago actual ya no es válido
 
                                 }
@@ -81,6 +84,8 @@ namespace GymTest.Services
                                 if (ass.Count() >= newestPayment.QuantityMovmentType)
                                 {
                                     objectToReturn.Message = "Pago por asistencias consumido. Se habilitaron " + newestPayment.QuantityMovmentType + " asistencia(s) y se utilizaron " + ass.Count() + " asistencia(s).";
+                                    ProcessNotEntryNotification(objectToReturn.User.FullName, objectToReturn.Message, objectToReturn.User.Email,
+                                        newestPayment.PaymentDate.ToString("dd/MM/yyyy HH:mm"));
                                     return objectToReturn; // ya se consumieron todas las asistencias
 
                                 }
@@ -91,6 +96,8 @@ namespace GymTest.Services
 
                             default:
                                 objectToReturn.Message = "Formato de pago no procesable.";
+                                ProcessNotEntryNotification(objectToReturn.User.FullName, objectToReturn.Message, objectToReturn.User.Email,
+                                    newestPayment.PaymentDate.ToString("dd/MM/yyyy HH:mm"));
                                 return objectToReturn;
                         }
 
@@ -140,6 +147,8 @@ namespace GymTest.Services
                     else//error: ultimo pago sin tipo de membresía
                     {
                         objectToReturn.Message = "Último pago sin tipo de membresía.";
+                        ProcessNotEntryNotification(objectToReturn.User.FullName, objectToReturn.Message, objectToReturn.User.Email,
+                            newestPayment.PaymentDate.ToString("dd/MM/yyyy HH:mm"));
 
                         return objectToReturn;
 
@@ -148,6 +157,7 @@ namespace GymTest.Services
                 else//error: usuario sin pagos
                 {
                     objectToReturn.Message = "Usuario sin pagos.";
+                    ProcessNotEntryNotification(objectToReturn.User.FullName, objectToReturn.Message, objectToReturn.User.Email, string.Empty);
                     return objectToReturn;
                 }
 
@@ -169,6 +179,28 @@ namespace GymTest.Services
                 objectToReturn.Message = "Usuario no encontrado.";
 
             return objectToReturn;
+        }
+
+        public void ProcessNotEntryNotification(string fullName, string details, string email, string lastPaymentDate)
+        {
+            if (!string.IsNullOrEmpty(lastPaymentDate))
+                lastPaymentDate = "Su último pago fue realizado el día " + lastPaymentDate + ".";
+
+            var bodyData = new System.Collections.Generic.Dictionary<string, string>
+                {
+                    { "UserName", fullName },
+                    { "message", details },
+                    { "entryDate", DateTime.Now.ToString("dd/MM/yyyy HH:mm") },
+                    { "lastPaymentDate" , lastPaymentDate }
+
+                };
+
+            _sendEmail.SendEmail(bodyData,
+                                 "AssistanceUserNotEntryTemplate",
+                                 "Notificación de entrada no procesada" + fullName,
+                                 new System.Collections.Generic.List<string>() { email }
+                                );
+
         }
 
         public void ProcessAssistanceNotification(int userId)

@@ -42,7 +42,6 @@
         <Content Remove="wwwroot\images\gym1.jpg" />
         <Content Remove="wwwroot\images\gym2.jpg" />
         <Content Remove="wwwroot\Templates\AssistanceTemplate %28copy%29.html" />
-        <Content Remove="wwwroot\Templates\AssistanceDeleteTemplate.html" />
     </ItemGroup>
     <ItemGroup>
         <None Include="wwwroot\images\mustpay.gif" />
