@@ -8,6 +8,10 @@ using GymTest.Data;
 using OfficeOpenXml;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using GymTest.Services;
+using System.Security.Claims;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Hosting;
 
 namespace GymTest.Controllers
 {
@@ -15,10 +19,14 @@ namespace GymTest.Controllers
     public class CashMovementController : Controller
     {
         private readonly GymTestContext _context;
+        private readonly ISendEmail _sendEmail;
+        private IHostingEnvironment _env;
 
-        public CashMovementController(GymTestContext context)
+        public CashMovementController(GymTestContext context, ISendEmail sendEmail, IHostingEnvironment env)
         {
             _context = context;
+            _sendEmail = sendEmail;
+            _env = env;
         }
 
         // GET: CashMovement
@@ -34,7 +42,7 @@ namespace GymTest.Controllers
 
         public IActionResult ExportToExcel()
         {
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);//_env.WebRootPath;//Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             string Ruta_Publica_Excel = (path + "/MovimientosDeCaja_" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".xlsx");
 
             ExcelPackage Package = new ExcelPackage(new System.IO.FileInfo(Ruta_Publica_Excel));
@@ -89,6 +97,29 @@ namespace GymTest.Controllers
             await Response.Body.WriteAsync(Package.GetAsByteArray());
             await Response.Body.FlushAsync();*/
             /*------------------------------------------------------*/
+
+            //SendMail
+            var userEmail = User.FindFirst(ClaimTypes.Name).Value;
+
+
+            var bodyData = new System.Collections.Generic.Dictionary<string, string>
+                {
+                    { "UserName", "Administrador" },
+                    { "Title", "Te mando eso!" },
+                    { "message", "Si no te llego mala liga." }
+                };
+
+            _sendEmail.SendEmail(bodyData,
+                                 "AssistanceTemplate",
+                                 "Notificación de asistencia" + userEmail,
+                                 new System.Collections.Generic.List<string>() { userEmail },
+                                 new List<string>() { Ruta_Publica_Excel }
+                                );
+
+            if ((System.IO.File.Exists(Ruta_Publica_Excel)))
+            {
+                System.IO.File.Delete(Ruta_Publica_Excel);
+            }
 
             return RedirectToAction(nameof(Index));
         }

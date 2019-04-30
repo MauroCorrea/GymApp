@@ -7,6 +7,7 @@ using System.IO;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
+using System.Net.Mime;
 
 namespace GymTest.Services
 {
@@ -54,7 +55,7 @@ namespace GymTest.Services
             return body;
         }
 
-        public void SendEmail(Dictionary<string, string> bodyData, string templateName, string subject, List<string> receipts)
+        public void SendEmail(Dictionary<string, string> bodyData, string templateName, string subject, List<string> receipts, List<string> filePathAttachment = null)
         {
             try
             {
@@ -62,10 +63,25 @@ namespace GymTest.Services
                 {
                     From = new MailAddress(_appSettings.Value.EmailConfiguration_Username)
                 };
+
+
+                if(filePathAttachment != null)
+                {
+                    foreach (string item in filePathAttachment)
+                    {
+                        if (!string.IsNullOrEmpty(item))
+                        {
+                            Attachment attachment = new Attachment(item, MediaTypeNames.Application.Octet);
+                            correo.Attachments.Add(attachment);
+                        }
+                    }
+                }
+
                 foreach (var receipt in receipts)
                 {
                     correo.To.Add(receipt);
                 }
+
                 correo.Subject = subject;
                 correo.Body = CreateEmailBody(bodyData, templateName);
                 correo.IsBodyHtml = true;
