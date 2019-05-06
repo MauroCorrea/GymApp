@@ -14,6 +14,8 @@ namespace GymTest.Models
 
         public MySQLConfiguration MySQLConfiguration { get; set; }
 
+        public string EnableAdminRegister { get; set; }
+
         public string AssistanceConfiguration_DiffHours { get; set; }
         public string AssistanceConfiguration_DiffMins { get; set; }
         public string AssistanceConfiguration_DiffSecs { get; set; }

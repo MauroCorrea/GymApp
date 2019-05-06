@@ -57,11 +57,7 @@ namespace GymTest
                 options.UseMySql(settings.MySQLConfiguration.ConnectionString,
                         mysqlOptions =>
                         {
-                            //mysqlOptions.MaxBatchSize(_configuration..EfBatchSize);
-                            mysqlOptions.ServerVersion((settings.MySQLConfiguration.Version)
-                            );
-                            //if (AppConfig.EfRetryOnFailure > 0)
-                            //mysqlOptions.EnableRetryOnFailure(AppConfig.EfRetryOnFailure, TimeSpan.FromSeconds(5), null);
+                            mysqlOptions.ServerVersion(settings.MySQLConfiguration.Version);
                         }
                 ));
         }

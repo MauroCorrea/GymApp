@@ -1,4 +1,3 @@
-using System;
 using GymTest.Areas.Identity.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
