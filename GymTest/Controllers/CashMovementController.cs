@@ -40,8 +40,16 @@ namespace GymTest.Controllers
             return View(await gymTestContext.ToListAsync());
         }
 
-        public IActionResult ExportToExcel()
+        public IActionResult ExportToExcel(DateTime FromDate, DateTime ToDate)
         {
+
+            if (FromDate == DateTime.MinValue)
+                FromDate = DateTime.Now.AddDays(-7);
+            if (ToDate == DateTime.MinValue)
+                ToDate = DateTime.Now.AddDays(1);
+
+            var cashMovs = _context.CashMovement.Where(cm => cm.CashMovementDate >= FromDate && cm.CashMovementDate < ToDate);
+
             string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);//_env.WebRootPath;//Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             string Ruta_Publica_Excel = (path + "/MovimientosDeCaja_" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".xlsx");
 
@@ -49,7 +57,15 @@ namespace GymTest.Controllers
             var Hoja_1 = Package.Workbook.Worksheets.Add("Contenido_1");
 
             /*------------------------------------------------------*/
-            int rowNum = 2;
+            int rowNum = 1;
+
+            Hoja_1.Cells["B" + rowNum].Value = "Desde:";
+            Hoja_1.Cells["C" + rowNum].Value = FromDate.ToShortDateString();
+            Hoja_1.Cells["D" + rowNum].Value = "Hasta:";
+            Hoja_1.Cells["E" + rowNum].Value = ToDate.ToShortDateString();
+
+            /*------------------------------------------------------*/
+            rowNum = 2;
             int originalRowNum = rowNum;
 
             Hoja_1.Cells["B" + rowNum].Value = "Detalles";
@@ -63,7 +79,7 @@ namespace GymTest.Controllers
             Hoja_1.Cells["B" + rowNum + ":H" + rowNum].Style.Font.Bold = true;
             Hoja_1.Cells["B" + rowNum + ":H" + rowNum].Style.Font.Size = 15;
 
-            foreach (CashMovement row in _context.CashMovement)
+            foreach (CashMovement row in cashMovs)
             {
                 row.CashMovementType = _context.CashMovementType.Where(x => x.CashMovementTypeId == row.CashMovementTypeId).First();
                 row.CashCategory = _context.CashCategory.Where(x => x.CashCategoryId == row.CashCategoryId).First();
@@ -80,29 +96,18 @@ namespace GymTest.Controllers
                 Hoja_1.Cells["H" + rowNum].Value = row.Supplier.SupplierDescription;
             }
 
-            Hoja_1.Cells["G" + (rowNum + 1)].Formula = "SUM(G" + (originalRowNum + 1) + ":G" + rowNum + ")";
-
+            if (cashMovs.Count() > 0)
+                Hoja_1.Cells["G" + (rowNum + 1)].Formula = "SUM(G" + (originalRowNum + 1) + ":G" + rowNum + ")";
 
             /*------------------------------------------------------*/
 
             Package.Save();
 
-            /*------------------------------------------------------*/
-            /*Response.ContentType = "application/force-download";
-            Response.ContentType = "application/vnd.ms-excel";
-            Response.ContentType = "application/download";
-
-          
-            Response.Headers.Add("content-disposition", string.Format("attachment;  filename={0}", "ExcelWeb.xlsx"));
-            await Response.Body.WriteAsync(Package.GetAsByteArray());
-            await Response.Body.FlushAsync();*/
-            /*------------------------------------------------------*/
-
             //SendMail
             var userEmail = User.FindFirst(ClaimTypes.Name).Value;
 
 
-            var bodyData = new System.Collections.Generic.Dictionary<string, string>
+            var bodyData = new Dictionary<string, string>
                 {
                     { "UserName", "Administrador" },
                     { "Title", "Te mando eso!" },
@@ -112,7 +117,7 @@ namespace GymTest.Controllers
             _sendEmail.SendEmail(bodyData,
                                  "AssistanceTemplate",
                                  "Notificación de asistencia" + userEmail,
-                                 new System.Collections.Generic.List<string>() { userEmail },
+                                 new List<string>() { userEmail },
                                  new List<string>() { Ruta_Publica_Excel }
                                 );
 

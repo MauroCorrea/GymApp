@@ -8,8 +8,17 @@
 
 <p>
     <a asp-action="Create" class="btn btn-primary">Crear movimiento de caja</a>
-    <a asp-action="ExportToExcel" class="btn btn-primary">Exportar a Excel</a>
+    @*<a asp-action="ExportToExcel" class="btn btn-primary">Exportar a Excel</a>*@
 </p>
+
+<form asp-controller="CashMovement" asp-action="ExportToExcel">
+    <p>
+        Fecha desde: <input type="date" name="FromDate" class="form-control datepicker">
+        Fecha hasta: <input type="date" name="ToDate" class="form-control datepicker">
+        <input type="submit" value="Exportar a Excel" class="btn btn-primary" />
+    </p>
+</form>
+
 <table class="table">
     <thead>
         <tr>
