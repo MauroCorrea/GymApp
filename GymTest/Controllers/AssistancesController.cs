@@ -67,7 +67,7 @@ namespace GymTest.Controllers
         // GET: Assistances/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.User, "UserId", "DocumentNumber");
+            ViewData["UserId"] = new SelectList(_context.User, "UserId", "FullName");
             return View();
         }
 
