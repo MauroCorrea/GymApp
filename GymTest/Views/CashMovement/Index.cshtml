@@ -8,7 +8,6 @@
 
 <p>
     <a asp-action="Create" class="btn btn-primary">Crear movimiento de caja</a>
-    @*<a asp-action="ExportToExcel" class="btn btn-primary">Exportar a Excel</a>*@
 </p>
 
 <form asp-controller="CashMovement" asp-action="ExportToExcel">
@@ -27,6 +26,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CashMovementDate)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CashMovementType)
@@ -49,6 +51,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CashMovementDate)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CashMovementType.CashMovementTypeDescription)
