@@ -12,6 +12,8 @@
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.4" />
         <PackageReference Include="EPPlus.Core" Version="1.5.4" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+        <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.2" />
+        <PackageReference Include="NLog" Version="4.6.3" />
     </ItemGroup>
     <ItemGroup>
         <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.1.1" />
@@ -48,5 +50,10 @@
         <None Include="wwwroot\Templates\AssistanceTemplate.html" />
         <None Include="wwwroot\css\jquery-ui.css" />
         <None Include="wwwroot\images\ui-icons_444444_256x240.png" />
+    </ItemGroup>
+    <ItemGroup>
+        <Content Update="nlog.config">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 </Project>

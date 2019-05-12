@@ -1,6 +1,7 @@
 ﻿using System;
 using GymTest.Data;
 using GymTest.Models;
+using Microsoft.Extensions.Logging;
 
 namespace GymTest.Services
 {
@@ -10,8 +11,11 @@ namespace GymTest.Services
 
         private readonly GymTestContext _context;
 
-        public PaymentLogicImpl(GymTestContext context, ISendEmail sendEmail)
+        private readonly ILogger<IPaymentLogic> _logger;
+
+        public PaymentLogicImpl(GymTestContext context, ISendEmail sendEmail, ILogger<IPaymentLogic> logger)
         {
+            _logger = logger;
             _context = context;
             _sendEmail = sendEmail;
         }
@@ -29,8 +33,10 @@ namespace GymTest.Services
             }
             catch (Exception ex)
             {
-                var message = ex.Message;
-                //log error
+                var messageError = ex.Message;
+                _logger.LogError("Error Processing Payment. Detail: " + messageError);
+                if (ex.InnerException != null)
+                    _logger.LogError("Error Processing Payment. Detail: " + ex.InnerException.Message);
                 return false;
             }
 
@@ -87,8 +93,10 @@ namespace GymTest.Services
             }
             catch (Exception ex)
             {
-                var message = ex.Message;
-                //log error
+                var messageError = ex.Message;
+                _logger.LogError("Error Sending email. Detail: " + messageError);
+                if (ex.InnerException != null)
+                    _logger.LogError("Error Sending email. Detail: " + ex.InnerException.Message);
             }
 
             return true;

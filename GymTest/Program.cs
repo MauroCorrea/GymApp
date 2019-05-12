@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using GymTest.Data;
 using GymTest.Models;
 using System;
+using NLog.Web;
 using Microsoft.Extensions.Logging;
 
 namespace GymTest
@@ -15,17 +16,34 @@ namespace GymTest
     {
         public static void Main(string[] args)
         {
-            var host = BuildWebHost(args);
+            var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            try
+            {
+                logger.Debug("init main");
 
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                var host = BuildWebHost(args);
 
-            IConfigurationRoot configuration = builder.Build();
+                var builder = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
-            SeedDataBase(host);
+                IConfigurationRoot configuration = builder.Build();
 
-            host.Run();
+                SeedDataBase(host);
+
+                host.Run();
+            }
+            catch (Exception ex)
+            {
+                //NLog: catch setup errors
+                logger.Error(ex, "Stopped program because of exception");
+                throw;
+            }
+            finally
+            {
+                // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
+                NLog.LogManager.Shutdown();
+            }
         }
 
         private static void SeedDataBase(IWebHost host)
@@ -51,6 +69,11 @@ namespace GymTest
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                    .UseStartup<Startup>()
+                    .ConfigureLogging(logging =>
+                    {
+                        logging.ClearProviders();
+                        logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Warning);
+                    }).UseNLog()
                    .Build();
     }
 }

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using System.Net.Mime;
+using Microsoft.Extensions.Logging;
 
 namespace GymTest.Services
 {
@@ -19,8 +20,11 @@ namespace GymTest.Services
 
         private IHostingEnvironment _env;
 
-        public SendEmailImpl(GymTestContext context, IHostingEnvironment env, IOptions<AppSettings> app)
+        private readonly ILogger<ISendEmail> _logger;
+
+        public SendEmailImpl(GymTestContext context, IHostingEnvironment env, IOptions<AppSettings> app, ILogger<ISendEmail> logger)
         {
+            _logger = logger;
             _appSettings = app;
             _context = context;
             _env = env;
@@ -28,31 +32,38 @@ namespace GymTest.Services
 
         private string CreateEmailBody(Dictionary<string, string> bodyData, string templateName)
         {
-            string body = string.Empty;
-            //using streamreader for reading my htmltemplate  
-
-            var pathToFile = _env.WebRootPath
-                            + Path.DirectorySeparatorChar.ToString()
-                            + "Templates"
-                            + Path.DirectorySeparatorChar.ToString()
-                                 + templateName + ".html";
-
-            using (StreamReader reader = File.OpenText(pathToFile))
+            try
             {
-                body = reader.ReadToEnd();
-            }
+                string body = string.Empty;
+                //using streamreader for reading my htmltemplate  
 
-            foreach (var key in bodyData.Keys)
-            {
-                if (body.Contains("{" + key + "}"))
+                var pathToFile = _appSettings.Value.TemplateEmailPath + templateName + ".html";
+
+                using (StreamReader reader = File.OpenText(pathToFile))
                 {
-                    body = body.Replace("{" + key + "}", bodyData.GetValueOrDefault(key)); //replacing the required things
+                    body = reader.ReadToEnd();
                 }
+
+                foreach (var key in bodyData.Keys)
+                {
+                    if (body.Contains("{" + key + "}"))
+                    {
+                        body = body.Replace("{" + key + "}", bodyData.GetValueOrDefault(key)); //replacing the required things
+                    }
+                }
+
+                body = body.Replace("{client}", _appSettings.Value.Client);
+
+                return body;
             }
-
-            body = body.Replace("{client}", _appSettings.Value.Client);
-
-            return body;
+            catch (Exception ex)
+            {
+                var messageError = ex.Message;
+                _logger.LogError("Error Sending email. Detail: " + messageError);
+                if (ex.InnerException != null)
+                    _logger.LogError("Error Sending email. Detail: " + ex.InnerException.Message);
+            }
+            return string.Empty;
         }
 
         public void SendEmail(Dictionary<string, string> bodyData, string templateName, string subject, List<string> receipts, List<string> filePathAttachment = null)
@@ -65,7 +76,7 @@ namespace GymTest.Services
                 };
 
 
-                if(filePathAttachment != null)
+                if (filePathAttachment != null)
                 {
                     foreach (string item in filePathAttachment)
                     {
@@ -84,27 +95,31 @@ namespace GymTest.Services
 
                 correo.Subject = subject;
                 correo.Body = CreateEmailBody(bodyData, templateName);
-                correo.IsBodyHtml = true;
-                correo.Priority = MailPriority.Normal;
-
-                SmtpClient smtp = new SmtpClient
+                if (!string.IsNullOrEmpty(correo.Body))
                 {
-                    Host = _appSettings.Value.EmailConfiguration_Host,
-                    Port = int.Parse(_appSettings.Value.EmailConfiguration_Port),
-                    EnableSsl = true,
-                    UseDefaultCredentials = true
-                };
-                string sCuentaCorreo = _appSettings.Value.EmailConfiguration_Username;
-                string pwd = _appSettings.Value.EmailConfiguration_Password;
-                smtp.Credentials = new NetworkCredential(sCuentaCorreo, pwd);
+                    correo.IsBodyHtml = true;
+                    correo.Priority = MailPriority.Normal;
 
-                smtp.Send(correo);
+                    SmtpClient smtp = new SmtpClient
+                    {
+                        Host = _appSettings.Value.EmailConfiguration_Host,
+                        Port = int.Parse(_appSettings.Value.EmailConfiguration_Port),
+                        EnableSsl = true,
+                        UseDefaultCredentials = true
+                    };
+                    string sCuentaCorreo = _appSettings.Value.EmailConfiguration_Username;
+                    string pwd = _appSettings.Value.EmailConfiguration_Password;
+                    smtp.Credentials = new NetworkCredential(sCuentaCorreo, pwd);
+
+                    smtp.Send(correo);
+                }
             }
             catch (Exception ex)
             {
-                // TODO: log error
                 var messageError = ex.Message;
-
+                _logger.LogError("Error Sending email. Detail: " + messageError);
+                if (ex.InnerException != null)
+                    _logger.LogError("Error Sending email. Detail: " + ex.InnerException.Message);
             }
         }
     }
