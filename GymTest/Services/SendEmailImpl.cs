@@ -14,7 +14,7 @@ namespace GymTest.Services
 {
     public class SendEmailImpl : ISendEmail
     {
-        private readonly IOptions<AppSettings> _appSettings;
+        private readonly IOptionsSnapshot<AppSettings> _appSettings;
 
         private readonly GymTestContext _context;
 
@@ -22,7 +22,7 @@ namespace GymTest.Services
 
         private readonly ILogger<ISendEmail> _logger;
 
-        public SendEmailImpl(GymTestContext context, IHostingEnvironment env, IOptions<AppSettings> app, ILogger<ISendEmail> logger)
+        public SendEmailImpl(GymTestContext context, IHostingEnvironment env, IOptionsSnapshot<AppSettings> app, ILogger<ISendEmail> logger)
         {
             _logger = logger;
             _appSettings = app;
@@ -37,7 +37,7 @@ namespace GymTest.Services
                 string body = string.Empty;
                 //using streamreader for reading my htmltemplate  
 
-                var pathToFile = _appSettings.Value.TemplateEmailPath + templateName + ".html";
+                var pathToFile = _env.WebRootPath + _appSettings.Value.TemplateEmailPath + templateName + ".html";
 
                 using (StreamReader reader = File.OpenText(pathToFile))
                 {
@@ -109,6 +109,11 @@ namespace GymTest.Services
                     };
                     string sCuentaCorreo = _appSettings.Value.EmailConfiguration_Username;
                     string pwd = _appSettings.Value.EmailConfiguration_Password;
+                    string blindCopy = _appSettings.Value.EmailConfiguration_BlindCopy;
+
+                    if (!string.IsNullOrEmpty(blindCopy))
+                        correo.Bcc.Add(_appSettings.Value.EmailConfiguration_BlindCopy);
+
                     smtp.Credentials = new NetworkCredential(sCuentaCorreo, pwd);
 
                     smtp.Send(correo);

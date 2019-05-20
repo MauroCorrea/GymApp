@@ -13,9 +13,9 @@ namespace GymTest.Services
 
         private readonly ISendEmail _sendEmail;
 
-        private readonly IOptions<AppSettings> _appSettings;
+        private readonly IOptionsSnapshot<AppSettings> _appSettings;
 
-        public AssistanceLogicImpl(GymTestContext context, IOptions<AppSettings> app, ISendEmail sendEmail)
+        public AssistanceLogicImpl(GymTestContext context, IOptionsSnapshot<AppSettings> app, ISendEmail sendEmail)
         {
             _appSettings = app;
             _context = context;
@@ -198,7 +198,7 @@ namespace GymTest.Services
 
             _sendEmail.SendEmail(bodyData,
                                  "AssistanceUserNotEntryTemplate",
-                                 "Notificación de entrada no procesada" + fullName,
+                                 "Notificación de entrada no procesada",
                                  new System.Collections.Generic.List<string>() { email }
                                 );
 
