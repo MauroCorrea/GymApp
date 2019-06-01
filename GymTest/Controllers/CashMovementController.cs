@@ -34,6 +34,7 @@ namespace GymTest.Controllers
         {
             var gymTestContext = _context.CashMovement
                                          .Include(c => c.CashCategory)
+                                         .Include(c => c.PaymentMedia)
                                          .Include(c => c.CashSubcategory)
                                          .Include(c => c.CashMovementType)
                                          .Include(c => c.Supplier);
@@ -157,6 +158,7 @@ namespace GymTest.Controllers
             ViewData["CashCategoryId"] = new SelectList(_context.CashCategory, "CashCategoryId", "CashCategoryDescription");
             ViewData["CashSubcategoryId"] = new SelectList(_context.CashSubcategory, "CashSubcategoryId", "CashSubcategoryDescription");
             ViewData["CashMovementTypeId"] = new SelectList(_context.Set<CashMovementType>(), "CashMovementTypeId", "CashMovementTypeDescription");
+            ViewData["PaymentMediaId"] = new SelectList(_context.Set<PaymentMedia>(), "PaymentMediaId", "PaymentMediaDescription");
             ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "SupplierDescription");
             return View();
         }
@@ -166,7 +168,7 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CashMovementId,CashMovementDate,CashMovementDetails,Amount,CashMovementTypeId,CashCategoryId,SupplierId,CashSubcategoryId")] CashMovement cashMovement)
+        public async Task<IActionResult> Create([Bind("CashMovementId,CashMovementDate,CashMovementDetails,Amount,CashMovementTypeId,PaymentMediaId,CashCategoryId,SupplierId,CashSubcategoryId")] CashMovement cashMovement)
         {
             if (ModelState.IsValid)
             {

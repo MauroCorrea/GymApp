@@ -3,18 +3,16 @@
 }
 <br />
 
-<script>
-    function fingerPrimtValue(val) {
+<script>function fingerPrimtValue(val) {
         document.getElementById("fingerprint").value += val;
         document.getElementById("fingerprint").focus();
     }
 
-    function deleteLasFingerValue(){
+    function deleteLasFingerValue() {
         document.getElementById("fingerprint").value = document.getElementById("fingerprint").value.substring(0, document.getElementById("fingerprint").value.length - 1);
-    }
-</script>
+    }</script>
 
-<div id="contenedorDivIndex" style="display: flex">
+<!--<div id="contenedorDivIndex" style="display: flex">
     <div style="position: relative;width: 20%">
         <p>
             <input type="button" onclick="fingerPrimtValue(1)" value="1" class="btn btn-info btn-lg" style="position:relative; width:30%" />
@@ -35,7 +33,7 @@
             <input type="button" onclick="fingerPrimtValue(0)" value="0" class="btn btn-info btn-lg" style="position:relative; width:30%" />
             <input type="button" onclick="deleteLasFingerValue()" value="Borrar" class="btn btn-warning btn-lg" style="position:relative; width:60%" />
         </p>
-    </div>
+    </div>-->
 
     <div style="padding-left: 5%;position: relative;width: 75%">
         <form asp-controller="Home" asp-action="Contact">

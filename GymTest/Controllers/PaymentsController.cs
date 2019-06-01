@@ -30,7 +30,7 @@ namespace GymTest.Controllers
         // GET: Payments
         public async Task<IActionResult> Index()
         {
-            var gymTestContext = _context.Payment.Include(p => p.MovmentType).Include(p => p.User);
+            var gymTestContext = _context.Payment.Include(p => p.MovmentType).Include(p => p.User).Include(p => p.PaymentMedia);
             return View(await gymTestContext.ToListAsync());
         }
 
@@ -58,6 +58,7 @@ namespace GymTest.Controllers
         public IActionResult Create(int? id)
         {
             ViewData["MovementTypeId"] = new SelectList(_context.MovementType, "MovementTypeId", "Description");
+            ViewData["PaymentMediaId"] = new SelectList(_context.Set<PaymentMedia>(), "PaymentMediaId", "PaymentMediaDescription");
 
             if (id != null)
             {
@@ -78,14 +79,30 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("PaymentId,PaymentDate,MovementTypeId,QuantityMovmentType,Amount,UserId,LimitUsableDate")] Payment payment)
+        public IActionResult Create([Bind("PaymentId,PaymentDate,MovementTypeId,QuantityMovmentType,Amount,PaymentMediaId,UserId,LimitUsableDate")] Payment payment)
         {
             if (ModelState.IsValid)
             {
                 if (_paymentLogic.ProcessPayment(payment,
                         _context.User.Where(u => u.UserId == payment.UserId).First().FullName,
                         _context.User.Where(u => u.UserId == payment.UserId).First().Email))
+                {
+                    CashMovement cashMov = new CashMovement
+                    {
+                        Amount = payment.Amount,
+                        PaymentMediaId = payment.PaymentMediaId,
+                        CashMovementDate = payment.PaymentDate,
+                        CashMovementDetails = "Movimiento de Pago",
+                        CashMovementTypeId = 1,//1 es de tipo entrada
+                        CashCategoryId = _context.CashCategory.Where(x => x.CashCategoryDescription == "Movimiento de pago").FirstOrDefault().CashCategoryId,
+                        CashSubcategoryId = _context.CashSubcategory.Where(x => x.CashSubcategoryDescription == "Movimiento de pago").FirstOrDefault().CashSubcategoryId,
+                        SupplierId = _context.Supplier.Where(x => x.SupplierDescription == "Movimiento de pago").FirstOrDefault().SupplierId,
+                        PaymentId = payment.PaymentId
+                    };
+                    _context.Add(cashMov);
+                    _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
+                }
             }
             ViewData["MovementTypeId"] = new SelectList(_context.MovementType, "MovementTypeId", "Description", payment.MovementTypeId);
             ViewData["UserId"] = new SelectList(_context.User, "UserId", "FullName", payment.UserId);
@@ -106,6 +123,7 @@ namespace GymTest.Controllers
                 return NotFound();
             }
             ViewData["MovementTypeId"] = new SelectList(_context.MovementType, "MovementTypeId", "Description", payment.MovementTypeId);
+            ViewData["PaymentMediaId"] = new SelectList(_context.Set<PaymentMedia>(), "PaymentMediaId", "PaymentMediaDescription", payment.PaymentMediaId);
             ViewData["UserId"] = new SelectList(_context.User.Where(u => u.UserId == payment.UserId), "UserId", "FullName", payment.UserId);
             return View(payment);
         }
@@ -115,7 +133,7 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("PaymentId,PaymentDate,MovementTypeId,QuantityMovmentType,Amount,UserId,LimitUsableDate")] Payment payment)
+        public IActionResult Edit(int id, [Bind("PaymentId,PaymentDate,MovementTypeId,QuantityMovmentType,Amount,PaymentMediaId,UserId,LimitUsableDate")] Payment payment)
         {
             if (id != payment.PaymentId)
             {
@@ -127,9 +145,18 @@ namespace GymTest.Controllers
                 try
                 {
                     if (_paymentLogic.ProcessPayment(payment,
-                    _context.User.Where(u => u.UserId == payment.UserId).First().FullName,
+                        _context.User.Where(u => u.UserId == payment.UserId).First().FullName,
                         _context.User.Where(u => u.UserId == payment.UserId).First().Email))
+                    {
+                        CashMovement cashMov = _context.CashMovement.Where(c => c.PaymentId == payment.PaymentId).FirstOrDefault();
+                        cashMov.Amount = payment.Amount;
+                        cashMov.CashMovementDate = payment.PaymentDate;
+                        cashMov.PaymentMediaId = payment.PaymentMediaId;
+
+                        _context.Update(cashMov);
+                        _context.SaveChangesAsync();
                         return RedirectToAction(nameof(Index));
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -144,6 +171,7 @@ namespace GymTest.Controllers
                 }
             }
             ViewData["MovementTypeId"] = new SelectList(_context.MovementType, "MovementTypeId", "Description", payment.MovementTypeId);
+            ViewData["PaymentMediaId"] = new SelectList(_context.Set<PaymentMedia>(), "PaymentMediaId", "PaymentMediaDescription", payment.PaymentMediaId);
             ViewData["UserId"] = new SelectList(_context.User.Where(u => u.UserId == payment.UserId), "UserId", "FullName", payment.UserId);
             return View(payment);
         }
@@ -174,7 +202,10 @@ namespace GymTest.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var payment = await _context.Payment.FindAsync(id);
+            CashMovement cashMovement = _context.CashMovement.Where(c => c.PaymentId == id).FirstOrDefault();
+
             _context.Payment.Remove(payment);
+            _context.CashMovement.Remove(cashMovement);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

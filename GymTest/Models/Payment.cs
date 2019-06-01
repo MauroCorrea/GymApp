@@ -29,6 +29,13 @@ namespace GymTest.Models
         [Display(Name = "Tipo Pago")]
         public virtual MovementType MovmentType { get; set; }
 
+        [Display(Name = "Medio de Pago")]
+        [Required(ErrorMessage = "Campo Tipo es obligatorio")]
+        public int PaymentMediaId { get; set; }
+
+        [Display(Name = "Medio de Pago")]
+        public virtual PaymentMedia PaymentMedia { get; set; }
+
         [Required]
         [Display(Name = "Cant. Entradas")]
         public int QuantityMovmentType { get; set; }

@@ -34,6 +34,9 @@
                 @Html.DisplayNameFor(model => model.CashMovementType)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.PaymentMedia)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.CashCategory)
             </th>
             <th>
@@ -59,17 +62,23 @@
                     @Html.DisplayFor(modelItem => item.CashMovementType.CashMovementTypeDescription)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.PaymentMedia.PaymentMediaDescription)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.CashCategory.CashCategoryDescription)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CashSubcategory.CashSubcategoryDescription)
                 </td>
                 <td>
-                    <div class="btn-group">
-                        <a asp-action="Edit" asp-route-id="@item.CashMovementId" class="btn btn-primary">Modificar</a>
-                        <a asp-action="Details" asp-route-id="@item.CashMovementId" class="btn btn-primary">Detalle</a>
-                        <a asp-action="Delete" asp-route-id="@item.CashMovementId" class="btn btn-danger">Eliminar</a>
-                    </div>
+                    @if (item.PaymentId == null)
+                    {
+                        <div class="btn-group">
+                            <a asp-action="Edit" asp-route-id="@item.CashMovementId" class="btn btn-primary">Modificar</a>
+                            <a asp-action="Details" asp-route-id="@item.CashMovementId" class="btn btn-primary">Detalle</a>
+                            <a asp-action="Delete" asp-route-id="@item.CashMovementId" class="btn btn-danger">Eliminar</a>
+                        </div>
+                    }
                 </td>
             </tr>
         }

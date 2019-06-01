@@ -27,14 +27,14 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <div class="containerToggle navbar-brand" onclick="showX(this)" data-toggle="collapse" data-target="#main-menu">
+                <!--<div class="containerToggle navbar-brand" onclick="showX(this)" data-toggle="collapse" data-target="#main-menu">
                     <div class="bar1"></div>
                     <div class="bar2"></div>
                     <div class="bar3"></div>
-                </div>
+                </div>-->
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">GymApp</a>
             </div>
-            <div id="main-menu" class="collapse">
+            <div id="main-menu" > <!--class="collapse">-->
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Users" asp-action="Index">Usuarios</a></li>
                     <li><a asp-area="" asp-controller="Payments" asp-action="Index">Pagos</a></li>

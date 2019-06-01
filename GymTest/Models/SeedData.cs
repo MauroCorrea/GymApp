@@ -24,7 +24,7 @@ namespace GymTest.Models
 
                 LoadMoveTypes(context);
 
-                //LoadUsers(context);
+                LoadPaymentMedia(context);
 
                 LoadCashCategories(context);
 
@@ -84,6 +84,38 @@ namespace GymTest.Models
             }
         }
 
+        private static void LoadPaymentMedia(GymTestContext context)
+        {
+            var list = from m in context.PaymentMedia
+                       select m;
+
+            if (list.Count() != 2)
+            {
+                context.PaymentMedia.AddRange(
+                    new PaymentMedia
+                    {
+                        PaymentMediaId = 1,
+                        PaymentMediaDescription = "Efectivo"
+                    },
+                    new PaymentMedia
+                    {
+                        PaymentMediaId = 2,
+                        PaymentMediaDescription = "Débito"
+                    },
+                    new PaymentMedia
+                    {
+                        PaymentMediaId = 3,
+                        PaymentMediaDescription = "Crédito"
+                    },
+                    new PaymentMedia
+                    {
+                        PaymentMediaId = 4,
+                        PaymentMediaDescription = "Tranferencia"
+                    }
+                );
+            }
+        }
+
         private static void LoadUsers(GymTestContext context)
         {
             var list = from m in context.User
@@ -125,7 +157,12 @@ namespace GymTest.Models
                     new CashSubcategory
                     {
                         CashCategoryId = 1,
-                        CashSubcategoryDescription = "Subcategoria 1"
+                        CashSubcategoryDescription = "Otros"
+                    },
+                    new CashSubcategory
+                    {
+                        CashCategoryId = 2,
+                        CashSubcategoryDescription = "Movimiento de pago"
                     }
                 );
             }
@@ -141,7 +178,13 @@ namespace GymTest.Models
                 context.CashCategory.AddRange(
                     new CashCategory
                     {
-                        CashCategoryDescription = "Categoria 1"
+                        CashCategoryId = 1,
+                        CashCategoryDescription = "Otros"
+                    },
+                    new CashCategory
+                    {
+                        CashCategoryId = 2,
+                        CashCategoryDescription = "Movimiento de pago"
                     }
                 );
             }
@@ -177,7 +220,13 @@ namespace GymTest.Models
                 context.Supplier.AddRange(
                     new Supplier
                     {
+                        SupplierId = 1,
                         SupplierDescription = "Proveedor 1"
+                    },
+                    new Supplier
+                    {
+                        SupplierId = 2,
+                        SupplierDescription = "Movimiento de pago"
                     }
                 );
             }

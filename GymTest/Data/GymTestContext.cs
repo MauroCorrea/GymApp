@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using GymTest.Models;
 
 namespace GymTest.Data
 {
@@ -36,5 +37,7 @@ namespace GymTest.Data
         public DbSet<GymTest.Models.Role> Role { get; set; }
 
         public DbSet<GymTest.Models.Workday> Workday { get; set; }
+
+        public DbSet<GymTest.Models.PaymentMedia> PaymentMedia { get; set; }
     }
 }
