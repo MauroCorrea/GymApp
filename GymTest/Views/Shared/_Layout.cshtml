@@ -19,6 +19,9 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/css/users.min.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/css/site.css" />
+
+        <link rel="stylesheet" href="~/css/jquery-ui.css" />
+        <link rel="stylesheet" href="~/css/users.css" />
         <link rel="stylesheet" href="~/css/users.css" />-->
     </environment>
 </head>
@@ -27,14 +30,17 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <!--<div class="containerToggle navbar-brand" onclick="showX(this)" data-toggle="collapse" data-target="#main-menu">
+                <div class="containerToggle navbar-brand" onclick="showX(this)" data-toggle="collapse" data-target="#main-menu">
                     <div class="bar1"></div>
                     <div class="bar2"></div>
                     <div class="bar3"></div>
-                </div>-->
+                </div>
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">GymApp</a>
+                <!--<img src="~/images/logo.png" alt="logo" width="100px" height="30px" />-->
             </div>
-            <div id="main-menu" > <!--class="collapse">-->
+
+            <div id="main-menu">
+                <!--class="collapse">-->
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Users" asp-action="Index">Usuarios</a></li>
                     <li><a asp-area="" asp-controller="Payments" asp-action="Index">Pagos</a></li>
@@ -64,35 +70,32 @@
         <script src="~/js/site.js" asp-append-version="true"></script>
         <script src="~/js/jquery-1.12.4.js" asp-append-version="true"></script>
         <script src="~/js/jquery-ui.js" asp-append-version="true"></script>
-        <script>
-                $(function () {
-                    $(".datepicker").datepicker();
-                    $( ".datepicker" ).datepicker( "option", "dateFormat", "dd/mm/yy");
-                });</script>
-        <script>
-                function showX(x) {
-                    x.classList.toggle("change");
-                }
-        </script>
+        <script>$(function () {
+                $(".datepicker").datepicker();
+                $(".datepicker").datepicker("option", "dateFormat", "dd/mm/yy");
+            });</script>
+        <script>function showX(x) {
+                x.classList.toggle("change");
+            }</script>
         <script src="~/lib/jquery-validation/dist/jquery.validate.date.js"></script>
     </environment>
     <environment exclude="Development">
         <!--<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
-             asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-             asp-fallback-test="window.jQuery"
-             crossorigin="anonymous"
-             integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
-     </script>
-     <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
-             asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-             asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-             crossorigin="anonymous"
-             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
-     </script>
-     <script src="~/js/site.min.js" asp-append-version="true"></script>
-     <script src="~/js/jquery-1.12.4.js" asp-append-version="true"></script>
-     <script src="~/js/jquery-ui.js" asp-append-version="true"></script>
-     <script src="~/lib/jquery-validation/dist/jquery.validate.date.js"></script>-->
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <script src="~/js/jquery-1.12.4.js" asp-append-version="true"></script>
+        <script src="~/js/jquery-ui.js" asp-append-version="true"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.date.js"></script>-->
     </environment>
 
     @RenderSection("Scripts", required: false)
