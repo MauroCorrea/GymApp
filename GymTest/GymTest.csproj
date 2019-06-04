@@ -35,7 +35,6 @@
         <Folder Include="Views\Payroll\" />
     </ItemGroup>
     <ItemGroup>
-        <Content Remove="wwwroot\images\mustpay.gif" />
         <Content Remove="wwwroot\css\jquery-ui.css" />
         <Content Remove="wwwroot\images\ui-icons_444444_256x240.png" />
         <Content Remove="wwwroot\Templates\AssistanceTemplate.html" />
@@ -44,12 +43,13 @@
         <Content Remove="wwwroot\images\gym1.jpg" />
         <Content Remove="wwwroot\images\gym2.jpg" />
         <Content Remove="wwwroot\Templates\AssistanceTemplate %28copy%29.html" />
+        <Content Remove="wwwroot\images\logo.png" />
     </ItemGroup>
     <ItemGroup>
-        <None Include="wwwroot\images\mustpay.gif" />
         <None Include="wwwroot\Templates\AssistanceTemplate.html" />
         <None Include="wwwroot\css\jquery-ui.css" />
         <None Include="wwwroot\images\ui-icons_444444_256x240.png" />
+        <None Include="wwwroot\images\logo.png" />
     </ItemGroup>
     <ItemGroup>
         <Content Update="nlog.config">
