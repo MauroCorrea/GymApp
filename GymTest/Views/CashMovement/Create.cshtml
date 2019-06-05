@@ -39,12 +39,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="CashCategoryId" class="control-label"></label>
-                <select asp-for="CashCategoryId" class="form-control" asp-items="ViewBag.CashCategoryId"></select>
+                <select asp-for="CashCategoryId" class="form-control" asp-items="ViewBag.CashCategoryId" id="selectCategroy"></select>
                 <span asp-validation-for="CashCategoryId" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" id="DataTypeOptions">
                 <label asp-for="CashSubcategoryId" class="control-label"></label>
-                <select asp-for="CashSubcategoryId" class="form-control" asp-items="ViewBag.CashSubcategoryId"></select>
+                <select asp-for="CashSubcategoryId" class="form-control" asp-items="ViewBag.CashSubcategoryId" id="selectSubCategroy"></select>
                 <span asp-validation-for="CashSubcategoryId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -64,5 +64,31 @@
 </div>
 
 @section Scripts {
+<script>$(document).ready(function () {
+        $(document).on("change", "#selectCategroy", function () {
+            var subCat = this;
+            $.ajax({
+                url: "ReturnJsonSubCategories/?categoryId=" + $(subCat).val(),
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                datatype: JSON,
+                success: function (result) {
+                    var categories = "";
+                    $(result).each(function () {
+                        categories = categories + '<option value="' + this.cashSubcategoryId + '">' + this.cashSubcategoryDescription + '</option>'
+                    });
+
+                    var subCateList = $("#selectSubCategroy");
+                    subCateList.empty();
+                    subCateList.append(categories);
+                },
+                error: function (data) {
+                    return "Error";
+                }
+            });
+        });
+    });</script>
+
+
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

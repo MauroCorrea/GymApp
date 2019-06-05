@@ -12,6 +12,7 @@ using GymTest.Services;
 using System.Security.Claims;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace GymTest.Controllers
 {
@@ -21,12 +22,14 @@ namespace GymTest.Controllers
         private readonly GymTestContext _context;
         private readonly ISendEmail _sendEmail;
         private IHostingEnvironment _env;
+        private readonly IOptionsSnapshot<AppSettings> _appSettings;
 
-        public CashMovementController(GymTestContext context, ISendEmail sendEmail, IHostingEnvironment env)
+        public CashMovementController(GymTestContext context, ISendEmail sendEmail, IHostingEnvironment env, IOptionsSnapshot<AppSettings> app)
         {
             _context = context;
             _sendEmail = sendEmail;
             _env = env;
+            _appSettings = app;
         }
 
         // GET: CashMovement
@@ -51,8 +54,8 @@ namespace GymTest.Controllers
 
             var cashMovs = _context.CashMovement.Where(cm => cm.CashMovementDate >= FromDate && cm.CashMovementDate < ToDate);
 
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);//_env.WebRootPath;//Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            string Ruta_Publica_Excel = (path + "/MovimientosDeCaja_" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".xlsx");
+            string path = _env.WebRootPath;
+            string Ruta_Publica_Excel = path + "/MovimientosDeCaja_" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".xlsx";
 
             ExcelPackage Package = new ExcelPackage(new System.IO.FileInfo(Ruta_Publica_Excel));
             var Hoja_1 = Package.Workbook.Worksheets.Add("Contenido_1");
@@ -105,19 +108,23 @@ namespace GymTest.Controllers
             Package.Save();
 
             //SendMail
-            var userEmail = User.FindFirst(ClaimTypes.Name).Value;
-
+            var userEmail = User.FindFirst(ClaimTypes.Email).Value;
+            if (string.IsNullOrEmpty(userEmail))
+                userEmail = _appSettings.Value.EmailConfiguration_Username;
+            var userName = User.FindFirst(ClaimTypes.Name).Value;
+            if (string.IsNullOrEmpty(userName))
+                userName = "Administrador";
 
             var bodyData = new Dictionary<string, string>
                 {
-                    { "UserName", "Administrador" },
-                    { "Title", "Te mando eso!" },
-                    { "message", "Si no te llego mala liga." }
+                    { "UserName", userName },
+                    { "Title", "Envío de movimientos de caja." },
+                    { "message", "Descargue el archivo adjunto." }
                 };
 
             _sendEmail.SendEmail(bodyData,
-                                 "AssistanceTemplate",
-                                 "Notificación de asistencia" + userEmail,
+                                 "ReportTemplate",
+                                 "Reporte de movimientos de caja",
                                  new List<string>() { userEmail },
                                  new List<string>() { Ruta_Publica_Excel }
                                 );
@@ -273,6 +280,12 @@ namespace GymTest.Controllers
             _context.CashMovement.Remove(cashMovement);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        public JsonResult ReturnJsonSubCategories(int categoryId)
+        {
+            var jsonData = _context.CashSubcategory.Where(x => x.CashCategoryId == categoryId).ToList();
+            return Json(jsonData);
         }
 
         private bool CashMovementExists(int id)
