@@ -13,6 +13,7 @@ using System.Security.Claims;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Identity;
 
 namespace GymTest.Controllers
 {
@@ -23,9 +24,11 @@ namespace GymTest.Controllers
         private readonly ISendEmail _sendEmail;
         private IHostingEnvironment _env;
         private readonly IOptionsSnapshot<AppSettings> _appSettings;
+        private UserManager<IdentityUser> _userManager;
 
-        public CashMovementController(GymTestContext context, ISendEmail sendEmail, IHostingEnvironment env, IOptionsSnapshot<AppSettings> app)
+        public CashMovementController(GymTestContext context, ISendEmail sendEmail, IHostingEnvironment env, IOptionsSnapshot<AppSettings> app, UserManager<IdentityUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
             _sendEmail = sendEmail;
             _env = env;
@@ -44,7 +47,7 @@ namespace GymTest.Controllers
             return View(await gymTestContext.ToListAsync());
         }
 
-        public IActionResult ExportToExcel(DateTime FromDate, DateTime ToDate)
+        public async Task<IActionResult> ExportToExcel(DateTime FromDate, DateTime ToDate)
         {
 
             if (FromDate == DateTime.MinValue)
@@ -108,10 +111,11 @@ namespace GymTest.Controllers
             Package.Save();
 
             //SendMail
-            var userEmail = User.FindFirst(ClaimTypes.Email).Value;
+            var user = await _userManager.GetUserAsync(User);
+            var userEmail = user.Email;
+            var userName = user.UserName;
             if (string.IsNullOrEmpty(userEmail))
                 userEmail = _appSettings.Value.EmailConfiguration_Username;
-            var userName = User.FindFirst(ClaimTypes.Name).Value;
             if (string.IsNullOrEmpty(userName))
                 userName = "Administrador";
 
