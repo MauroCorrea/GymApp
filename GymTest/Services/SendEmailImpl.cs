@@ -66,6 +66,51 @@ namespace GymTest.Services
             return string.Empty;
         }
 
+        public void SendEmailRegister(Dictionary<string, string> bodyData, string templateName, string subject, List<string> receipts)
+        {
+            try
+            {
+                MailMessage correo = new MailMessage
+                {
+                    From = new MailAddress(_appSettings.Value.EmailConfiguration_Username)
+                };
+
+                foreach (var receipt in receipts)
+                {
+                    correo.To.Add(receipt);
+                }
+
+                correo.Subject = subject;
+                correo.Body = CreateEmailBody(bodyData, templateName);
+                if (!string.IsNullOrEmpty(correo.Body))
+                {
+                    correo.IsBodyHtml = true;
+                    correo.Priority = MailPriority.Normal;
+
+                    SmtpClient smtp = new SmtpClient
+                    {
+                        Host = _appSettings.Value.EmailConfiguration_Host,
+                        Port = int.Parse(_appSettings.Value.EmailConfiguration_Port),
+                        EnableSsl = true,
+                        UseDefaultCredentials = true
+                    };
+                    string sCuentaCorreo = _appSettings.Value.EmailConfiguration_Username;
+                    string pwd = _appSettings.Value.EmailConfiguration_Password;
+
+                    smtp.Credentials = new NetworkCredential(sCuentaCorreo, pwd);
+
+                    smtp.Send(correo);
+                }
+            }
+            catch (Exception ex)
+            {
+                var messageError = ex.Message;
+                _logger.LogError("Error Sending email. Detail: " + messageError);
+                if (ex.InnerException != null)
+                    _logger.LogError("Error Sending email. Detail: " + ex.InnerException.Message);
+            }
+        }
+
         public void SendEmail(Dictionary<string, string> bodyData, string templateName, string subject, List<string> receipts, List<string> filePathAttachment = null)
         {
             try
