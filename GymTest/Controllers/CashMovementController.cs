@@ -76,18 +76,20 @@ namespace GymTest.Controllers
             Hoja_1.Cells["C" + rowNum].Value = "Tipo";
             Hoja_1.Cells["D" + rowNum].Value = "Categoría";
             Hoja_1.Cells["E" + rowNum].Value = "Subcategoría";
-            Hoja_1.Cells["F" + rowNum].Value = "Fecha";
-            Hoja_1.Cells["G" + rowNum].Value = "Monto";
-            Hoja_1.Cells["H" + rowNum].Value = "Proveedor";
+            Hoja_1.Cells["F" + rowNum].Value = "Medio de Pago";
+            Hoja_1.Cells["G" + rowNum].Value = "Fecha";
+            Hoja_1.Cells["H" + rowNum].Value = "Monto";
+            Hoja_1.Cells["I" + rowNum].Value = "Proveedor";
 
-            Hoja_1.Cells["B" + rowNum + ":H" + rowNum].Style.Font.Bold = true;
-            Hoja_1.Cells["B" + rowNum + ":H" + rowNum].Style.Font.Size = 15;
+            Hoja_1.Cells["B" + rowNum + ":I" + rowNum].Style.Font.Bold = true;
+            Hoja_1.Cells["B" + rowNum + ":I" + rowNum].Style.Font.Size = 15;
 
             foreach (CashMovement row in cashMovs)
             {
                 row.CashMovementType = _context.CashMovementType.Where(x => x.CashMovementTypeId == row.CashMovementTypeId).First();
                 row.CashCategory = _context.CashCategory.Where(x => x.CashCategoryId == row.CashCategoryId).First();
                 row.CashSubcategory = _context.CashSubcategory.Where(x => x.CashSubcategoryId == row.CashSubcategoryId).First();
+                row.PaymentMedia = _context.PaymentMedia.Where(x => x.PaymentMediaId == row.PaymentMediaId).First();
                 row.Supplier = _context.Supplier.Where(x => x.SupplierId == row.SupplierId).First();
 
                 rowNum++;
@@ -95,13 +97,14 @@ namespace GymTest.Controllers
                 Hoja_1.Cells["C" + rowNum].Value = row.CashMovementType.CashMovementTypeDescription;
                 Hoja_1.Cells["D" + rowNum].Value = row.CashCategory.CashCategoryDescription;
                 Hoja_1.Cells["E" + rowNum].Value = row.CashSubcategory.CashSubcategoryDescription;
-                Hoja_1.Cells["F" + rowNum].Value = row.CashMovementDate.ToString();
-                Hoja_1.Cells["G" + rowNum].Value = row.CashMovementTypeId == 1 ? row.Amount : (row.Amount * (-1));
-                Hoja_1.Cells["H" + rowNum].Value = row.Supplier.SupplierDescription;
+                Hoja_1.Cells["F" + rowNum].Value = row.PaymentMedia.PaymentMediaDescription;
+                Hoja_1.Cells["G" + rowNum].Value = row.CashMovementDate.ToString();
+                Hoja_1.Cells["H" + rowNum].Value = row.CashMovementTypeId == 1 ? row.Amount : (row.Amount * (-1));
+                Hoja_1.Cells["I" + rowNum].Value = row.Supplier.SupplierDescription;
             }
 
             if (cashMovs.Count() > 0)
-                Hoja_1.Cells["G" + (rowNum + 1)].Formula = "SUM(G" + (originalRowNum + 1) + ":G" + rowNum + ")";
+                Hoja_1.Cells["H" + (rowNum + 1)].Formula = "SUM(H" + (originalRowNum + 1) + ":H" + rowNum + ")";
 
             /*------------------------------------------------------*/
 
