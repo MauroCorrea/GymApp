@@ -89,7 +89,7 @@ namespace GymTest.Models
             var list = from m in context.PaymentMedia
                        select m;
 
-            if (list.Count() != 2)
+            if (list.Count() < 1)
             {
                 context.PaymentMedia.AddRange(
                     new PaymentMedia
