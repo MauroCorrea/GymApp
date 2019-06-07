@@ -36,7 +36,7 @@ namespace GymTest.Controllers
         }
 
         // GET: CashMovement
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var gymTestContext = _context.CashMovement
                                          .Include(c => c.CashCategory)
@@ -44,7 +44,7 @@ namespace GymTest.Controllers
                                          .Include(c => c.CashSubcategory)
                                          .Include(c => c.CashMovementType)
                                          .Include(c => c.Supplier);
-            return View(await gymTestContext.ToListAsync());
+            return View(gymTestContext.ToList().OrderByDescending(x => x.CashMovementDate));
         }
 
         public async Task<IActionResult> ExportToExcel(DateTime FromDate, DateTime ToDate)
@@ -56,6 +56,8 @@ namespace GymTest.Controllers
                 ToDate = DateTime.Now.AddDays(1);
 
             var cashMovs = _context.CashMovement.Where(cm => cm.CashMovementDate >= FromDate && cm.CashMovementDate < ToDate);
+
+            cashMovs.OrderByDescending(x => x.CashMovementDate);
 
             string path = _env.WebRootPath;
             string Ruta_Publica_Excel = path + "/MovimientosDeCaja_" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".xlsx";
@@ -107,7 +109,7 @@ namespace GymTest.Controllers
                 Hoja_1.Cells["D" + rowNum].Value = row.CashCategory.CashCategoryDescription;
                 Hoja_1.Cells["E" + rowNum].Value = row.CashSubcategory.CashSubcategoryDescription;
                 Hoja_1.Cells["F" + rowNum].Value = row.PaymentMedia.PaymentMediaDescription;
-                Hoja_1.Cells["G" + rowNum].Value = row.CashMovementDate.ToString();
+                Hoja_1.Cells["G" + rowNum].Value = row.CashMovementDate.ToString("dd/MM/yyyy");
                 Hoja_1.Cells["H" + rowNum].Value = row.CashMovementTypeId == 1 ? row.Amount : (row.Amount * (-1));
                 Hoja_1.Cells["I" + rowNum].Value = row.Supplier.SupplierDescription;
 
@@ -139,9 +141,6 @@ namespace GymTest.Controllers
 
             /*------------------------------------------------------*/
 
-
-
-            /*------------------------------------------------------*/
             Package.Save();
 
             //SendMail
@@ -200,11 +199,11 @@ namespace GymTest.Controllers
         // GET: CashMovement/Create
         public IActionResult Create()
         {
-            ViewData["CashCategoryId"] = new SelectList(_context.CashCategory, "CashCategoryId", "CashCategoryDescription");
-            ViewData["CashSubcategoryId"] = new SelectList(_context.CashSubcategory, "CashSubcategoryId", "CashSubcategoryDescription");
+            ViewData["CashCategoryId"] = new SelectList(_context.CashCategory.Where(x => x.CashCategoryDescription != "Movimiento de pago"), "CashCategoryId", "CashCategoryDescription");
+            ViewData["CashSubcategoryId"] = new SelectList(_context.CashSubcategory.Where(x => x.CashSubcategoryDescription != "Movimiento de pago"), "CashSubcategoryId", "CashSubcategoryDescription");
             ViewData["CashMovementTypeId"] = new SelectList(_context.Set<CashMovementType>(), "CashMovementTypeId", "CashMovementTypeDescription");
             ViewData["PaymentMediaId"] = new SelectList(_context.Set<PaymentMedia>(), "PaymentMediaId", "PaymentMediaDescription");
-            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "SupplierDescription");
+            ViewData["SupplierId"] = new SelectList(_context.Supplier.Where(x => x.SupplierDescription != "Movimiento de pago"), "SupplierId", "SupplierDescription");
             return View();
         }
 
@@ -224,6 +223,7 @@ namespace GymTest.Controllers
             ViewData["CashCategoryId"] = new SelectList(_context.CashCategory, "CashCategoryId", "CashCategoryDescription", cashMovement.CashCategoryId);
             ViewData["CashSubcategoryId"] = new SelectList(_context.CashSubcategory, "CashSubcategoryId", "CashSubcategoryDescription", cashMovement.CashSubcategoryId);
             ViewData["CashMovementTypeId"] = new SelectList(_context.Set<CashMovementType>(), "CashMovementTypeId", "CashMovementTypeDescription", cashMovement.CashMovementTypeId);
+            ViewData["PaymentMediaId"] = new SelectList(_context.Set<PaymentMedia>(), "PaymentMediaId", "PaymentMediaDescription", cashMovement.PaymentMediaId);
             ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "SupplierDescription", cashMovement.SupplierId);
             return View(cashMovement);
         }
@@ -241,10 +241,10 @@ namespace GymTest.Controllers
             {
                 return NotFound();
             }
-            ViewData["CashCategoryId"] = new SelectList(_context.CashCategory, "CashCategoryId", "CashCategoryDescription", cashMovement.CashCategoryId);
-            ViewData["CashSubcategoryId"] = new SelectList(_context.CashSubcategory, "CashSubcategoryId", "CashSubcategoryDescription", cashMovement.CashSubcategoryId);
+            ViewData["CashCategoryId"] = new SelectList(_context.CashCategory.Where(x => x.CashCategoryDescription != "Movimiento de pago"), "CashCategoryId", "CashCategoryDescription", cashMovement.CashCategoryId);
+            ViewData["CashSubcategoryId"] = new SelectList(_context.CashSubcategory.Where(x => x.CashSubcategoryDescription != "Movimiento de pago"), "CashSubcategoryId", "CashSubcategoryDescription", cashMovement.CashSubcategoryId);
             ViewData["CashMovementTypeId"] = new SelectList(_context.Set<CashMovementType>(), "CashMovementTypeId", "CashMovementTypeDescription", cashMovement.CashMovementTypeId);
-            ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "SupplierDescription", cashMovement.SupplierId);
+            ViewData["SupplierId"] = new SelectList(_context.Supplier.Where(x => x.SupplierDescription != "Movimiento de pago"), "SupplierId", "SupplierDescription", cashMovement.SupplierId);
             return View(cashMovement);
         }
 

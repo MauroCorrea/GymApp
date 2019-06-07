@@ -28,10 +28,10 @@ namespace GymTest.Controllers
         }
 
         // GET: Payments
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var gymTestContext = _context.Payment.Include(p => p.MovmentType).Include(p => p.User).Include(p => p.PaymentMedia);
-            return View(await gymTestContext.ToListAsync());
+            return View(gymTestContext.ToList().OrderByDescending(x => x.PaymentDate));
         }
 
         // GET: Payments/Details/5
@@ -100,11 +100,12 @@ namespace GymTest.Controllers
                         PaymentId = payment.PaymentId
                     };
                     _context.Add(cashMov);
-                    _context.SaveChangesAsync();
+                    _context.SaveChanges();
                     return RedirectToAction(nameof(Index));
                 }
             }
             ViewData["MovementTypeId"] = new SelectList(_context.MovementType, "MovementTypeId", "Description", payment.MovementTypeId);
+            ViewData["PaymentMediaId"] = new SelectList(_context.PaymentMedia, "PaymentMediaId", "PaymentMediaDescription", payment.PaymentMediaId);
             ViewData["UserId"] = new SelectList(_context.User, "UserId", "FullName", payment.UserId);
             return View(payment);
         }
@@ -154,7 +155,7 @@ namespace GymTest.Controllers
                         cashMov.PaymentMediaId = payment.PaymentMediaId;
 
                         _context.Update(cashMov);
-                        _context.SaveChangesAsync();
+                        _context.SaveChanges();
                         return RedirectToAction(nameof(Index));
                     }
                 }
