@@ -84,8 +84,14 @@ namespace GymTest.Controllers
             Hoja_1.Cells["H" + rowNum].Value = "Monto";
             Hoja_1.Cells["I" + rowNum].Value = "Proveedor";
 
-            Hoja_1.Cells["B" + rowNum + ":I" + rowNum].Style.Font.Bold = true;
-            Hoja_1.Cells["B" + rowNum + ":I" + rowNum].Style.Font.Size = 15;
+            Hoja_1.Cells["K" + rowNum].Value = "Saldos a Favor";
+
+            Hoja_1.Cells["N" + rowNum].Value = "Total";
+
+            Hoja_1.Cells["B" + rowNum + ":N" + rowNum].Style.Font.Bold = true;
+            Hoja_1.Cells["B" + rowNum + ":N" + rowNum].Style.Font.Size = 15;
+
+            Dictionary<string, float> positiveBalance = new Dictionary<string, float>();
 
             foreach (CashMovement row in cashMovs)
             {
@@ -104,13 +110,38 @@ namespace GymTest.Controllers
                 Hoja_1.Cells["G" + rowNum].Value = row.CashMovementDate.ToString();
                 Hoja_1.Cells["H" + rowNum].Value = row.CashMovementTypeId == 1 ? row.Amount : (row.Amount * (-1));
                 Hoja_1.Cells["I" + rowNum].Value = row.Supplier.SupplierDescription;
+
+                if (positiveBalance.ContainsKey(row.PaymentMedia.PaymentMediaDescription))
+                {
+                    float totalAmount = positiveBalance[row.PaymentMedia.PaymentMediaDescription] + (float)(row.CashMovementTypeId == 1 ? row.Amount : (row.Amount * (-1)));
+                    positiveBalance[row.PaymentMedia.PaymentMediaDescription] = totalAmount;
+                }
+                else
+                {
+                    positiveBalance.Add(row.PaymentMedia.PaymentMediaDescription, (float)(row.CashMovementTypeId == 1 ? row.Amount : (row.Amount * (-1))));
+                }
             }
 
             if (cashMovs.Count() > 0)
-                Hoja_1.Cells["H" + (rowNum + 1)].Formula = "SUM(H" + (originalRowNum + 1) + ":H" + rowNum + ")";
+            {
+                rowNum = 2;
+                Hoja_1.Cells["N" + (rowNum + 1)].Formula = "SUM(H" + (originalRowNum + 1) + ":H" + rowNum + ")";
+                foreach(string key in positiveBalance.Keys)
+                {
+                    if(positiveBalance[key] > 0)
+                    {
+                        rowNum++;
+                        Hoja_1.Cells["k" + rowNum].Value = key;
+                        Hoja_1.Cells["L" + rowNum].Value = positiveBalance[key];
+                    }
+                }
+            }
 
             /*------------------------------------------------------*/
 
+
+
+            /*------------------------------------------------------*/
             Package.Save();
 
             //SendMail
