@@ -128,9 +128,9 @@ namespace GymTest.Controllers
             {
                 rowNum = 2;
                 Hoja_1.Cells["N" + (rowNum + 1)].Formula = "SUM(H" + (originalRowNum + 1) + ":H" + rowNum + ")";
-                foreach(string key in positiveBalance.Keys)
+                foreach (string key in positiveBalance.Keys)
                 {
-                    if(positiveBalance[key] > 0)
+                    if (positiveBalance[key] > 0)
                     {
                         rowNum++;
                         Hoja_1.Cells["k" + rowNum].Value = key;
@@ -187,6 +187,7 @@ namespace GymTest.Controllers
                 .Include(c => c.CashSubcategory)
                 .Include(c => c.CashMovementType)
                 .Include(c => c.Supplier)
+                .Include(c => c.PaymentMedia)
                 .FirstOrDefaultAsync(m => m.CashMovementId == id);
             if (cashMovement == null)
             {
@@ -245,6 +246,7 @@ namespace GymTest.Controllers
             ViewData["CashSubcategoryId"] = new SelectList(_context.CashSubcategory.Where(x => x.CashSubcategoryDescription != "Movimiento de pago"), "CashSubcategoryId", "CashSubcategoryDescription", cashMovement.CashSubcategoryId);
             ViewData["CashMovementTypeId"] = new SelectList(_context.Set<CashMovementType>(), "CashMovementTypeId", "CashMovementTypeDescription", cashMovement.CashMovementTypeId);
             ViewData["SupplierId"] = new SelectList(_context.Supplier.Where(x => x.SupplierDescription != "Movimiento de pago"), "SupplierId", "SupplierDescription", cashMovement.SupplierId);
+            ViewData["PaymentMediaId"] = new SelectList(_context.Set<PaymentMedia>(), "PaymentMediaId", "PaymentMediaDescription", cashMovement.PaymentMediaId);
             return View(cashMovement);
         }
 
@@ -253,7 +255,7 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CashMovementId,CashMovementDate,CashMovementDetails,Amount,CashMovementTypeId,CashCategoryId,SupplierId,CashSubcategoryId")] CashMovement cashMovement)
+        public async Task<IActionResult> Edit(int id, [Bind("CashMovementId,CashMovementDate,CashMovementDetails,Amount,CashMovementTypeId,CashCategoryId,SupplierId,CashSubcategoryId,PaymentMediaId")] CashMovement cashMovement)
         {
             if (id != cashMovement.CashMovementId)
             {
@@ -284,6 +286,7 @@ namespace GymTest.Controllers
             ViewData["CashSubcategoryId"] = new SelectList(_context.CashSubcategory, "CashSubcategoryId", "CashSubcategoryDescription", cashMovement.CashSubcategoryId);
             ViewData["CashMovementTypeId"] = new SelectList(_context.Set<CashMovementType>(), "CashMovementTypeId", "CashMovementTypeDescription", cashMovement.CashMovementTypeId);
             ViewData["SupplierId"] = new SelectList(_context.Set<Supplier>(), "SupplierId", "SupplierDescription", cashMovement.SupplierId);
+            ViewData["PaymentMediaId"] = new SelectList(_context.Set<PaymentMedia>(), "PaymentMediaId", "PaymentMediaDescription", cashMovement.PaymentMediaId);
             return View(cashMovement);
         }
 
@@ -300,6 +303,7 @@ namespace GymTest.Controllers
                 .Include(c => c.CashSubcategory)
                 .Include(c => c.CashMovementType)
                 .Include(c => c.Supplier)
+                .Include(c => c.PaymentMedia)
                 .FirstOrDefaultAsync(m => m.CashMovementId == id);
             if (cashMovement == null)
             {
