@@ -12,8 +12,8 @@
 
 <form asp-controller="CashMovement" asp-action="ExportToExcel">
     <p>
-        Fecha desde: <input type="date" name="FromDate" class="datepicker">
-        Fecha hasta: <input type="date" name="ToDate"  class="datepicker">
+        Fecha desde: <input name="FromDate" class="datepicker" type="text" placeholder="dd/mm/aaaa">
+        Fecha hasta: <input name="ToDate"  class="datepicker" type="text" placeholder="dd/mm/aaaa">
                      <input type="submit" value="Exportar a Excel" class="btn btn-primary" />
     </p>
 </form>
