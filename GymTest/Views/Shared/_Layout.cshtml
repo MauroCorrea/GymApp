@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
 
-    <environment include="Development">
+
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" href="~/css/users.css" />
         <link rel="stylesheet" href="~/css/jquery-ui.css" />
         <link rel="stylesheet" href="~/css/style.css" />
-    </environment>
+
 
 </head>
 <!--<body style="background-image: linear-gradient(to bottom right,#DEDFDF,#017383)">-->
@@ -52,7 +52,6 @@
         </footer>
     </div>
 
-    <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
@@ -66,7 +65,7 @@
                 x.classList.toggle("change");
             }</script>
         <script src="~/lib/jquery-validation/dist/jquery.validate.date.js"></script>
-    </environment>
+
 
 
     @RenderSection("Scripts", required: false)
