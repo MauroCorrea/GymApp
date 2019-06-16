@@ -86,14 +86,14 @@ namespace GymTest.Controllers
             Hoja_1.Cells["H" + rowNum].Value = "Monto";
             Hoja_1.Cells["I" + rowNum].Value = "Proveedor";
 
-            Hoja_1.Cells["K" + rowNum].Value = "Saldos a Favor";
+            Hoja_1.Cells["K" + rowNum].Value = "Saldos por Medio de pago";
 
-            Hoja_1.Cells["N" + rowNum].Value = "Total";
+            Hoja_1.Cells["N" + rowNum].Value = "Total movimientos";
 
             Hoja_1.Cells["B" + rowNum + ":N" + rowNum].Style.Font.Bold = true;
             Hoja_1.Cells["B" + rowNum + ":N" + rowNum].Style.Font.Size = 15;
 
-            Dictionary<string, float> positiveBalance = new Dictionary<string, float>();
+            Dictionary<string, float> balances = new Dictionary<string, float>();
 
             foreach (CashMovement row in cashMovs)
             {
@@ -113,29 +113,29 @@ namespace GymTest.Controllers
                 Hoja_1.Cells["H" + rowNum].Value = row.CashMovementTypeId == 1 ? row.Amount : (row.Amount * (-1));
                 Hoja_1.Cells["I" + rowNum].Value = row.Supplier.SupplierDescription;
 
-                if (positiveBalance.ContainsKey(row.PaymentMedia.PaymentMediaDescription))
+                if (balances.ContainsKey(row.PaymentMedia.PaymentMediaDescription))
                 {
-                    float totalAmount = positiveBalance[row.PaymentMedia.PaymentMediaDescription] + (float)(row.CashMovementTypeId == 1 ? row.Amount : (row.Amount * (-1)));
-                    positiveBalance[row.PaymentMedia.PaymentMediaDescription] = totalAmount;
+                    float totalAmount = balances[row.PaymentMedia.PaymentMediaDescription] + (float)(row.CashMovementTypeId == 1 ? row.Amount : (row.Amount * (-1)));
+                    balances[row.PaymentMedia.PaymentMediaDescription] = totalAmount;
                 }
                 else
                 {
-                    positiveBalance.Add(row.PaymentMedia.PaymentMediaDescription, (float)(row.CashMovementTypeId == 1 ? row.Amount : (row.Amount * (-1))));
+                    balances.Add(row.PaymentMedia.PaymentMediaDescription, (float)(row.CashMovementTypeId == 1 ? row.Amount : (row.Amount * (-1))));
                 }
             }
 
             if (cashMovs.Count() > 0)
             {
-                rowNum = 2;
-                Hoja_1.Cells["N" + (rowNum + 1)].Formula = "SUM(H" + (originalRowNum + 1) + ":H" + rowNum + ")";
-                foreach (string key in positiveBalance.Keys)
+                //Total movs sum:
+                Hoja_1.Cells["N" + (originalRowNum + 1)].Formula = "SUM(H" + (originalRowNum + 1) + ":H" + rowNum + ")";
+
+                //Total by paymentType
+                int rowNumTotal = 2;
+                foreach (string key in balances.Keys)
                 {
-                    if (positiveBalance[key] > 0)
-                    {
-                        rowNum++;
-                        Hoja_1.Cells["k" + rowNum].Value = key;
-                        Hoja_1.Cells["L" + rowNum].Value = positiveBalance[key];
-                    }
+                    rowNumTotal++;
+                    Hoja_1.Cells["k" + rowNumTotal].Value = key;
+                    Hoja_1.Cells["L" + rowNumTotal].Value = balances[key];
                 }
             }
 
