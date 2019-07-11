@@ -1,3 +1,4 @@
+using System;
 using GymTest.Areas.Identity.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +15,11 @@ namespace GymTest.Areas.Identity
         {
             builder.ConfigureServices((context, services) =>
             {
+                services.ConfigureApplicationCookie(options =>
+                {
+                    options.ExpireTimeSpan = TimeSpan.FromHours(context.Configuration.GetValue<Int16>("CookieHoursExpiration"));
+                });
+
                 services.AddDbContext<GymTestIdentityDbContext>(options =>
                     options.UseMySql(
                         context.Configuration.GetConnectionString("GymTestIdentityDbContextConnection")));
