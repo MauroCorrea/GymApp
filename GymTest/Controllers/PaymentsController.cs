@@ -149,12 +149,16 @@ namespace GymTest.Controllers
                         _context.User.Where(u => u.UserId == payment.UserId).First().FullName,
                         _context.User.Where(u => u.UserId == payment.UserId).First().Email))
                     {
-                        CashMovement cashMov = _context.CashMovement.Where(c => c.PaymentId == payment.PaymentId).FirstOrDefault();
-                        cashMov.Amount = payment.Amount;
-                        cashMov.CashMovementDate = payment.PaymentDate;
-                        cashMov.PaymentMediaId = payment.PaymentMediaId;
+                        var cashMovsPayment = _context.CashMovement.Where(c => c.PaymentId == payment.PaymentId);
+                        if (cashMovsPayment.Count() > 0)
+                        {
+                            CashMovement cashMov = cashMovsPayment.FirstOrDefault();
+                            cashMov.Amount = payment.Amount;
+                            cashMov.CashMovementDate = payment.PaymentDate;
+                            cashMov.PaymentMediaId = payment.PaymentMediaId;
 
-                        _context.Update(cashMov);
+                            _context.Update(cashMov);
+                        }
                         _context.SaveChanges();
                         return RedirectToAction(nameof(Index));
                     }
