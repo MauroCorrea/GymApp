@@ -7,6 +7,7 @@ using GymTest.Data;
 using GymTest.Models;
 using GymTest.Services;
 using Microsoft.AspNetCore.Authorization;
+using System;
 
 namespace GymTest.Controllers
 {
@@ -27,12 +28,39 @@ namespace GymTest.Controllers
 
         }
 
+
+
         // GET: Payments
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string searchString, DateTime FromDate, DateTime ToDate)
         {
-            var gymTestContext = _context.Payment.Include(p => p.MovmentType).Include(p => p.User).Include(p => p.PaymentMedia);
-            return View(gymTestContext.ToList().OrderByDescending(x => x.PaymentDate));
+
+            var payments = from u
+                           in _context.Payment.Include(p => p.MovmentType)
+                                              .Include(p => p.User)
+                                              .Include(p => p.PaymentMedia)
+                           select u;
+
+            if (FromDate != DateTime.MinValue)
+                payments = payments.Where(s => s.PaymentDate >= FromDate);
+
+            if (ToDate != DateTime.MinValue)
+                payments = payments.Where(s => s.PaymentDate <= ToDate);
+
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                payments = payments.Where(s => s.User.FullName.ToLower().Contains(searchString.ToLower()) ||
+                                            s.User.DocumentNumber.ToLower().Contains(searchString.ToLower()));
+
+            }
+            return View(await payments.OrderByDescending(x => x.PaymentDate).ToListAsync());
         }
+
+        //public IActionResult Index()
+        //{
+        //    var gymTestContext = _context.Payment.Include(p => p.MovmentType).Include(p => p.User).Include(p => p.PaymentMedia);
+        //    return View(gymTestContext.ToList().OrderByDescending(x => x.PaymentDate));
+        //}
 
         // GET: Payments/Details/5
         public async Task<IActionResult> Details(int? id)
