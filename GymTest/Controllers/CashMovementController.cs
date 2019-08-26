@@ -9,11 +9,11 @@ using OfficeOpenXml;
 using System;
 using Microsoft.AspNetCore.Authorization;
 using GymTest.Services;
-using System.Security.Claims;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace GymTest.Controllers
 {
@@ -26,8 +26,11 @@ namespace GymTest.Controllers
         private readonly IOptionsSnapshot<AppSettings> _appSettings;
         private UserManager<IdentityUser> _userManager;
 
-        public CashMovementController(GymTestContext context, ISendEmail sendEmail, IHostingEnvironment env, IOptionsSnapshot<AppSettings> app, UserManager<IdentityUser> userManager)
+        private readonly ILogger<IPaymentLogic> _logger;
+
+        public CashMovementController(GymTestContext context, ISendEmail sendEmail, IHostingEnvironment env, IOptionsSnapshot<AppSettings> app, UserManager<IdentityUser> userManager, ILogger<IPaymentLogic> logger)
         {
+            _logger = logger;
             _userManager = userManager;
             _context = context;
             _sendEmail = sendEmail;
@@ -165,10 +168,19 @@ namespace GymTest.Controllers
                                  new List<string>() { userEmail },
                                  new List<string>() { Ruta_Publica_Excel }
                                 );
-
-            if ((System.IO.File.Exists(Ruta_Publica_Excel)))
+            try
             {
-                System.IO.File.Delete(Ruta_Publica_Excel);
+                if ((System.IO.File.Exists(Ruta_Publica_Excel)))
+                {
+                    System.IO.File.Delete(Ruta_Publica_Excel);
+                }
+            }
+            catch (Exception ex)
+            {
+                var messageError = ex.Message;
+                _logger.LogError("Error Processing Payment. Detail: " + messageError);
+                if (ex.InnerException != null)
+                    _logger.LogError("Error Processing Payment. Detail: " + ex.InnerException.Message);
             }
 
             return RedirectToAction(nameof(Index));
