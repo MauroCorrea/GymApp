@@ -52,7 +52,71 @@ namespace GymTest.Controllers
                 return NotFound();
             }
 
+            ViewData["PaymentInfo"] = getPaymentInfo(user);
+
             return View(user);
+        }
+
+        private string getPaymentInfo(User user)
+        {
+            string paymentInfo = string.Empty;
+
+            var payments = from m in _context.Payment
+                           select m;
+            payments = payments.Where(p => p.UserId == user.UserId);
+
+            if (payments.Count() > 0)
+            {
+                var newestPayment = payments.OrderByDescending(p => p.PaymentDate).First();
+                if (newestPayment.MovementTypeId > 0)
+                {
+                    if (newestPayment.LimitUsableDate.Date < DateTime.Now.Date)
+                        return "Fecha límite de uso sobrepasada. La misma es " + newestPayment.LimitUsableDate.Date.ToShortDateString() + ".";
+
+                    switch (newestPayment.MovementTypeId)
+                    {
+                        #region Mensual
+                        case (int)PaymentTypeEnum.Monthly:
+                            var monthsPayed = newestPayment.QuantityMovmentType;
+
+                            var monthsUsed = DateTime.Now.Month - newestPayment.PaymentDate.Month;
+
+                            if (DateTime.Now.Year > newestPayment.PaymentDate.Year)
+                                monthsUsed += 12;
+
+                            if (monthsUsed > monthsPayed)
+                                return "Pago mensual vencido. Su último fue por " + monthsPayed + " mes(es) y se utilizaron " + monthsUsed + " mes(es).";
+
+                            paymentInfo = "Su último pago fue por " + monthsPayed + " mes(es) y se utilizaron " + monthsUsed + " mes(es)."; ;
+                            break;
+                        #endregion
+                        #region Por asistencias
+                        case (int)PaymentTypeEnum.ByAssistances:
+                            var ass = from a in _context.Assistance select a;
+
+                            ass = ass.Where(a => a.UserId == user.UserId &&
+                                            a.AssistanceDate.Date >= newestPayment.PaymentDate.Date);
+
+                            if (ass.Count() >= newestPayment.QuantityMovmentType)
+                                return "Pago por asistencias consumido. Se habilitaron " + newestPayment.QuantityMovmentType + " asistencia(s) y se utilizaron " + ass.Count() + " asistencia(s).";
+
+                            paymentInfo = "Cantidad de asistencias restantes: " + (newestPayment.QuantityMovmentType - ass.Count()) + ".";
+                            break;
+                        #endregion
+
+                        default:
+                            return "Formato de pago no procesable.";
+                    }
+
+                    paymentInfo += "Fecha límite de uso del pago: " + newestPayment.LimitUsableDate.ToShortDateString() + ".";
+                }
+                else//error: ultimo pago sin tipo de membresía
+                    return "Último pago sin tipo de membresía.";
+            }
+            else//error: usuario sin pagos
+                return "Usuario sin pagos.";
+
+            return paymentInfo;
         }
 
         // GET: Users/Create
