@@ -17,6 +17,8 @@ namespace GymTest.Models
 
         public string TemplateEmailPath { get; set; }
 
+        public string AlwaysRememberUser { get; set; }
+
         public string EnableAdminRegister { get; set; }
         public string EmailAdminRegistration { get; set; }
 

@@ -17,7 +17,11 @@ namespace GymTest.Areas.Identity
             {
                 services.ConfigureApplicationCookie(options =>
                 {
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.Name = "TyrUyIdentity";
+                    options.Cookie.Expiration = TimeSpan.FromHours(context.Configuration.GetValue<Int16>("CookieHoursExpiration"));
                     options.ExpireTimeSpan = TimeSpan.FromHours(context.Configuration.GetValue<Int16>("CookieHoursExpiration"));
+                    options.SlidingExpiration = true;
                 });
 
                 services.AddDbContext<GymTestIdentityDbContext>(options =>
