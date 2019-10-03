@@ -21,7 +21,7 @@ namespace GymTest.Controllers
         // GET: Supplier
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Supplier.ToListAsync());
+            return View(await _context.Supplier.Where(m => !m.SupplierDescription.Equals("Movimiento de Pago")).ToListAsync());
         }
 
         // GET: Supplier/Details/5
@@ -55,6 +55,10 @@ namespace GymTest.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("SupplierId,SupplierDescription")] Supplier supplier)
         {
+            if (supplier.SupplierDescription.Equals("Movimiento de pago"))
+            {
+                ModelState.AddModelError("DataError", "No se puede crear entidad con esa descripción.");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(supplier);
@@ -91,7 +95,10 @@ namespace GymTest.Controllers
             {
                 return NotFound();
             }
-
+            if (supplier.SupplierDescription.Equals("Movimiento de pago"))
+            {
+                ModelState.AddModelError("DataError", "No se puede crear entidad con esa descripción.");
+            }
             if (ModelState.IsValid)
             {
                 try

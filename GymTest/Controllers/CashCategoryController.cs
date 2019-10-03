@@ -21,7 +21,7 @@ namespace GymTest.Controllers
         // GET: CashCategory
         public async Task<IActionResult> Index()
         {
-            return View(await _context.CashCategory.ToListAsync());
+            return View(await _context.CashCategory.Where(m => !m.CashCategoryDescription.Equals("Movimiento de pago")).ToListAsync());
         }
 
         // GET: CashCategory/Details/5
@@ -55,6 +55,10 @@ namespace GymTest.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CashCategoryId,CashCategoryDescription")] CashCategory cashCategory)
         {
+            if (cashCategory.CashCategoryDescription.Equals("Movimiento de pago"))
+            {
+                ModelState.AddModelError("DataError", "No se puede crear entidad con esa descripción.");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(cashCategory);
@@ -91,7 +95,10 @@ namespace GymTest.Controllers
             {
                 return NotFound();
             }
-
+            if (cashCategory.CashCategoryDescription.Equals("Movimiento de pago"))
+            {
+                ModelState.AddModelError("DataError", "No se puede crear entidad con esa descripción.");
+            }
             if (ModelState.IsValid)
             {
                 try
