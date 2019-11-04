@@ -1,0 +1,101 @@
+@model IEnumerable<GymTest.Models.UserReport>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Reporte Usuarios</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create Reporte</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SignInDateFrom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SignInDateTo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AssitanceFrom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AssitanceTo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AgeFrom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AgeTo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AssitanceCountFrom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AssitanceCountTo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PayDateFrom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PayDateTo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MovmentType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PaymentMedia)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SignInDateFrom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SignInDateTo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssitanceFrom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssitanceTo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AgeFrom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AgeTo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssitanceCountFrom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssitanceCountTo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PayDateFrom)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PayDateTo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MovmentType.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentMedia.PaymentMediaDescription)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.UserReportId" class="btn btn-primary">Modificar</a>
+                <a asp-action="Details" asp-route-id="@item.UserReportId" class="btn btn-primary">Enviar</a>
+                <a asp-action="Delete" asp-route-id="@item.UserReportId" class="btn btn-danger">Eliminar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

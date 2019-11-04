@@ -1,0 +1,93 @@
+@model GymTest.Models.UserReport
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Eliminar Reporte</h2>
+
+<h3>¿Seguro que desea Eliminar el Reporte?</h3>
+<div>
+    <h4>UserReport</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.SignInDateFrom)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SignInDateFrom)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SignInDateTo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SignInDateTo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AssitanceFrom)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AssitanceFrom)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AssitanceTo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AssitanceTo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AgeFrom)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AgeFrom)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AgeTo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AgeTo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AssitanceCountFrom)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AssitanceCountFrom)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AssitanceCountTo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AssitanceCountTo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PayDateFrom)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PayDateFrom)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PayDateTo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PayDateTo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MovmentType)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MovmentType.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PaymentMedia)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PaymentMedia.PaymentMediaDescription)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="UserReportId" />
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-default">Volver</a>
+    </form>
+</div>

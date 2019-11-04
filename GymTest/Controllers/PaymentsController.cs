@@ -7,6 +7,7 @@ using GymTest.Data;
 using GymTest.Models;
 using GymTest.Services;
 using Microsoft.AspNetCore.Authorization;
+using PagedList;
 
 namespace GymTest.Controllers
 {
@@ -28,10 +29,14 @@ namespace GymTest.Controllers
         }
 
         // GET: Payments
-        public IActionResult Index()
+        public IActionResult Index(int? page)
         {
             var gymTestContext = _context.Payment.Include(p => p.MovmentType).Include(p => p.User).Include(p => p.PaymentMedia);
-            return View(gymTestContext.ToList().OrderByDescending(x => x.PaymentDate));
+
+            int pageSize = 2;
+            int pageNumber = (page ?? 1);
+
+            return View(gymTestContext.ToList().OrderByDescending(x => x.PaymentDate).ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Payments/Details/5

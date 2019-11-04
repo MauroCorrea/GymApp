@@ -39,5 +39,7 @@ namespace GymTest.Data
         public DbSet<GymTest.Models.Workday> Workday { get; set; }
 
         public DbSet<GymTest.Models.PaymentMedia> PaymentMedia { get; set; }
+
+        public DbSet<GymTest.Models.UserReport> UserReport { get; set; }
     }
 }
