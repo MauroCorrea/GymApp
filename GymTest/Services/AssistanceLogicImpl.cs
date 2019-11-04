@@ -28,11 +28,27 @@ namespace GymTest.Services
             var users = from m in _context.User
                         select m;
 
-            users = users.Where(s => s.Token.ToLower().Equals(userToken.ToLower()));
+            users = users.Where(s => s.Token.ToLower().Trim().Equals(userToken.ToLower().Trim()));
 
             if (users.Count() == 1)
             {
                 objectToReturn.User = users.First();
+
+                //Si la fecha no es nula, entonces significa que el ingreso es manual.
+                //cuando el ingreso es manual, no se debe chequear si existia un pago valido.
+                //TODO: hacer configurable el chequeo de pago valido
+                if (assistanceDate.HasValue)
+                {
+                    Assistance assistance = new Assistance
+                    {
+                        User = objectToReturn.User,
+                        AssistanceDate = assistanceDate.Value
+                    };
+                    _context.Assistance.Add(assistance);
+                    _context.SaveChanges();
+
+                    return objectToReturn;
+                }
 
                 var payments = from m in _context.Payment
                                select m;

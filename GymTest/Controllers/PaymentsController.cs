@@ -7,7 +7,7 @@ using GymTest.Data;
 using GymTest.Models;
 using GymTest.Services;
 using Microsoft.AspNetCore.Authorization;
-using PagedList;
+using System;
 
 namespace GymTest.Controllers
 {
@@ -28,16 +28,39 @@ namespace GymTest.Controllers
 
         }
 
+
+
         // GET: Payments
-        public IActionResult Index(int? page)
+        public async Task<IActionResult> Index(string searchString, DateTime FromDate, DateTime ToDate)
         {
-            var gymTestContext = _context.Payment.Include(p => p.MovmentType).Include(p => p.User).Include(p => p.PaymentMedia);
 
-            int pageSize = 2;
-            int pageNumber = (page ?? 1);
+            var payments = from u
+                           in _context.Payment.Include(p => p.MovmentType)
+                                              .Include(p => p.User)
+                                              .Include(p => p.PaymentMedia)
+                           select u;
 
-            return View(gymTestContext.ToList().OrderByDescending(x => x.PaymentDate).ToPagedList(pageNumber, pageSize));
+            if (FromDate != DateTime.MinValue)
+                payments = payments.Where(s => s.PaymentDate >= FromDate);
+
+            if (ToDate != DateTime.MinValue)
+                payments = payments.Where(s => s.PaymentDate <= ToDate);
+
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                payments = payments.Where(s => s.User.FullName.ToLower().Contains(searchString.ToLower()) ||
+                                            s.User.DocumentNumber.ToLower().Contains(searchString.ToLower()));
+
+            }
+            return View(await payments.OrderByDescending(x => x.PaymentDate).ToListAsync());
         }
+
+        //public IActionResult Index()
+        //{
+        //    var gymTestContext = _context.Payment.Include(p => p.MovmentType).Include(p => p.User).Include(p => p.PaymentMedia);
+        //    return View(gymTestContext.ToList().OrderByDescending(x => x.PaymentDate));
+        //}
 
         // GET: Payments/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -154,12 +177,16 @@ namespace GymTest.Controllers
                         _context.User.Where(u => u.UserId == payment.UserId).First().FullName,
                         _context.User.Where(u => u.UserId == payment.UserId).First().Email))
                     {
-                        CashMovement cashMov = _context.CashMovement.Where(c => c.PaymentId == payment.PaymentId).FirstOrDefault();
-                        cashMov.Amount = payment.Amount;
-                        cashMov.CashMovementDate = payment.PaymentDate;
-                        cashMov.PaymentMediaId = payment.PaymentMediaId;
+                        var cashMovsPayment = _context.CashMovement.Where(c => c.PaymentId == payment.PaymentId);
+                        if (cashMovsPayment.Count() > 0)
+                        {
+                            CashMovement cashMov = cashMovsPayment.FirstOrDefault();
+                            cashMov.Amount = payment.Amount;
+                            cashMov.CashMovementDate = payment.PaymentDate;
+                            cashMov.PaymentMediaId = payment.PaymentMediaId;
 
-                        _context.Update(cashMov);
+                            _context.Update(cashMov);
+                        }
                         _context.SaveChanges();
                         return RedirectToAction(nameof(Index));
                     }

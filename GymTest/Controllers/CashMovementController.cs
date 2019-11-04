@@ -9,11 +9,11 @@ using OfficeOpenXml;
 using System;
 using Microsoft.AspNetCore.Authorization;
 using GymTest.Services;
-using System.Security.Claims;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace GymTest.Controllers
 {
@@ -26,8 +26,11 @@ namespace GymTest.Controllers
         private readonly IOptionsSnapshot<AppSettings> _appSettings;
         private UserManager<IdentityUser> _userManager;
 
-        public CashMovementController(GymTestContext context, ISendEmail sendEmail, IHostingEnvironment env, IOptionsSnapshot<AppSettings> app, UserManager<IdentityUser> userManager)
+        private readonly ILogger<IPaymentLogic> _logger;
+
+        public CashMovementController(GymTestContext context, ISendEmail sendEmail, IHostingEnvironment env, IOptionsSnapshot<AppSettings> app, UserManager<IdentityUser> userManager, ILogger<IPaymentLogic> logger)
         {
+            _logger = logger;
             _userManager = userManager;
             _context = context;
             _sendEmail = sendEmail;
@@ -86,14 +89,14 @@ namespace GymTest.Controllers
             Hoja_1.Cells["H" + rowNum].Value = "Monto";
             Hoja_1.Cells["I" + rowNum].Value = "Proveedor";
 
-            Hoja_1.Cells["K" + rowNum].Value = "Saldos a Favor";
+            Hoja_1.Cells["K" + rowNum].Value = "Saldos por Medio de pago";
 
-            Hoja_1.Cells["N" + rowNum].Value = "Total";
+            Hoja_1.Cells["N" + rowNum].Value = "Total movimientos";
 
             Hoja_1.Cells["B" + rowNum + ":N" + rowNum].Style.Font.Bold = true;
             Hoja_1.Cells["B" + rowNum + ":N" + rowNum].Style.Font.Size = 15;
 
-            Dictionary<string, float> positiveBalance = new Dictionary<string, float>();
+            Dictionary<string, float> balances = new Dictionary<string, float>();
 
             foreach (CashMovement row in cashMovs)
             {
@@ -113,29 +116,29 @@ namespace GymTest.Controllers
                 Hoja_1.Cells["H" + rowNum].Value = row.CashMovementTypeId == 1 ? row.Amount : (row.Amount * (-1));
                 Hoja_1.Cells["I" + rowNum].Value = row.Supplier.SupplierDescription;
 
-                if (positiveBalance.ContainsKey(row.PaymentMedia.PaymentMediaDescription))
+                if (balances.ContainsKey(row.PaymentMedia.PaymentMediaDescription))
                 {
-                    float totalAmount = positiveBalance[row.PaymentMedia.PaymentMediaDescription] + (float)(row.CashMovementTypeId == 1 ? row.Amount : (row.Amount * (-1)));
-                    positiveBalance[row.PaymentMedia.PaymentMediaDescription] = totalAmount;
+                    float totalAmount = balances[row.PaymentMedia.PaymentMediaDescription] + (float)(row.CashMovementTypeId == 1 ? row.Amount : (row.Amount * (-1)));
+                    balances[row.PaymentMedia.PaymentMediaDescription] = totalAmount;
                 }
                 else
                 {
-                    positiveBalance.Add(row.PaymentMedia.PaymentMediaDescription, (float)(row.CashMovementTypeId == 1 ? row.Amount : (row.Amount * (-1))));
+                    balances.Add(row.PaymentMedia.PaymentMediaDescription, (float)(row.CashMovementTypeId == 1 ? row.Amount : (row.Amount * (-1))));
                 }
             }
 
             if (cashMovs.Count() > 0)
             {
-                rowNum = 2;
-                Hoja_1.Cells["N" + (rowNum + 1)].Formula = "SUM(H" + (originalRowNum + 1) + ":H" + rowNum + ")";
-                foreach (string key in positiveBalance.Keys)
+                //Total movs sum:
+                Hoja_1.Cells["N" + (originalRowNum + 1)].Formula = "SUM(H" + (originalRowNum + 1) + ":H" + rowNum + ")";
+
+                //Total by paymentType
+                int rowNumTotal = 2;
+                foreach (string key in balances.Keys)
                 {
-                    if (positiveBalance[key] > 0)
-                    {
-                        rowNum++;
-                        Hoja_1.Cells["k" + rowNum].Value = key;
-                        Hoja_1.Cells["L" + rowNum].Value = positiveBalance[key];
-                    }
+                    rowNumTotal++;
+                    Hoja_1.Cells["k" + rowNumTotal].Value = key;
+                    Hoja_1.Cells["L" + rowNumTotal].Value = balances[key];
                 }
             }
 
@@ -165,10 +168,19 @@ namespace GymTest.Controllers
                                  new List<string>() { userEmail },
                                  new List<string>() { Ruta_Publica_Excel }
                                 );
-
-            if ((System.IO.File.Exists(Ruta_Publica_Excel)))
+            try
             {
-                System.IO.File.Delete(Ruta_Publica_Excel);
+                if ((System.IO.File.Exists(Ruta_Publica_Excel)))
+                {
+                    System.IO.File.Delete(Ruta_Publica_Excel);
+                }
+            }
+            catch (Exception ex)
+            {
+                var messageError = ex.Message;
+                _logger.LogError("Error Processing Payment. Detail: " + messageError);
+                if (ex.InnerException != null)
+                    _logger.LogError("Error Processing Payment. Detail: " + ex.InnerException.Message);
             }
 
             return RedirectToAction(nameof(Index));

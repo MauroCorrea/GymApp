@@ -9,6 +9,15 @@
 <p>
     <a asp-action="Create" class="btn btn-primary">Crear Pago</a>
 </p>
+
+<form asp-controller="Payments" asp-action="Index">
+    <p>
+        Filtro inteligente: <input type="text" name="SearchString">
+        Fecha desde: <input name="FromDate" class="datepicker" type="text" placeholder="dd/mm/aaaa">
+        Fecha hasta: <input name="ToDate" class="datepicker" type="text" placeholder="dd/mm/aaaa">
+        <input type="submit" value="Filtrar" class="btn btn-default" />
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -34,34 +43,35 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PaymentDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MovmentType.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.QuantityMovmentType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PaymentMedia.PaymentMediaDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.FullName)
-            </td>
-            <td>
-                <div class="btn-group">
-                    <a asp-action="Edit" asp-route-id="@item.PaymentId" class="btn btn-primary">Modificar</a>
-                    <a asp-action="Details" asp-route-id="@item.PaymentId" class="btn btn-primary">Detalles</a>
-                    <a asp-action="Delete" asp-route-id="@item.PaymentId" class="btn btn-danger">Eliminar</a>
-                </div>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PaymentDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MovmentType.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuantityMovmentType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PaymentMedia.PaymentMediaDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.FullName)
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <a asp-action="Edit" asp-route-id="@item.PaymentId" class="btn btn-primary">Modificar</a>
+                        <a asp-action="Details" asp-route-id="@item.PaymentId" class="btn btn-primary">Detalles</a>
+                        <a asp-action="Delete" asp-route-id="@item.PaymentId" class="btn btn-danger">Eliminar</a>
+                    </div>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
