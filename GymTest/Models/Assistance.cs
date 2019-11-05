@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GymTest.Models
 {
+    [IgnoreAntiforgeryToken(Order = 1001)]
     public class Assistance
     {
         [Required]

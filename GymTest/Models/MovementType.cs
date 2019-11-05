@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GymTest.Models
 {
@@ -8,6 +9,7 @@ namespace GymTest.Models
         ByAssistances = 2
     }
 
+    [IgnoreAntiforgeryToken(Order = 1001)]
     public class MovementType
     {
         [Required]
