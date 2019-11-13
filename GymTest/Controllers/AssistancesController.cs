@@ -25,7 +25,7 @@ namespace GymTest.Controllers
         }
 
         // GET: Assistances
-        public async Task<IActionResult> Index(string searchString, int? id)
+        public async Task<IActionResult> Index(string searchString, DateTime dateFilter, int? pageNumber, int? id)
         {
             var ret = from ass in _context.Assistance.Include("User")
                       select ass;
@@ -34,14 +34,20 @@ namespace GymTest.Controllers
             {
                 ret = ret.Where(x => x.UserId == id);
             }
-
-            if (!String.IsNullOrEmpty(searchString))
+            else
             {
-                ret = ret.Where(s => s.User.FullName.ToLower().Contains(searchString.ToLower()));
 
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    ret = ret.Where(s => s.User.FullName.ToLower().Contains(searchString.ToLower()));
+
+                }
+
+                if (dateFilter != DateTime.MinValue)
+                    ret = ret.Where(s => s.AssistanceDate == dateFilter);
             }
 
-            return View(await ret.ToListAsync());
+            return View(await PaginatedList<Assistance>.CreateAsync(ret.AsNoTracking(), pageNumber ?? 1));
         }
 
 
@@ -75,7 +81,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult Create([Bind("AssistanceId,AssistanceDate,UserId")] Assistance assistance)
         {
             if (ModelState.IsValid)
@@ -115,7 +121,7 @@ namespace GymTest.Controllers
         //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         //[HttpPost]
-        //[ValidateAntiForgeryToken]
+        ////[ValidateAntiForgeryToken]
         //public async Task<IActionResult> Edit(int id, [Bind("AssistanceId,AssistanceDate,UserId")] Assistance assistance)
         //{
         //    if (id != assistance.AssistanceId)
@@ -168,7 +174,7 @@ namespace GymTest.Controllers
 
         // POST: Assistances/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var assistance = await _context.Assistance.FindAsync(id);

@@ -57,7 +57,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //////[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("WorkdayId,ResourceId,WorkingDate,QuantityOne,QuantityTwo")] Workday workday)
         {
             if (ModelState.IsValid)
@@ -91,7 +91,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //////[ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("WorkdayId,ResourceId,WorkingDate,QuantityOne,QuantityTwo")] Workday workday)
         {
             if (id != workday.WorkdayId)
@@ -144,7 +144,7 @@ namespace GymTest.Controllers
 
         //// POST: Workday/Delete/5
         //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
+        ////////[ValidateAntiForgeryToken]
         //public async Task<IActionResult> DeleteConfirmed(int id)
         //{
         //    var workday = await _context.Workday.FindAsync(id);

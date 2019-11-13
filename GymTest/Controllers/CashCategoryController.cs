@@ -52,7 +52,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //////[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CashCategoryId,CashCategoryDescription")] CashCategory cashCategory)
         {
             if (cashCategory.CashCategoryDescription.Equals("Movimiento de pago"))
@@ -88,7 +88,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //////[ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CashCategoryId,CashCategoryDescription")] CashCategory cashCategory)
         {
             if (id != cashCategory.CashCategoryId)
@@ -142,7 +142,7 @@ namespace GymTest.Controllers
 
         // POST: CashCategory/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //////[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var cashCategory = await _context.CashCategory.FindAsync(id);

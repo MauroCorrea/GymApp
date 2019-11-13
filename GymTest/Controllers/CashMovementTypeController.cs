@@ -52,7 +52,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //////[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CashMovementTypeId,CashMovementTypeDescription")] CashMovementType cashMovementType)
         {
             if (ModelState.IsValid)
@@ -84,7 +84,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //////[ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CashMovementTypeId,CashMovementTypeDescription")] CashMovementType cashMovementType)
         {
             if (id != cashMovementType.CashMovementTypeId)
@@ -135,7 +135,7 @@ namespace GymTest.Controllers
 
         // POST: CashMovementType/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //////[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var cashMovementType = await _context.CashMovementType.FindAsync(id);
