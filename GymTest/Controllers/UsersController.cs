@@ -21,8 +21,14 @@ namespace GymTest.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("name_desc") ? "name_asc" : "name_desc";
+            ViewData["DocSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("doc_desc") ? "doc_asc" : "doc_desc";
+            ViewData["EmailSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("email_desc") ? "email_asc" : "email_desc";
+            ViewData["AddressSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("address_desc") ? "address_asc" : "address_desc";
+            ViewData["PhoneSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("phone_desc") ? "phone_asc" : "phone_desc";
+
             var users = from m in _context.User
                         select m;
 
@@ -32,7 +38,46 @@ namespace GymTest.Controllers
                                     s.DocumentNumber.ToLower().Contains(searchString.ToLower()));
 
             }
-            return View(await users.ToListAsync());
+
+            switch (sortOrder)
+            {
+                case "name_asc":
+                    users = users.OrderBy(s => s.FullName);
+                    break;
+                case "name_desc":
+                    users = users.OrderByDescending(s => s.FullName);
+                    break;
+                case "doc_asc":
+                    users = users.OrderBy(s => s.DocumentNumber);
+                    break;
+                case "doc_desc":
+                    users = users.OrderByDescending(s => s.DocumentNumber);
+                    break;
+                case "email_asc":
+                    users = users.OrderBy(s => s.Email);
+                    break;
+                case "email_desc":
+                    users = users.OrderByDescending(s => s.Email);
+                    break;
+                case "address_asc":
+                    users = users.OrderBy(s => s.Address);
+                    break;
+                case "address_desc":
+                    users = users.OrderByDescending(s => s.Address);
+                    break;
+                case "phone_asc":
+                    users = users.OrderBy(s => s.Phones);
+                    break;
+                case "phone_desc":
+                    users = users.OrderByDescending(s => s.Phones);
+                    break;
+                default:
+                    users = users.OrderBy(s => s.FullName);
+                    break;
+            }
+
+            return View(await users.AsNoTracking().ToListAsync());
+            //return View(await students.AsNoTracking().ToListAsync());
 
         }
 

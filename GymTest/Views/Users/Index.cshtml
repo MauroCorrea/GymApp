@@ -27,19 +27,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FullName)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.FullName)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DocumentNumber)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DocSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.DocumentNumber)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["EmailSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.Email)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Address)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["AddressSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.Address)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Phones)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PhoneSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.Phones)</a>
             </th>
             <th></th>
         </tr>

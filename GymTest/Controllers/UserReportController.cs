@@ -100,7 +100,7 @@ namespace GymTest.Controllers
                 }
 
                 result.Add(new UserReportModel { Name = user.FullName,
-                    BirthDate = user.BirthDate,
+                    BirthDate = user.BirthDate??DateTime.Now,
                     SingInDate = user.SignInDate,
                     AssistanceCount = assistances.Count(),
                     AssistFrom = assistances.Count() > 0 ? assistances.First().AssistanceDate : DateTime.MinValue,
