@@ -25,8 +25,11 @@ namespace GymTest.Controllers
         }
 
         // GET: Assistances
-        public async Task<IActionResult> Index(string searchString, DateTime dateFilter, int? pageNumber, int? id)
+        public async Task<IActionResult> Index(string sortOrder, string searchString, DateTime dateFilter, int? pageNumber, int? id)
         {
+            ViewData["DateSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("date_desc") ? "date_asc" : "date_desc";
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("name_desc") ? "name_asc" : "name_desc";
+            
             var ret = from ass in _context.Assistance.Include("User")
                       select ass;
 
@@ -45,6 +48,25 @@ namespace GymTest.Controllers
 
                 if (dateFilter != DateTime.MinValue)
                     ret = ret.Where(s => s.AssistanceDate == dateFilter);
+            }
+
+            switch (sortOrder)
+            {
+                case "name_asc":
+                    ret = ret.OrderBy(s => s.User.FullName);
+                    break;
+                case "name_desc":
+                    ret = ret.OrderByDescending(s => s.User.FullName);
+                    break;
+                case "date_desc":
+                    ret = ret.OrderBy(s => s.AssistanceDate);
+                    break;
+                case "date_asc":
+                    ret = ret.OrderByDescending(s => s.AssistanceDate);
+                    break;
+                default:
+                    ret = ret.OrderBy(s => s.AssistanceDate);
+                    break;
             }
 
             return View(await PaginatedList<Assistance>.CreateAsync(ret.AsNoTracking(), pageNumber ?? 1));

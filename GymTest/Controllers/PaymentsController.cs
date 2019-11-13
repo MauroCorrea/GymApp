@@ -31,8 +31,14 @@ namespace GymTest.Controllers
 
 
         // GET: Payments
-        public async Task<IActionResult> Index(string searchString, DateTime FromDate, DateTime ToDate)
+        public async Task<IActionResult> Index(string sortOrder, string searchString, DateTime FromDate, DateTime ToDate)
         {
+            ViewData["PaymentSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("payment_desc") ? "payment_asc" : "payment_desc";
+            ViewData["MovTypeSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("movType_desc") ? "movType_asc" : "movType_desc";
+            ViewData["QuanMovTypeSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("quantType_desc") ? "quantType_asc" : "quantType_desc";
+            ViewData["AmountSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("amount_desc") ? "amount_asc" : "amount_desc";
+            ViewData["PayMediaSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("payMedia_desc") ? "payMedia_asc" : "payMedia_desc";
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("name_desc") ? "name_asc" : "name_desc";
 
             var payments = from u
                            in _context.Payment.Include(p => p.MovmentType)
@@ -53,7 +59,51 @@ namespace GymTest.Controllers
                                             s.User.DocumentNumber.ToLower().Contains(searchString.ToLower()));
 
             }
-            return View(await payments.OrderByDescending(x => x.PaymentDate).ToListAsync());
+
+            switch (sortOrder)
+            {
+                case "name_asc":
+                    payments = payments.OrderBy(s => s.User.FullName);
+                    break;
+                case "name_desc":
+                    payments = payments.OrderByDescending(s => s.User.FullName);
+                    break;
+                case "payment_asc":
+                    payments = payments.OrderBy(s => s.PaymentDate);
+                    break;
+                case "payment_desc":
+                    payments = payments.OrderByDescending(s => s.PaymentDate);
+                    break;
+                case "movType_asc":
+                    payments = payments.OrderBy(s => s.MovementTypeId);
+                    break;
+                case "movType_desc":
+                    payments = payments.OrderByDescending(s => s.MovementTypeId);
+                    break;
+                case "quantType_asc":
+                    payments = payments.OrderBy(s => s.QuantityMovmentType);
+                    break;
+                case "quantType_desc":
+                    payments = payments.OrderByDescending(s => s.QuantityMovmentType);
+                    break;
+                case "amount_asc":
+                    payments = payments.OrderBy(s => s.Amount);
+                    break;
+                case "amount_desc":
+                    payments = payments.OrderByDescending(s => s.Amount);
+                    break;
+                case "payMedia_asc":
+                    payments = payments.OrderBy(s => s.PaymentMedia);
+                    break;
+                case "payMedia_desc":
+                    payments = payments.OrderByDescending(s => s.PaymentMedia);
+                    break;
+                default:
+                    payments = payments.OrderBy(s => s.PaymentDate);
+                    break;
+            }
+
+            return View(await payments.AsNoTracking().ToListAsync());
         }
 
         //public IActionResult Index()

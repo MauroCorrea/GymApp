@@ -22,22 +22,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.PaymentDate)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PaymentSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.PaymentDate)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MovmentType)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["MovTypeSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.MovmentType)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.QuantityMovmentType)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["QuanMovTypeSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.QuantityMovmentType)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Amount)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["AmountSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.Amount)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PaymentMedia)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PayMediaSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.PaymentMedia)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User.FullName)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.User.FullName)</a>
             </th>
             <th></th>
         </tr>

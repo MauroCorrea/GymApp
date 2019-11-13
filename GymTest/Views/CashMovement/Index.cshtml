@@ -1,4 +1,4 @@
-@model IEnumerable<GymTest.Models.CashMovement>
+﻿@model IEnumerable<GymTest.Models.CashMovement>
 
 @{
     ViewData["Title"] = "Index";
@@ -22,25 +22,25 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CashMovementDetails)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["CashMovSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.CashMovementDetails)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Amount)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["AmountSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.Amount)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CashMovementDate)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["CashMovDateSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.CashMovementDate)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CashMovementType)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["CashMovTypeSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.CashMovementType)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PaymentMedia)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PayMediaSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.PaymentMedia)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CashCategory)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["CashCatSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.CashCategory)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CashSubcategory)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["CashSubCatSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.CashSubcategory)</a>
             </th>
             <th></th>
         </tr>

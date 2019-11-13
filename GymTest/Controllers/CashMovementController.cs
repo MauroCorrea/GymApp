@@ -39,15 +39,57 @@ namespace GymTest.Controllers
         }
 
         // GET: CashMovement
-        public IActionResult Index()
+        public IActionResult Index(string sortOrder)
         {
-            var gymTestContext = _context.CashMovement
+            ViewData["CashMovSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("cashMov_desc") ? "cashMov_asc" : "cashMov_desc";
+            ViewData["AmountSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("amount_desc") ? "amount_asc" : "amount_desc";
+            ViewData["CashMovDateSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("cashMovDate_desc") ? "cashMovDate_asc" : "cashMovDate_desc";
+            ViewData["CashMovTypeSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("cashMovType_desc") ? "cashMovType_asc" : "cashMovType_desc";
+            ViewData["PayMediaSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("payMedia_desc") ? "payMedia_asc" : "payMedia_desc";
+            ViewData["CashCatSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("cashCat_desc") ? "cashCat_asc" : "cashCat_desc";
+            ViewData["CashSubCatSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("cashSubCat_desc") ? "cashSubCat_asc" : "cashSubCat_desc";
+
+            var cashMovements = _context.CashMovement
                                          .Include(c => c.CashCategory)
                                          .Include(c => c.PaymentMedia)
                                          .Include(c => c.CashSubcategory)
                                          .Include(c => c.CashMovementType)
                                          .Include(c => c.Supplier);
-            return View(gymTestContext.ToList().OrderByDescending(x => x.CashMovementDate));
+
+
+            switch (sortOrder)
+            {
+                case "cashMov_asc":
+                    return View(cashMovements.ToList().OrderBy(s => s.CashMovementDetails));
+                case "cashMov_desc":
+                    return View(cashMovements.ToList().OrderByDescending(s => s.CashMovementDetails));
+                case "amount_asc":
+                    return View(cashMovements.ToList().OrderBy(s => s.Amount));
+                case "amount_desc":
+                    return View(cashMovements.ToList().OrderByDescending(s => s.Amount));
+                case "cashMovDate_asc":
+                    return View(cashMovements.ToList().OrderBy(s => s.CashMovementDate));
+                case "cashMovDate_desc":
+                    return View(cashMovements.ToList().OrderByDescending(s => s.CashMovementDate));
+                case "cashMovType_asc":
+                    return View(cashMovements.ToList().OrderBy(s => s.CashMovementType));
+                case "cashMovType_desc":
+                    return View(cashMovements.ToList().OrderByDescending(s => s.CashMovementType));
+                case "payMedia_asc":
+                    return View(cashMovements.ToList().OrderBy(s => s.PaymentMedia));
+                case "payMedia_desc":
+                    return View(cashMovements.ToList().OrderByDescending(s => s.PaymentMedia));
+                case "cashCat_asc":
+                    return View(cashMovements.ToList().OrderBy(s => s.CashCategory));
+                case "cashCat_desc":
+                    return View(cashMovements.ToList().OrderByDescending(s => s.CashCategory));
+                case "cashSubCat_asc":
+                    return View(cashMovements.ToList().OrderBy(s => s.CashSubcategory));
+                case "cashSubCat_desc":
+                    return View(cashMovements.ToList().OrderByDescending(s => s.CashSubcategory));
+                default:
+                    return View(cashMovements.ToList().OrderBy(s => s.CashMovementDate));
+            }
         }
 
         public async Task<IActionResult> ExportToExcel(DateTime FromDate, DateTime ToDate)

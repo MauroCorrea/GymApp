@@ -1,4 +1,4 @@
-@model PaginatedList<GymTest.Models.Assistance>
+﻿@model PaginatedList<GymTest.Models.Assistance>
 
 @{
     ViewData["Title"] = "Index";
@@ -21,10 +21,10 @@
     <thead>
         <tr>
             <th>
-                Fecha de asistencia
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.First().AssistanceDate)</a>
             </th>
             <th>
-                Usuario
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.First().User.FullName)</a>
             </th>
             <th></th>
         </tr>
