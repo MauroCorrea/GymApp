@@ -26,7 +26,7 @@ namespace GymTest.Controllers
         // GET: Notifications
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Notification.ToListAsync());
+            return View(await _context.Notification.OrderByDescending(x => x.NotificationId).ToListAsync());
         }
 
         // GET: Notifications/Details/5

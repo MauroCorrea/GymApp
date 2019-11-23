@@ -28,6 +28,7 @@
         <Compile Remove="Migrations\20190327032849_InitialCreate.cs" />
         <Compile Remove="Migrations\20190327034445_InitialCreate.cs" />
         <Compile Remove="Migrations\20190330041033_InitialCreate.cs" />
+        <Compile Remove="System\Web\HttpContext.cs" />
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Services\" />
@@ -45,6 +46,7 @@
         <Content Remove="wwwroot\images\gym2.jpg" />
         <Content Remove="wwwroot\Templates\AssistanceTemplate %28copy%29.html" />
         <Content Remove="wwwroot\images\logo.png" />
+        <Content Remove="Views\AutomaticProcess\Details.cshtml" />
     </ItemGroup>
     <ItemGroup>
         <None Include="wwwroot\css\jquery-ui.css" />
