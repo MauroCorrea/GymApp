@@ -41,5 +41,7 @@ namespace GymTest.Data
         public DbSet<GymTest.Models.PaymentMedia> PaymentMedia { get; set; }
 
         public DbSet<GymTest.Models.UserReport> UserReport { get; set; }
+
+        public DbSet<GymTest.Models.AutomaticProcess> AutomaticProcess { get; set; }
     }
 }
