@@ -6,12 +6,12 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.App" Version="$(AspNetCoreAppRuntimeFrameworkVersion)">
             <IsImplicitlyDefined>true</IsImplicitlyDefined>
-            <PrivateAssets>All</PrivateAssets>
+            <PrivateAssets>all</PrivateAssets>
             <Publish>true</Publish>
         </PackageReference>
         <PackageReference Include="Microsoft.AspNetCore.All" Version="$(AspNetCoreAllRuntimeFrameworkVersion)">
             <IsImplicitlyDefined>true</IsImplicitlyDefined>
-            <PrivateAssets>All</PrivateAssets>
+            <PrivateAssets>all</PrivateAssets>
             <Publish>true</Publish>
         </PackageReference>
         <!--    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.1" />-->

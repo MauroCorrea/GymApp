@@ -31,39 +31,39 @@ namespace GymTest.Controllers
 
             if (dayOfMonth != null && Convert.ToInt16(dayOfMonth) > 0)
             {
-                AutomaticProcess nextDayAutomaticSendMailProcess = _context.AutomaticProcess.Where(x => x.LastProcessDate == null).FirstOrDefault();
-                if(nextDayAutomaticSendMailProcess != null)
-                {
-                    DateTime realDateToSendMail = nextDayAutomaticSendMailProcess.NextProcessDate;
-                    if (Convert.ToInt16(dayOfMonth) >= realDateToSendMail.Day)
-                    {
-                        Notification notification = new Notification
-                        {
-                            Everyone = true,
-                            Message = _appSettings.Value.DayToPayMessage,
-                            Send = false,
-                            To = null
-                        };
-                        nextDayAutomaticSendMailProcess.LastProcessDate = DateTime.Now;
+                //AutomaticProcess nextDayAutomaticSendMailProcess = _context.AutomaticProcess.Where(x => x.LastProcessDate == null).FirstOrDefault();
+                //if(nextDayAutomaticSendMailProcess != null)
+                //{
+                //    DateTime realDateToSendMail = nextDayAutomaticSendMailProcess.NextProcessDate;
+                //    if (Convert.ToInt16(dayOfMonth) >= realDateToSendMail.Day)
+                //    {
+                //        Notification notification = new Notification
+                //        {
+                //            Everyone = true,
+                //            Message = _appSettings.Value.DayToPayMessage,
+                //            Send = false,
+                //            To = null
+                //        };
+                //        nextDayAutomaticSendMailProcess.LastProcessDate = DateTime.Now;
 
-                        _context.AutomaticProcess.Update(nextDayAutomaticSendMailProcess);
-                        _context.Notification.Add(notification);
-                        _context.SaveChanges();
+                //        _context.AutomaticProcess.Update(nextDayAutomaticSendMailProcess);
+                //        _context.Notification.Add(notification);
+                //        _context.SaveChanges();
 
-                        ViewBag.Articles = true;
-                    }
-                    else
-                    {
-                        ViewBag.Articles = false;
-                    }
-                }
+                //        ViewBag.Articles = true;
+                //    }
+                //    else
+                //    {
+                //        ViewBag.Articles = false;
+                //    }
+                //}
             }
             else
             {
                 ViewBag.Articles = false;
             }
-            
-            
+
+
             return View();
         }
 

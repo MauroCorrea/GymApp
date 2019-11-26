@@ -175,7 +175,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([FromForm]User user) //[Bind("UserId,Token,FullName,BirthDate,DocumentNumber,Email,Address,Phones,SignInDate,Commentaries")] User user)
         {
             if (ModelState.IsValid)
@@ -209,7 +209,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [FromForm]User user) //[Bind("UserId,Token,FullName,BirthDate,DocumentNumber,Email,Address,Phones,SignInDate,Commentaries")] User user)
         {
             if (id != user.UserId)
