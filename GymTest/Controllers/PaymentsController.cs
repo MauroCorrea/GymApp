@@ -156,7 +156,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        //////[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("PaymentId,PaymentDate,MovementTypeId,QuantityMovmentType,Amount,PaymentMediaId,UserId,LimitUsableDate")] Payment payment)
         {
             if (ModelState.IsValid)
@@ -211,7 +211,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        //////[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, [Bind("PaymentId,PaymentDate,MovementTypeId,QuantityMovmentType,Amount,PaymentMediaId,UserId,LimitUsableDate")] Payment payment)
         {
             if (id != payment.PaymentId)
@@ -281,7 +281,7 @@ namespace GymTest.Controllers
 
         // POST: Payments/Delete/5
         [HttpPost, ActionName("Delete")]
-        //////[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var payment = await _context.Payment.FindAsync(id);

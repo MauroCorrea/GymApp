@@ -52,7 +52,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        //////[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("RoleId,RoleDescription")] Role role)
         {
             if (ModelState.IsValid)
@@ -84,7 +84,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        //////[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("RoleId,RoleDescription")] Role role)
         {
             if (id != role.RoleId)
@@ -135,7 +135,7 @@ namespace GymTest.Controllers
 
         // POST: Role/Delete/5
         [HttpPost, ActionName("Delete")]
-        //////[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var role = await _context.Role.FindAsync(id);

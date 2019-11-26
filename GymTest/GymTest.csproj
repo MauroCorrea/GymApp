@@ -5,23 +5,22 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.App" Version="$(AspNetCoreAppRuntimeFrameworkVersion)">
-          <IsImplicitlyDefined>true</IsImplicitlyDefined>
-          <PrivateAssets>All</PrivateAssets>
-          <Publish>true</Publish>
+            <IsImplicitlyDefined>true</IsImplicitlyDefined>
+            <PrivateAssets>All</PrivateAssets>
+            <Publish>true</Publish>
         </PackageReference>
-        <PackageReference Include="Microsoft.AspNetCore.All" Version="$(AspNetCoreAllRuntimeFrameworkVersion)"><IsImplicitlyDefined>true</IsImplicitlyDefined>
-<PrivateAssets>All</PrivateAssets>
-<Publish>true</Publish>
-</PackageReference>
+        <PackageReference Include="Microsoft.AspNetCore.All" Version="$(AspNetCoreAllRuntimeFrameworkVersion)">
+            <IsImplicitlyDefined>true</IsImplicitlyDefined>
+            <PrivateAssets>All</PrivateAssets>
+            <Publish>true</Publish>
+        </PackageReference>
         <!--    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.1" />-->
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.3" />
         <PackageReference Include="jQuery.UI.Combined" Version="1.12.1" />
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.4" />
         <PackageReference Include="EPPlus.Core" Version="1.5.4" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
         <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.2" />
         <PackageReference Include="NLog" Version="4.6.3" />
-        <PackageReference Include="PagedList.Mvc" Version="4.5.0" />
     </ItemGroup>
     <ItemGroup>
         <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.1.1" />
@@ -35,7 +34,6 @@
         <Compile Remove="Migrations\20190327032849_InitialCreate.cs" />
         <Compile Remove="Migrations\20190327034445_InitialCreate.cs" />
         <Compile Remove="Migrations\20190330041033_InitialCreate.cs" />
-        <Compile Remove="System\Web\HttpContext.cs" />
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Services\" />
@@ -45,7 +43,6 @@
         <Folder Include="Models\ReportModels\" />
     </ItemGroup>
     <ItemGroup>
-        <Content Remove="wwwroot\css\jquery-ui.css" />
         <Content Remove="wwwroot\images\ui-icons_444444_256x240.png" />
         <Content Remove="wwwroot\images\img2.jpg" />
         <Content Remove="wwwroot\images\img1.jpg" />
