@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GymTest.Models
 {
     [IgnoreAntiforgeryToken(Order = 1001)]
-    public class User : IValidatableObject
+    public class User
     {
         public int UserId { get; set; }
 

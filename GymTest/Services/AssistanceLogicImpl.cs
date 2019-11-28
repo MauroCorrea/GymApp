@@ -54,6 +54,8 @@ namespace GymTest.Services
                                select m;
                 payments = payments.Where(p => p.UserId == objectToReturn.User.UserId);
 
+                int remainingAssistants = -1;
+
                 if (payments.Count() > 0)
                 {
                     var newestPayment = payments.OrderByDescending(p => p.PaymentDate).First();
@@ -105,8 +107,8 @@ namespace GymTest.Services
                                     return objectToReturn; // ya se consumieron todas las asistencias
 
                                 }
-
-                                objectToReturn.AdditionalData = "Cantidad de asistencias restantes: " + (newestPayment.QuantityMovmentType - ass.Count()) + ".";
+                                remainingAssistants = (newestPayment.QuantityMovmentType - ass.Count());
+                                objectToReturn.AdditionalData = "Cantidad de asistencias restantes: " + remainingAssistants.ToString() + ".";
                                 break;
                             #endregion
 
@@ -150,7 +152,7 @@ namespace GymTest.Services
 
                             objectToReturn.Message = "Bienvenido. Disfrute de su jornada. Asistencia generada con fecha " + DateTime.Now + ".";
 
-                            ProcessAssistanceNotification(objectToReturn.User.UserId);
+                            ProcessAssistanceNotification(objectToReturn.User.UserId, remainingAssistants);
                         }
                         else
                         {
@@ -220,7 +222,7 @@ namespace GymTest.Services
 
         }
 
-        public void ProcessAssistanceNotification(int userId)
+        public void ProcessAssistanceNotification(int userId, int remainingAssistants)
         {
             var users = from m in _context.User
                         select m;
@@ -229,18 +231,37 @@ namespace GymTest.Services
 
             if (user != null)
             {
-                var bodyData = new System.Collections.Generic.Dictionary<string, string>
+                //Si es mayor a 0 significa que es un oagoi del tipo asistencia. Si le quedan pocas mando el mail con el link para comoprar mas
+                if(false && remainingAssistants > 0 && remainingAssistants <= 3)
                 {
-                    { "UserName", user.FullName },
-                    { "Title", "Disfrute de la sesión!" },
-                    { "message", "Estamos a sus órdenes." }
-                };
+                    var bodyData = new System.Collections.Generic.Dictionary<string, string>
+                    {
+                        { "UserName", user.FullName },
+                        { "Title", "Disfrute de la sesión!" },
+                        { "message", "Estamos a sus órdenes." }
+                    };
 
-                _sendEmail.SendEmail(bodyData,
-                                     "AssistanceTemplate",
-                                     "Notificación de asistencia" + user.FullName,
-                                     new System.Collections.Generic.List<string>() { user.Email }
-                                    );
+                    _sendEmail.SendEmail(bodyData,
+                                         "AssistanceTemplateFinishPayment",
+                                         "Notificación de asistencia" + user.FullName,
+                                         new System.Collections.Generic.List<string>() { user.Email }
+                                        );
+                }
+                else
+                {
+                    var bodyData = new System.Collections.Generic.Dictionary<string, string>
+                    {
+                        { "UserName", user.FullName },
+                        { "Title", "Disfrute de la sesión!" },
+                        { "message", "Estamos a sus órdenes." }
+                    };
+
+                    _sendEmail.SendEmail(bodyData,
+                                         "AssistanceTemplate",
+                                         "Notificación de asistencia" + user.FullName,
+                                         new System.Collections.Generic.List<string>() { user.Email }
+                                        );
+                }
             }
         }
 

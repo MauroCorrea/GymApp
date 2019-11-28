@@ -27,7 +27,7 @@ namespace GymTest.Controllers
 
         public IActionResult Index()
         {
-            var dayOfMonth = _appSettings.Value.DayToPay;
+            /*var dayOfMonth = _appSettings.Value.DayToPay;
 
             if (dayOfMonth != null && Convert.ToInt16(dayOfMonth) > 0)
             {
@@ -61,7 +61,7 @@ namespace GymTest.Controllers
             else
             {
                 ViewBag.Articles = false;
-            }
+            }*/
             
             
             return View();
