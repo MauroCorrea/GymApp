@@ -36,7 +36,7 @@
     </div>-->
 
 <div style="padding-left: 5%;position: relative;width: 75%">
-    <form asp-controller="Home" asp-action="Contact">
+    <form asp-controller="Home" asp-action="Contact" asp-antiforgery="false">
         <p>
             <input type="text" name="Fingerprint" id="fingerprint" size="20" autofocus>
             <input type="submit" value="Marcar Entrada" class="btn btn-success" />

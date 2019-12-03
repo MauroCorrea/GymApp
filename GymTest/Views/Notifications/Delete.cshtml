@@ -37,7 +37,7 @@
         </dd>
     </dl>
     
-    <form asp-action="Delete">
+    <form asp-action="Delete" asp-antiforgery="false">
         <input type="hidden" asp-for="NotificationId" />
         <input type="submit" value="Eliminar" class="btn btn-danger" /> |
         <a asp-action="Index" class="btn btn-default">Volver</a>

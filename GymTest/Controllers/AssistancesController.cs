@@ -105,7 +105,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+       //[ValidateAntiForgeryToken]
         public IActionResult Create([Bind("AssistanceId,AssistanceDate,UserId")] Assistance assistance)
         {
             if (ModelState.IsValid)

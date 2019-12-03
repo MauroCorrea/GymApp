@@ -65,8 +65,8 @@
             @Html.DisplayFor(model => model.Commentaries)
         </dd>
     </dl>
-    
-    <form asp-action="Delete">
+
+    <form asp-action="Delete" asp-antiforgery="false">
         <input type="hidden" asp-for="UserId" />
         <input type="submit" value="Eliminar" class="btn btn-danger" /> |
         <a asp-action="Index" class="btn btn-default">Volver</a>
