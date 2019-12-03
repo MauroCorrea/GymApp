@@ -53,7 +53,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+       //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("AutomaticProcessId,AutomaticProcessDesctipion,NextProcessDate,LastProcessDate")] AutomaticProcess automaticProcess)
         {
             if (ModelState.IsValid)
@@ -85,7 +85,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+       //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("AutomaticProcessId,AutomaticProcessDesctipion,NextProcessDate,LastProcessDate")] AutomaticProcess automaticProcess)
         {
             if (id != automaticProcess.AutomaticProcessId)
@@ -136,7 +136,7 @@ namespace GymTest.Controllers
 
         // POST: AutomaticProcess/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+       //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var automaticProcess = await _context.AutomaticProcess.FindAsync(id);

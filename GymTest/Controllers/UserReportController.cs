@@ -208,7 +208,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+       //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserReportId,SignInDateFrom,SignInDateTo,AssitanceFrom,AssitanceTo,AgeFrom,AgeTo,AssitanceCountFrom,AssitanceCountTo,PayDateFrom,PayDateTo,MovementTypeId,PaymentMediaId")] UserReport userReport)
         {
             if (ModelState.IsValid)
@@ -244,7 +244,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+       //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("UserReportId,SignInDateFrom,SignInDateTo,AssitanceFrom,AssitanceTo,AgeFrom,AgeTo,AssitanceCountFrom,AssitanceCountTo,PayDateFrom,PayDateTo,MovementTypeId,PaymentMediaId")] UserReport userReport)
         {
             if (id != userReport.UserReportId)
@@ -299,7 +299,7 @@ namespace GymTest.Controllers
 
         // POST: UserReport/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+       //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var userReport = await _context.UserReport.FindAsync(id);
