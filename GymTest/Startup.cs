@@ -53,6 +53,9 @@ namespace GymTest
             //*******Services Injection*******
             services.AddScoped<IPaymentLogic, PaymentLogicImpl>();
 
+            //*******Services Injection*******
+            services.AddScoped<IPaymentNotificationLogic, PaymentNotificationLogicImpl>();
+
             //*******Database context implementation*******
             services.AddDbContext<GymTestContext>(options =>
                 options.UseMySql(settings.MySQLConfiguration.ConnectionString,

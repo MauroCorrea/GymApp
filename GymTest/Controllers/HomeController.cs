@@ -6,6 +6,7 @@ using GymTest.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using System;
+using System.Linq;
 
 namespace GymTest.Controllers
 {
@@ -26,36 +27,37 @@ namespace GymTest.Controllers
 
         public IActionResult Index()
         {
-            var dayOfMonth = _appSettings.Value.DayToPay;
+            var dayOfMonth = _appSettings.Value.PaymentNotificationDayToPay;
 
             if (dayOfMonth != null && Convert.ToInt16(dayOfMonth) > 0)
             {
-                //AutomaticProcess nextDayAutomaticSendMailProcess = _context.AutomaticProcess.Where(x => x.LastProcessDate == null).FirstOrDefault();
-                //if(nextDayAutomaticSendMailProcess != null)
-                //{
-                //    DateTime realDateToSendMail = nextDayAutomaticSendMailProcess.NextProcessDate;
-                //    if (Convert.ToInt16(dayOfMonth) >= realDateToSendMail.Day)
-                //    {
-                //        Notification notification = new Notification
-                //        {
-                //            Everyone = true,
-                //            Message = _appSettings.Value.DayToPayMessage,
-                //            Send = false,
-                //            To = null
-                //        };
-                //        nextDayAutomaticSendMailProcess.LastProcessDate = DateTime.Now;
+                //TODO: LA LOGICA TIENE QUE IR EN EL SERVICE. No es para todos, solo para los que no tienen un pago valido.
+                AutomaticProcess nextDayAutomaticSendMailProcess = _context.AutomaticProcess.Where(x => x.LastProcessDate == null).FirstOrDefault();
+                if (nextDayAutomaticSendMailProcess != null)
+                {
+                    DateTime realDateToSendMail = nextDayAutomaticSendMailProcess.NextProcessDate;
+                    if (Convert.ToInt16(dayOfMonth) >= realDateToSendMail.Day)
+                    {
+                        Notification notification = new Notification
+                        {
+                            Everyone = true,
+                            Message = _appSettings.Value.PaymentNotificationDayToPayMessage,
+                            Send = false,
+                            To = null
+                        };
+                        nextDayAutomaticSendMailProcess.LastProcessDate = DateTime.Now;
 
-                //        _context.AutomaticProcess.Update(nextDayAutomaticSendMailProcess);
-                //        _context.Notification.Add(notification);
-                //        _context.SaveChanges();
+                        _context.AutomaticProcess.Update(nextDayAutomaticSendMailProcess);
+                        _context.Notification.Add(notification);
+                        _context.SaveChanges();
 
-                //        ViewBag.Articles = true;
-                //    }
-                //    else
-                //    {
-                //        ViewBag.Articles = false;
-                //    }
-                //}
+                        ViewBag.Articles = true;
+                    }
+                    else
+                    {
+                        ViewBag.Articles = false;
+                    }
+                }
             }
             else
             {
@@ -73,8 +75,6 @@ namespace GymTest.Controllers
 
             if (Request.Form["1"] != "")
                 fingerprint += 1;
-
-
         }
 
         public IActionResult Contact(string fingerprint)
