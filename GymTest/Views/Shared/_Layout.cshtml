@@ -37,10 +37,13 @@
                     <li><a asp-area="" asp-controller="GeneralAdministration" asp-action="Index">Administración General</a></li>
                     @if (ViewBag.Articles != null && ViewBag.Articles)
                     {
-                <li><a asp-area="" asp-controller="Notifications" asp-action="Index" style="background-color:red">Avisos</a></li>
-                    }else{
-                <li><a asp-area="" asp-controller="Notifications" asp-action="Index">Avisos</a></li>
+                        <li><a asp-area="" asp-controller="Notifications" asp-action="Index" style="background-color:red">Avisos</a></li>
                     }
+                    else
+                    {
+                        <li><a asp-area="" asp-controller="Notifications" asp-action="Index">Avisos</a></li>
+                    }
+                    <!--<li><a asp-area="" asp-controller="UserReport" asp-action="Index">Reportes Manuales</a></li>-->
                 </ul>
                 <partial name="_LoginPartial" />
             </div>

@@ -83,34 +83,44 @@ namespace GymTest.Controllers
                 var assistances = _context.Assistance.Where(x => x.UserId == user.UserId && x.AssistanceDate >= assistFrom
                                                             && x.AssistanceDate <= assistTo).OrderBy(o => o.AssistanceDate);
 
-                List<Payment> payments = new List<Payment>();
-                if (assistances.Count() >= countAssistFrom && assistances.Count() <= countAssistTo)
+                if(((assistFrom != DateTime.MinValue || assistTo != DateTime.MaxValue) && assistances.Count() > 0) || (assistFrom == DateTime.MinValue || assistTo == DateTime.MaxValue))
                 {
-                    var auxPayments = _context.Payment.Where(x => x.UserId == user.UserId && x.PaymentDate >= payFrom && x.PaymentDate <= payTo);
-                    if(moveTypeId != null)
+                    List<Payment> payments = new List<Payment>();
+                    if (assistances.Count() >= countAssistFrom && assistances.Count() <= countAssistTo)
                     {
-                        auxPayments = auxPayments.Where(x => x.MovementTypeId == (int)moveTypeId);
-                    }
-                    if(paymentMediaId != null)
-                    {
-                        auxPayments = auxPayments.Where(x => x.PaymentMediaId == (int)paymentMediaId);
+                        var auxPayments = _context.Payment.Where(x => x.UserId == user.UserId && x.PaymentDate >= payFrom && x.PaymentDate <= payTo);
+
+                        if (((payFrom != DateTime.MinValue || payTo != DateTime.MaxValue) && auxPayments.Count() > 0) || (payFrom == DateTime.MinValue || payTo == DateTime.MaxValue))
+                        {
+                            //aca tiene que ir si encuentra alguna persona con ese valor
+                        }
+                        if (moveTypeId != null)
+                        {
+                            auxPayments = auxPayments.Where(x => x.MovementTypeId == (int)moveTypeId);
+                        }
+                        if (paymentMediaId != null)
+                        {
+                            auxPayments = auxPayments.Where(x => x.PaymentMediaId == (int)paymentMediaId);
+                        }
+
+                        payments = auxPayments.OrderBy(o => o.PaymentDate).ToList();
                     }
 
-                    payments = auxPayments.OrderBy(o => o.PaymentDate).ToList();
+                    result.Add(new UserReportModel
+                    {
+                        Name = user.FullName,
+                        BirthDate = user.BirthDate ?? DateTime.Now,
+                        SingInDate = user.SignInDate,
+                        AssistanceCount = assistances.Count(),
+                        AssistFrom = assistances.Count() > 0 ? assistances.First().AssistanceDate : DateTime.MinValue,
+                        AssistTo = assistances.Count() > 0 ? assistances.Last().AssistanceDate : DateTime.MaxValue,
+                        PaymentCount = payments.Count(),
+                        PaymentFrom = payments.Count() > 0 ? payments.First().PaymentDate : DateTime.MinValue,
+                        PaymentTo = payments.Count() > 0 ? payments.Last().PaymentDate : DateTime.MaxValue,
+                        paymentType = moveTypeId != null ? _context.MovementType.Where(x => x.MovementTypeId == (int)moveTypeId).FirstOrDefault().Description : "",
+                        paymentMedia = paymentMediaId != null ? _context.PaymentMedia.Where(x => x.PaymentMediaId == (int)paymentMediaId).FirstOrDefault().PaymentMediaDescription : ""
+                    });
                 }
-
-                result.Add(new UserReportModel { Name = user.FullName,
-                    BirthDate = user.BirthDate??DateTime.Now,
-                    SingInDate = user.SignInDate,
-                    AssistanceCount = assistances.Count(),
-                    AssistFrom = assistances.Count() > 0 ? assistances.First().AssistanceDate : DateTime.MinValue,
-                    AssistTo = assistances.Count() > 0 ? assistances.Last().AssistanceDate : DateTime.MaxValue,
-                    PaymentCount = payments.Count(),
-                    PaymentFrom = payments.Count() > 0 ? payments.First().PaymentDate : DateTime.MinValue,
-                    PaymentTo = payments.Count() > 0 ? payments.Last().PaymentDate : DateTime.MaxValue,
-                    paymentType = moveTypeId != null ? _context.MovementType.Where(x => x.MovementTypeId == (int)moveTypeId).FirstOrDefault().Description : "",
-                    paymentMedia = paymentMediaId != null ? _context.PaymentMedia.Where(x => x.PaymentMediaId == (int)paymentMediaId).FirstOrDefault().PaymentMediaDescription : ""
-                });
             }
 
             return await ExportToExcel(result);
