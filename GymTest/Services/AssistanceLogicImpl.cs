@@ -232,13 +232,13 @@ namespace GymTest.Services
             if (user != null)
             {
                 //Si es mayor a 0 significa que es un oagoi del tipo asistencia. Si le quedan pocas mando el mail con el link para comoprar mas
-                if(false && remainingAssistants > 0 && remainingAssistants <= 3)
+                if(remainingAssistants <= 3)
                 {
                     var bodyData = new System.Collections.Generic.Dictionary<string, string>
                     {
                         { "UserName", user.FullName },
                         { "Title", "Disfrute de la sesión!" },
-                        { "message", "Estamos a sus órdenes." }
+                        { "Message", "Estamos a sus órdenes." }
                     };
 
                     _sendEmail.SendEmail(bodyData,
