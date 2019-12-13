@@ -152,21 +152,32 @@ namespace GymTest.Services
 
         public void NotifyUsers()
         {
-            string notifyByDate = _appSettings.Value.PaymentNotificationByDate;
-            if (bool.Parse(notifyByDate))
+            AutomaticProcess automaticSendMailProcess = _context.AutomaticProcess.Where(x => x.AutomaticProcessId == int.Parse(_appSettings.Value.PaymentNotificationProcessId)).FirstOrDefault();
+            if (automaticSendMailProcess != null && automaticSendMailProcess.NextProcessDate <= DateTime.Today)
             {
-                var dayOfMonth = _appSettings.Value.PaymentNotificationDayToPay;
 
-                if (dayOfMonth != null && int.Parse(dayOfMonth) > 0)
+                string notifyByDate = _appSettings.Value.PaymentNotificationByDate;
+                if (bool.Parse(notifyByDate))
                 {
-                    NotifyByDate();
-                }
-            }
+                    var dayOfMonth = _appSettings.Value.PaymentNotificationDayToPay;
 
-            string notifyByExp = _appSettings.Value.PaymentNotificationByExpiration;
-            if (bool.Parse(notifyByExp))
-            {
-                NotifyByExpiration();
+                    if (dayOfMonth != null && int.Parse(dayOfMonth) > 0)
+                    {
+                        NotifyByDate();
+                    }
+                }
+
+                string notifyByExp = _appSettings.Value.PaymentNotificationByExpiration;
+                if (bool.Parse(notifyByExp))
+                {
+                    NotifyByExpiration();
+                }
+
+                automaticSendMailProcess.NextProcessDate.AddDays(int.Parse(_appSettings.Value.PaymentNotificationProcessAddDays));
+                automaticSendMailProcess.NextProcessDate.AddMonths(int.Parse(_appSettings.Value.PaymentNotificationProcessAddMonths));
+
+                _context.AutomaticProcess.Update(automaticSendMailProcess);
+                _context.SaveChanges();
             }
         }
     }

@@ -1,8 +1,7 @@
-﻿using System;
-namespace GymTest.Services
+﻿namespace GymTest.Services
 {
     public interface IPaymentNotificationLogic
     {
-        public void NotifyUsers();
+        void NotifyUsers();
     }
 }

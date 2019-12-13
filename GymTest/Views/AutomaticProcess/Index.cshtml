@@ -18,30 +18,25 @@
             <th>
                 @Html.DisplayNameFor(model => model.NextProcessDate)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastProcessDate)
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.AutomaticProcessDesctipion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NextProcessDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastProcessDate)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.AutomaticProcessId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AutomaticProcessId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AutomaticProcessId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AutomaticProcessDesctipion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NextProcessDate)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.AutomaticProcessId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.AutomaticProcessId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.AutomaticProcessId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
