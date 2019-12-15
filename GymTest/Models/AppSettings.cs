@@ -15,7 +15,6 @@ namespace GymTest.Models
 
         public string PaymentNotificationProcessId { get; set; }
         public string PaymentNotificationProcessAddDays { get; set; }
-        public string PaymentNotificationProcessAddMonths { get; set; }
         public string PaymentNotificationDayToPay { get; set; }
         public string PaymentNotificationByDate { get; set; }
         public string PaymentNotificationByExpiration { get; set; }
@@ -30,6 +29,8 @@ namespace GymTest.Models
 
         public string EnableAdminRegister { get; set; }
         public string EmailAdminRegistration { get; set; }
+
+        public string SendMailOnAssistance { get; set; }
 
         public string AssistanceConfiguration_DiffHours { get; set; }
         public string AssistanceConfiguration_DiffMins { get; set; }

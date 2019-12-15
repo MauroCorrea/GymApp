@@ -225,7 +225,6 @@ namespace GymTest.Services
                     }
 
                     automaticSendMailProcess.NextProcessDate = automaticSendMailProcess.NextProcessDate.AddDays(int.Parse(_appSettings.Value.PaymentNotificationProcessAddDays));
-                    automaticSendMailProcess.NextProcessDate = automaticSendMailProcess.NextProcessDate.AddMonths(int.Parse(_appSettings.Value.PaymentNotificationProcessAddMonths));
 
                     _context.Update(automaticSendMailProcess);
                     _context.SaveChanges();

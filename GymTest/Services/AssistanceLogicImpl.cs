@@ -224,43 +224,45 @@ namespace GymTest.Services
 
         public void ProcessAssistanceNotification(int userId, int remainingAssistants)
         {
-            var users = from m in _context.User
-                        select m;
-
-            var user = users.First(u => u.UserId == userId);
-
-            if (user != null)
+            if (bool.Parse(_appSettings.Value.SendMailOnAssistance))
             {
-                //Si es mayor a 0 significa que es un oagoi del tipo asistencia. Si le quedan pocas mando el mail con el link para comoprar mas
-                if(remainingAssistants <= 3)
+                var users = from m in _context.User
+                            select m;
+
+                var user = users.First(u => u.UserId == userId);
+
+                if (user != null)
                 {
-                    var bodyData = new System.Collections.Generic.Dictionary<string, string>
+                    //Si es mayor a 0 significa que es un oagoi del tipo asistencia. Si le quedan pocas mando el mail con el link para comoprar mas
+                    if (remainingAssistants < int.Parse(_appSettings.Value.PaymentNotificationAssitanceBefore))
+                    {
+                        var bodyData = new System.Collections.Generic.Dictionary<string, string>
                     {
                         { "UserName", user.FullName },
-                        { "Title", "Disfrute de la sesión!" },
-                        { "Message", "Estamos a sus órdenes." }
+                        { "Message", "Disfrute de la sesión. Le quedan " + remainingAssistants + " asistencias disponibles." }
                     };
 
-                    _sendEmail.SendEmail(bodyData,
-                                         "AssistanceTemplateFinishPayment",
-                                         "Notificación de asistencia" + user.FullName,
-                                         new System.Collections.Generic.List<string>() { user.Email }
-                                        );
-                }
-                else
-                {
-                    var bodyData = new System.Collections.Generic.Dictionary<string, string>
+                        _sendEmail.SendEmail(bodyData,
+                                             "AssistanceTemplateFinishPayment",
+                                             "Notificación de asistencia" + user.FullName,
+                                             new System.Collections.Generic.List<string>() { user.Email }
+                                            );
+                    }
+                    else
+                    {
+                        var bodyData = new System.Collections.Generic.Dictionary<string, string>
                     {
                         { "UserName", user.FullName },
                         { "Title", "Disfrute de la sesión!" },
                         { "message", "Estamos a sus órdenes." }
                     };
 
-                    _sendEmail.SendEmail(bodyData,
-                                         "AssistanceTemplate",
-                                         "Notificación de asistencia" + user.FullName,
-                                         new System.Collections.Generic.List<string>() { user.Email }
-                                        );
+                        _sendEmail.SendEmail(bodyData,
+                                             "AssistanceTemplate",
+                                             "Notificación de asistencia" + user.FullName,
+                                             new System.Collections.Generic.List<string>() { user.Email }
+                                            );
+                    }
                 }
             }
         }
