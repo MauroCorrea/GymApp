@@ -17,59 +17,18 @@ namespace GymTest.Controllers
 
         private readonly IAssistanceLogic _assistanceLogic;
 
-        private readonly IPaymentNotificationLogic _paymentNotLogic;
-
         private readonly IOptionsSnapshot<AppSettings> _appSettings;
 
-        public HomeController(GymTestContext context, IAssistanceLogic assistanceLogic, IOptionsSnapshot<AppSettings> app, IPaymentNotificationLogic paymentNotiLogic)
+        public HomeController(GymTestContext context, IAssistanceLogic assistanceLogic, IOptionsSnapshot<AppSettings> app)
         {
             _context = context;
             _assistanceLogic = assistanceLogic;
-            _paymentNotLogic = paymentNotiLogic;
             _appSettings = app;
         }
 
         public IActionResult Index()
         {
-            _paymentNotLogic.NotifyUsers();
-
-            var dayOfMonth = _appSettings.Value.PaymentNotificationDayToPay;
-
-            if (dayOfMonth != null && Convert.ToInt16(dayOfMonth) > 0)
-            {
-                //TODO: LA LOGICA TIENE QUE IR EN EL SERVICE. No es para todos, solo para los que no tienen un pago valido.
-                //AutomaticProcess nextDayAutomaticSendMailProcess = _context.AutomaticProcess.Where(x => x.LastProcessDate == null).FirstOrDefault();
-                //if (nextDayAutomaticSendMailProcess != null)
-                //{
-                //    DateTime realDateToSendMail = nextDayAutomaticSendMailProcess.NextProcessDate;
-                //    if (Convert.ToInt16(dayOfMonth) >= realDateToSendMail.Day)
-                //    {
-                //        Notification notification = new Notification
-                //        {
-                //            Everyone = true,
-                //            Message = _appSettings.Value.PaymentNotificationDayToPayMessage,
-                //            Send = false,
-                //            To = null
-                //        };
-                //        nextDayAutomaticSendMailProcess.LastProcessDate = DateTime.Now;
-
-                //        _context.AutomaticProcess.Update(nextDayAutomaticSendMailProcess);
-                //        _context.Notification.Add(notification);
-                //        _context.SaveChanges();
-
-                //        ViewBag.Articles = true;
-                //    }
-                //    else
-                //    {
-                //        ViewBag.Articles = false;
-                //    }
-                //}
-            }
-            else
-            {
-                ViewBag.Articles = false;
-            }
-
+            ViewBag.Articles = false;
 
             return View();
         }

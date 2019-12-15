@@ -3,6 +3,7 @@ using GymTest.Models;
 using System.Linq;
 using Microsoft.Extensions.Options;
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace GymTest.Services
 {
@@ -15,7 +16,10 @@ namespace GymTest.Services
 
         private readonly IOptionsSnapshot<AppSettings> _appSettings;
 
-        public PaymentNotificationLogicImpl(GymTestContext context, IOptionsSnapshot<AppSettings> app, ISendEmail sendEmail)
+        private readonly ILogger<IPaymentLogic> _logger;
+
+
+        public PaymentNotificationLogicImpl(GymTestContext context, IOptionsSnapshot<AppSettings> app, ISendEmail sendEmail, ILogger<IPaymentLogic> logger)
         {
             _appSettings = app;
             _context = context;
@@ -24,41 +28,59 @@ namespace GymTest.Services
 
         private void NotifyByDate()
         {
-            var users = from m in _context.User
-                        select m;
+            var dayToPay = int.Parse(_appSettings.Value.PaymentNotificationDayToPay);
 
-            var sendMail = false;
-            var message = string.Empty;
+            var dayToCompare = dayToPay - int.Parse(_appSettings.Value.PaymentNotificationDaysBefore);
 
-            foreach (var user in users)
+
+            if (DateTime.Now.Day >= dayToCompare && DateTime.Now.Day < dayToPay)
             {
-                sendMail = false;
+                var users = from m in _context.User
+                            select m;
 
-                var payments = from m in _context.Payment
-                               select m;
-                payments = payments.Where(p => p.UserId == user.UserId);
+                var sendMail = false;
+                var message = string.Empty;
 
-                if (payments.Count() > 0)
+                foreach (var user in users)
                 {
-                    var newestPayment = payments.OrderByDescending(p => p.PaymentDate).First();
-                    if (newestPayment.MovementTypeId > 0)
+                    sendMail = false;
+
+                    var payments = from m in _context.Payment
+                                   select m;
+                    payments = payments.Where(p => p.UserId == user.UserId);
+
+                    if (payments.Count() > 0)
                     {
-                        if (newestPayment.LimitUsableDate.Date < DateTime.Now.Date)
+                        var newestPayment = payments.OrderByDescending(p => p.PaymentDate).First();
+                        if (newestPayment.MovementTypeId > 0)
                         {
-                            // se venció el tiempo de uso del ultimo pago
-                            message = "Fecha límite de uso sobrepasada. La misma es " + newestPayment.LimitUsableDate.Date.ToShortDateString() + ".";
-                            sendMail = true;
+                            if (newestPayment.LimitUsableDate.Date < DateTime.Now.Date)
+                            {
+                                // se venció el tiempo de uso del ultimo pago
+                                message = "Fecha límite de uso sobrepasada. La misma es " + newestPayment.LimitUsableDate.Date.ToShortDateString() + ".";
+                                sendMail = true;
+                            }
                         }
                     }
-                }
-                else//error: usuario sin pagos
-                {
-                    message = "Usuario sin pagos.";
-                    sendMail = true;
-                }
-                if (sendMail)
-                {
-                    //Todo: send mail to user with message
+                    else//error: usuario sin pagos
+                    {
+                        message = "Usuario sin pagos.";
+                        sendMail = true;
+                    }
+                    if (sendMail)
+                    {
+                        var bodyData = new System.Collections.Generic.Dictionary<string, string>
+                        {
+                            { "UserName", user.FullName },
+                            { "Message", message }
+                        };
+
+                        _sendEmail.SendEmail(bodyData,
+                                                "AssistanceTemplateFinishPayment",
+                                                "Notificación por expiración de acceso",
+                                                new System.Collections.Generic.List<string>() { user.Email }
+                                            );
+                    }
                 }
             }
         }
@@ -105,7 +127,21 @@ namespace GymTest.Services
                                 if (monthsUsed > monthsPayed)
                                 {
                                     //Ya pasó el mes
-                                    message = "Pago mensual vencido. Su último fue por " + monthsPayed + " mes(es) y se utilizaron " + monthsUsed + " mes(es).";
+                                    message = "Pago mensual vencido. Su último fue por " + monthsPayed + " mes(es) el día " +
+                                        newestPayment.PaymentDate.ToString("dd/MM/yyyy HH:mm")
+                                        + " y se utilizaron " + monthsUsed + " mes(es).";
+                                    sendMail = true;
+                                }
+
+                                var dayToCompare = int.Parse(_appSettings.Value.PaymentNotificationDayToPay) -
+                                                    int.Parse(_appSettings.Value.PaymentNotificationDaysBefore);
+
+                                //Si estamos en mes vencido, tenemos que ver la fecha.
+                                if (monthsUsed == monthsPayed && DateTime.Now.Day >= dayToCompare)
+                                {
+                                    message = "Pago mensual está por vencer. Su último fue por " + monthsPayed + " mes(es) el día " +
+                                        newestPayment.PaymentDate.ToString("dd/MM/yyyy HH:mm")
+                                        + " y se utilizaron " + monthsUsed + " mes(es).";
                                     sendMail = true;
                                 }
 
@@ -122,6 +158,12 @@ namespace GymTest.Services
                                 {
                                     // ya se consumieron todas las asistencias
                                     message = "Pago por asistencias consumido. Se habilitaron " + newestPayment.QuantityMovmentType + " asistencia(s) y se utilizaron " + ass.Count() + " asistencia(s).";
+                                    sendMail = true;
+                                }
+                                else if (ass.Count() >= newestPayment.QuantityMovmentType - int.Parse(_appSettings.Value.PaymentNotificationAssitanceBefore))
+                                {
+                                    // le avisamos antes
+                                    message = "Pago por asistencias pronto a consumirse. Se habilitaron " + newestPayment.QuantityMovmentType + " asistencia(s) y se utilizaron " + ass.Count() + " asistencia(s).";
                                     sendMail = true;
                                 }
                                 break;
@@ -145,39 +187,56 @@ namespace GymTest.Services
                 }
                 if (sendMail)
                 {
-                    //Todo: send mail to user with message
+                    var bodyData = new System.Collections.Generic.Dictionary<string, string>
+                        {
+                            { "UserName", user.FullName },
+                            { "Message", message }
+                        };
+
+                    _sendEmail.SendEmail(bodyData,
+                                            "AssistanceTemplateFinishPayment",
+                                            "Notificación por expiración de acceso",
+                                            new System.Collections.Generic.List<string>() { user.Email }
+                                        );
                 }
             }
         }
 
         public void NotifyUsers()
         {
-            AutomaticProcess automaticSendMailProcess = _context.AutomaticProcess.Where(x => x.AutomaticProcessId == int.Parse(_appSettings.Value.PaymentNotificationProcessId)).FirstOrDefault();
-            if (automaticSendMailProcess != null && automaticSendMailProcess.NextProcessDate <= DateTime.Today)
+            try
             {
-
-                string notifyByDate = _appSettings.Value.PaymentNotificationByDate;
-                if (bool.Parse(notifyByDate))
+                AutomaticProcess automaticSendMailProcess = _context.AutomaticProcess.Where(x => x.AutomaticProcessId == int.Parse(_appSettings.Value.PaymentNotificationProcessId)).FirstOrDefault();
+                if (automaticSendMailProcess != null && automaticSendMailProcess.NextProcessDate <= DateTime.Today)
                 {
-                    var dayOfMonth = _appSettings.Value.PaymentNotificationDayToPay;
 
-                    if (dayOfMonth != null && int.Parse(dayOfMonth) > 0)
+                    string notifyByDate = _appSettings.Value.PaymentNotificationByDate;
+                    if (bool.Parse(notifyByDate))
                     {
+
                         NotifyByDate();
+
                     }
+
+                    string notifyByExp = _appSettings.Value.PaymentNotificationByExpiration;
+                    if (bool.Parse(notifyByExp))
+                    {
+                        NotifyByExpiration();
+                    }
+
+                    automaticSendMailProcess.NextProcessDate = automaticSendMailProcess.NextProcessDate.AddDays(int.Parse(_appSettings.Value.PaymentNotificationProcessAddDays));
+                    automaticSendMailProcess.NextProcessDate = automaticSendMailProcess.NextProcessDate.AddMonths(int.Parse(_appSettings.Value.PaymentNotificationProcessAddMonths));
+
+                    _context.Update(automaticSendMailProcess);
+                    _context.SaveChanges();
                 }
-
-                string notifyByExp = _appSettings.Value.PaymentNotificationByExpiration;
-                if (bool.Parse(notifyByExp))
-                {
-                    NotifyByExpiration();
-                }
-
-                automaticSendMailProcess.NextProcessDate.AddDays(int.Parse(_appSettings.Value.PaymentNotificationProcessAddDays));
-                automaticSendMailProcess.NextProcessDate.AddMonths(int.Parse(_appSettings.Value.PaymentNotificationProcessAddMonths));
-
-                _context.AutomaticProcess.Update(automaticSendMailProcess);
-                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                var messageError = ex.Message;
+                _logger.LogError("Error Processing Payment. Detail: " + messageError);
+                if (ex.InnerException != null)
+                    _logger.LogError("Error Processing Payment. Detail: " + ex.InnerException.Message);
             }
         }
     }

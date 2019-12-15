@@ -17,7 +17,6 @@ namespace GymTest.Models
         public string PaymentNotificationProcessAddDays { get; set; }
         public string PaymentNotificationProcessAddMonths { get; set; }
         public string PaymentNotificationDayToPay { get; set; }
-        public string PaymentNotificationDayToPayMessage { get; set; }
         public string PaymentNotificationByDate { get; set; }
         public string PaymentNotificationByExpiration { get; set; }
         public string PaymentNotificationDaysBefore { get; set; }

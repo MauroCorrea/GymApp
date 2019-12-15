@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using GymTest.Models;
+using GymTest.Services;
 
 namespace GymTest.Areas.Identity.Pages.Account
 {
@@ -21,9 +22,12 @@ namespace GymTest.Areas.Identity.Pages.Account
         private readonly ILogger<LoginModel> _logger;
         private readonly IOptionsSnapshot<AppSettings> _appSettings;
 
+        private readonly IPaymentNotificationLogic _paymentNotificationLogic;
+
         public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger,
-            IOptionsSnapshot<AppSettings> app)
+            IOptionsSnapshot<AppSettings> app, IPaymentNotificationLogic paymentNotiLogic)
         {
+            _paymentNotificationLogic = paymentNotiLogic;
             _appSettings = app;
             _signInManager = signInManager;
             _logger = logger;
@@ -77,14 +81,17 @@ namespace GymTest.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                string isEnabledRegister = _appSettings.Value.AlwaysRememberUser;
-                if (bool.Parse(isEnabledRegister))
+                string isAlwaysRemember = _appSettings.Value.AlwaysRememberUser;
+                if (bool.Parse(isAlwaysRemember))
                     Input.RememberMe = true;
 
                 var result = await _signInManager.PasswordSignInAsync(Input.Name, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+
+                    _paymentNotificationLogic.NotifyUsers();
+
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
