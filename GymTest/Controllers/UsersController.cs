@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using GymTest.Models;
 using GymTest.Data;
 using Microsoft.AspNetCore.Authorization;
+using PagedList;
 
 namespace GymTest.Controllers
 {
@@ -21,8 +22,11 @@ namespace GymTest.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        public async Task<IActionResult> Index(int? page, string sortOrder, string searchString)
         {
+            int pageSize = 20;
+            int pageIndex = page.HasValue ? (int)page : 1;
+
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("name_desc") ? "name_asc" : "name_desc";
             ViewData["DocSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("doc_desc") ? "doc_asc" : "doc_desc";
             ViewData["EmailSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("email_desc") ? "email_asc" : "email_desc";
@@ -76,9 +80,11 @@ namespace GymTest.Controllers
                     break;
             }
 
-            return View(await users.AsNoTracking().ToListAsync());
-            //return View(await students.AsNoTracking().ToListAsync());
 
+            IPagedList<User> userPaged = users.ToPagedList(pageIndex, pageSize);
+
+            return View(userPaged);
+            //return View(await users.AsNoTracking().ToListAsync());
         }
 
         // GET: Users/Details/5
