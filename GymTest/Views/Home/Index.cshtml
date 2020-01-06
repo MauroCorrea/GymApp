@@ -10,41 +10,44 @@
 
     function deleteLasFingerValue() {
         document.getElementById("fingerprint").value = document.getElementById("fingerprint").value.substring(0, document.getElementById("fingerprint").value.length - 1);
-    }</script>
-
-<!--<div id="contenedorDivIndex" style="display: flex">
-    <div style="position: relative;width: 20%">
-        <p>
-            <input type="button" onclick="fingerPrimtValue(1)" value="1" class="btn btn-info btn-lg" style="position:relative; width:30%" />
-            <input type="button" onclick="fingerPrimtValue(2)" value="2" class="btn btn-info btn-lg" style="position:relative; width:30%" />
-            <input type="button" onclick="fingerPrimtValue(3)" value="3" class="btn btn-info btn-lg" style="position:relative; width:30%" />
-        </p>
-        <p>
-            <input type="button" onclick="fingerPrimtValue(4)" value="4" class="btn btn-info btn-lg" style="position:relative; width:30%" />
-            <input type="button" onclick="fingerPrimtValue(5)" value="5" class="btn btn-info btn-lg" style="position:relative; width:30%" />
-            <input type="button" onclick="fingerPrimtValue(6)" value="6" class="btn btn-info btn-lg" style="position:relative; width:30%" />
-        </p>
-        <p>
-            <input type="button" onclick="fingerPrimtValue(7)" value="7" class="btn btn-info btn-lg" style="position:relative; width:30%" />
-            <input type="button" onclick="fingerPrimtValue(8)" value="8" class="btn btn-info btn-lg" style="position:relative; width:30%" />
-            <input type="button" onclick="fingerPrimtValue(9)" value="9" class="btn btn-info btn-lg" style="position:relative; width:30%" />
-        </p>
-        <p>
-            <input type="button" onclick="fingerPrimtValue(0)" value="0" class="btn btn-info btn-lg" style="position:relative; width:30%" />
-            <input type="button" onclick="deleteLasFingerValue()" value="Borrar" class="btn btn-warning btn-lg" style="position:relative; width:60%" />
-        </p>
-    </div>-->
-
-<div style="padding-left: 5%;position: relative;width: 75%">
-    <form asp-controller="Home" asp-action="Contact" asp-antiforgery="false">
-        <p>
-            <input type="text" name="Fingerprint" id="fingerprint" size="20" autofocus>
-            <input type="submit" value="Marcar Entrada" class="btn btn-success" />
-        </p>
-    </form>
+    }
+</script>
 
 
-    <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="5000">
+    <div>
+        <form asp-controller="Home" asp-action="Contact" asp-antiforgery="false">
+            <p>
+                <input type="text" name="Fingerprint" id="fingerprint" autofocus style="position: relative;width: 70%; height:80px; font-size:200%">
+                <input type="submit" value="Marcar Entrada" class="btn btn-success" style="position: relative;width: 20%; height:100px; font-size:200%"/>
+            </p>
+        </form>
+    </div>
+
+    <div >
+        <p>
+            <input type="button" onclick="fingerPrimtValue(1)" value="1" class="btn btn-info btn-lg" style="position:relative; width:30%; height:100px; font-size:500%" />
+            <input type="button" onclick="fingerPrimtValue(2)" value="2" class="btn btn-info btn-lg" style="position:relative; width:30%; height:100px; font-size:500%" />
+            <input type="button" onclick="fingerPrimtValue(3)" value="3" class="btn btn-info btn-lg" style="position:relative; width:30%; height:100px; font-size:500%" />
+        </p>
+        <p>
+            <input type="button" onclick="fingerPrimtValue(4)" value="4" class="btn btn-info btn-lg" style="position:relative; width:30%; height:100px; font-size:500%" />
+            <input type="button" onclick="fingerPrimtValue(5)" value="5" class="btn btn-info btn-lg" style="position:relative; width:30%; height:100px; font-size:500%" />
+            <input type="button" onclick="fingerPrimtValue(6)" value="6" class="btn btn-info btn-lg" style="position:relative; width:30%; height:100px; font-size:500%" />
+        </p>
+        <p>
+            <input type="button" onclick="fingerPrimtValue(7)" value="7" class="btn btn-info btn-lg" style="position:relative; width:30%; height:100px; font-size:500%" />
+            <input type="button" onclick="fingerPrimtValue(8)" value="8" class="btn btn-info btn-lg" style="position:relative; width:30%; height:100px; font-size:500%" />
+            <input type="button" onclick="fingerPrimtValue(9)" value="9" class="btn btn-info btn-lg" style="position:relative; width:30%; height:100px; font-size:500%" />
+        </p>
+        <p>
+            <input type="button" onclick="fingerPrimtValue(0)" value="0" class="btn btn-info btn-lg" style="position:relative; width:30%; height:100px; font-size:500%" />
+            <input type="button" onclick="deleteLasFingerValue()" value="Borrar" class="btn btn-warning btn-lg" style="position:relative; width:60%; height:100px; font-size:500%" />
+        </p>
+    </div>
+
+
+
+    <!--<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="5000">
         <ol class="carousel-indicators">
             <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
             <li data-target="#myCarousel" data-slide-to="1"></li>
@@ -83,5 +86,4 @@
             <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
         </a>
-    </div>
-</div>
+    </div>-->
