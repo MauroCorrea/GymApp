@@ -8,6 +8,7 @@ using GymTest.Models;
 using GymTest.Services;
 using Microsoft.AspNetCore.Authorization;
 using System;
+using PagedList;
 
 namespace GymTest.Controllers
 {
@@ -31,8 +32,11 @@ namespace GymTest.Controllers
 
 
         // GET: Payments
-        public async Task<IActionResult> Index(string sortOrder, string searchString, DateTime FromDate, DateTime ToDate)
+        public async Task<IActionResult> Index(int? page, string sortOrder, string searchString, DateTime FromDate, DateTime ToDate)
         {
+            int pageSize = 3;
+            int pageIndex = page.HasValue ? (int)page : 1;
+
             ViewData["PaymentSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("payment_desc") ? "payment_asc" : "payment_desc";
             ViewData["MovTypeSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("movType_desc") ? "movType_asc" : "movType_desc";
             ViewData["QuanMovTypeSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("quantType_desc") ? "quantType_asc" : "quantType_desc";
@@ -103,14 +107,12 @@ namespace GymTest.Controllers
                     break;
             }
 
-            return View(await payments.AsNoTracking().ToListAsync());
-        }
 
-        //public IActionResult Index()
-        //{
-        //    var gymTestContext = _context.Payment.Include(p => p.MovmentType).Include(p => p.User).Include(p => p.PaymentMedia);
-        //    return View(gymTestContext.ToList().OrderByDescending(x => x.PaymentDate));
-        //}
+            IPagedList<Payment> paymentPaged = payments.ToPagedList(pageIndex, pageSize);
+
+            return View(paymentPaged);
+            //return View(await payments.AsNoTracking().ToListAsync());
+        }
 
         // GET: Payments/Details/5
         public async Task<IActionResult> Details(int? id)

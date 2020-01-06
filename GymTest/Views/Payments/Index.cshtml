@@ -1,4 +1,5 @@
-﻿@model IEnumerable<GymTest.Models.Payment>
+﻿@model PagedList.IPagedList<GymTest.Models.Payment>
+@using PagedList.Mvc;
 
 @{
     ViewData["Title"] = "Index";
@@ -22,22 +23,22 @@
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["PaymentSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.PaymentDate)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PaymentSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.FirstOrDefault().PaymentDate)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["MovTypeSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.MovmentType)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["MovTypeSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.FirstOrDefault().MovmentType)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["QuanMovTypeSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.QuantityMovmentType)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["QuanMovTypeSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.FirstOrDefault().QuantityMovmentType)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["AmountSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.Amount)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["AmountSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.FirstOrDefault().Amount)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["PayMediaSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.PaymentMedia)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PayMediaSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.FirstOrDefault().PaymentMedia)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.User.FullName)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.FirstOrDefault().User.FullName)</a>
             </th>
             <th></th>
         </tr>
@@ -75,3 +76,8 @@
         }
     </tbody>
 </table>
+<div id="container" style="width:100%">
+  <div id="left" style="float:left;width:20%;"><a asp-action="Index" asp-route-page=@(Model.PageNumber > 1 ? Model.PageNumber - 1 : 1) style="color:black"> < Anterior</a></div>
+    <div id="right" style="float:right;width:20%;text-align:right"><a asp-action="Index" asp-route-page=@(Model.PageNumber < Model.PageCount ? Model.PageNumber + 1 : Model.PageNumber) style="color:black">Siguiente > </a></div>
+  <div id="center" style="margin:0 auto;width:60%;"><p style="text-align:center"> - Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount - </p></div>
+</div>
