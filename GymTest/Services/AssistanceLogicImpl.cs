@@ -89,6 +89,8 @@ namespace GymTest.Services
 
                                 }
 
+                                remainingAssistants = monthsPayed - monthsUsed;
+
                                 objectToReturn.AdditionalData = "Su último pago fue por " + monthsPayed + " mes(es) y se utilizaron " + monthsUsed + " mes(es)."; ;
                                 break;
                             #endregion
@@ -152,7 +154,7 @@ namespace GymTest.Services
 
                             objectToReturn.Message = "Bienvenido. Disfrute de su jornada. Asistencia generada con fecha " + DateTime.Now + ".";
 
-                            ProcessAssistanceNotification(objectToReturn.User.UserId, remainingAssistants);
+                            ProcessAssistanceNotification(objectToReturn.User.UserId, remainingAssistants, newestPayment.MovementTypeId);
                         }
                         else
                         {
@@ -222,7 +224,7 @@ namespace GymTest.Services
 
         }
 
-        public void ProcessAssistanceNotification(int userId, int remainingAssistants)
+        public void ProcessAssistanceNotification(int userId, int remainingAssistants, int paymentType)
         {
             if (bool.Parse(_appSettings.Value.SendMailOnAssistance))
             {
@@ -233,15 +235,38 @@ namespace GymTest.Services
 
                 if (user != null)
                 {
-                    //Si es mayor a 0 significa que es un oagoi del tipo asistencia. Si le quedan pocas mando el mail con el link para comoprar mas
-                    if (remainingAssistants < int.Parse(_appSettings.Value.PaymentNotificationAssitanceBefore))
-                    {
-                        var bodyData = new System.Collections.Generic.Dictionary<string, string>
-                    {
-                        { "UserName", user.FullName },
-                        { "Message", "Disfrute de la sesión. Le quedan " + remainingAssistants + " asistencias disponibles." }
-                    };
+                    var bodyData = new System.Collections.Generic.Dictionary<string, string>();
 
+                    var error = false;
+                    switch (paymentType)
+                    {
+                        #region Mensual
+                        case (int)PaymentTypeEnum.Monthly:
+                            error = remainingAssistants < 1;
+                            bodyData = new System.Collections.Generic.Dictionary<string, string>
+                            {
+                                { "UserName", user.FullName },
+                                { "Message", "Disfrute de la sesión. Le quedan " + remainingAssistants + " meses disponibles." }
+                            };
+                            break;
+                        #endregion
+                        #region Por asistencias
+                        case (int)PaymentTypeEnum.ByAssistances:
+                            error = remainingAssistants < int.Parse(_appSettings.Value.PaymentNotificationAssitanceBefore);
+                            bodyData = new System.Collections.Generic.Dictionary<string, string>
+                            {
+                                { "UserName", user.FullName },
+                                { "Message", "Disfrute de la sesión. Le quedan " + remainingAssistants + " asistencias disponibles." }
+                            };
+                            break;
+                        #endregion
+
+                        default:
+                            break;
+                    }
+
+                    if (error)
+                    {
                         _sendEmail.SendEmail(bodyData,
                                              "AssistanceTemplateFinishPayment",
                                              "Notificación de asistencia" + user.FullName,
@@ -250,12 +275,12 @@ namespace GymTest.Services
                     }
                     else
                     {
-                        var bodyData = new System.Collections.Generic.Dictionary<string, string>
-                    {
-                        { "UserName", user.FullName },
-                        { "Title", "Disfrute de la sesión!" },
-                        { "message", "Estamos a sus órdenes." }
-                    };
+                        bodyData = new System.Collections.Generic.Dictionary<string, string>
+                        {
+                            { "UserName", user.FullName },
+                            { "Title", "Disfrute de la sesión!" },
+                            { "message", "Estamos a sus órdenes." }
+                        };
 
                         _sendEmail.SendEmail(bodyData,
                                              "AssistanceTemplate",
