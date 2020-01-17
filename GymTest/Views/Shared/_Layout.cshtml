@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.Extensions.Options
+@inject UserManager<IdentityUser> UserManager
+@inject IOptions<AppSettings> AppSettingsOptions
+
+<!DOCTYPE html>
 <html>
 <head class="headerHome">
     <meta charset="utf-8" />
@@ -29,6 +34,8 @@
             </div>
 
             <div id="main-menu" class="collapse">
+                @if (UserManager.GetUserName(User) != AppSettingsOptions.Value.EmailOnlyForAssistances)
+                {
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Users" asp-action="Index">Usuarios</a></li>
                     <li><a asp-area="" asp-controller="Payments" asp-action="Index">Pagos</a></li>
@@ -45,6 +52,7 @@
                     }
                     <!--<li><a asp-area="" asp-controller="UserReport" asp-action="Index">Reportes Manuales</a></li>-->
                 </ul>
+                }
                 <partial name="_LoginPartial" />
             </div>
         </div>

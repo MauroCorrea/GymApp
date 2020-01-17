@@ -12,6 +12,7 @@ namespace GymTest.Models
         public string EmailConfiguration_Username { get; set; }
         public string EmailConfiguration_Password { get; set; }
         public string EmailConfiguration_BlindCopy { get; set; }
+        public string EmailOnlyForAssistances { get; set; }
 
         public string PaymentNotificationProcessId { get; set; }
         public string PaymentNotificationProcessAddDays { get; set; }
