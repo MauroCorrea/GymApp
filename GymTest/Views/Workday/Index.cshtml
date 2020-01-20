@@ -9,6 +9,13 @@
 <p>
     <a asp-action="Create" class="btn btn-primary">Nueva jornada</a>
 </p>
+<form asp-controller="Workday" asp-action="Index">
+    <p>
+        Fecha desde: <input name="FromDate" class="datepicker" type="text" placeholder="dd/mm/aaaa">
+        Fecha hasta: <input name="ToDate" class="datepicker" type="text" placeholder="dd/mm/aaaa">
+        <input type="submit" value="Filtrar" class="btn btn-default" />
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
