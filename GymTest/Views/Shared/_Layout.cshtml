@@ -34,24 +34,34 @@
             </div>
 
             <div id="main-menu" class="collapse">
-                @if (UserManager.GetUserName(User) != AppSettingsOptions.Value.EmailOnlyForAssistances)
+                @if (UserManager.GetUserName(User) != null && AppSettingsOptions.Value.UserOnlyForJourneys != null)
                 {
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Users" asp-action="Index">Usuarios</a></li>
-                    <li><a asp-area="" asp-controller="Payments" asp-action="Index">Pagos</a></li>
-                    <li><a asp-area="" asp-controller="Assistances" asp-action="Index">Asistencias</a></li>
-                    <li><a asp-area="" asp-controller="CashMovement" asp-action="Index">Movimientos caja</a></li>
-                    <li><a asp-area="" asp-controller="GeneralAdministration" asp-action="Index">Administración General</a></li>
-                    @if (ViewBag.Articles != null && ViewBag.Articles)
+                    @if (!UserManager.GetUserName(User).Contains(AppSettingsOptions.Value.UserOnlyForJourneys))
                     {
-                        <li><a asp-area="" asp-controller="Notifications" asp-action="Index" style="background-color:red">Avisos</a></li>
+                    <ul class="nav navbar-nav">
+                        <li><a asp-area="" asp-controller="Users" asp-action="Index">Usuarios</a></li>
+                        <li><a asp-area="" asp-controller="Payments" asp-action="Index">Pagos</a></li>
+                        <li><a asp-area="" asp-controller="Assistances" asp-action="Index">Asistencias</a></li>
+                        <li><a asp-area="" asp-controller="CashMovement" asp-action="Index">Movimientos caja</a></li>
+                        <li><a asp-area="" asp-controller="GeneralAdministration" asp-action="Index">Administración General</a></li>
+                        @if (ViewBag.Articles != null && ViewBag.Articles)
+                        {
+                            <li><a asp-area="" asp-controller="Notifications" asp-action="Index" style="background-color:red">Avisos</a></li>
+                        }
+                        else
+                        {
+                            <li><a asp-area="" asp-controller="Notifications" asp-action="Index">Avisos</a></li>
+                        }
+                        <!--<li><a asp-area="" asp-controller="UserReport" asp-action="Index">Reportes Manuales</a></li>-->
+                    </ul>
                     }
                     else
                     {
-                        <li><a asp-area="" asp-controller="Notifications" asp-action="Index">Avisos</a></li>
+                    <ul class="nav navbar-nav">
+                        <li><a asp-area="" asp-controller="GeneralAdministration" asp-action="Index">Administración General</a></li>
+                    
+                    </ul>
                     }
-                    <!--<li><a asp-area="" asp-controller="UserReport" asp-action="Index">Reportes Manuales</a></li>-->
-                </ul>
                 }
                 <partial name="_LoginPartial" />
             </div>

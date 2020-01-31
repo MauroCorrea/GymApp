@@ -224,7 +224,7 @@ namespace GymTest.Services
                         NotifyByExpiration();
                     }
 
-                    automaticSendMailProcess.NextProcessDate = automaticSendMailProcess.NextProcessDate.AddDays(int.Parse(_appSettings.Value.PaymentNotificationProcessAddDays));
+                    automaticSendMailProcess.NextProcessDate = DateTime.Now.Date.AddDays(int.Parse(_appSettings.Value.PaymentNotificationProcessAddDays));
 
                     _context.Update(automaticSendMailProcess);
                     _context.SaveChanges();

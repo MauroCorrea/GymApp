@@ -1,10 +1,17 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.Extensions.Options
+@inject UserManager<IdentityUser> UserManager
+@inject IOptions<AppSettings> AppSettingsOptions
+
+@{
     ViewData["Title"] = "Admin. General";
 }
 
 <h2>Administración General</h2>
 
 <div class="row">
+    @if (!UserManager.GetUserName(User).Contains(AppSettingsOptions.Value.UserOnlyForJourneys))
+    {
     <ul class="nav navbar-nav">
         <li style="padding-right: 3px">
             <p><a asp-area="" asp-controller="CashCategory" asp-action="Index" class="btn btn-primary">Categorías movimientos</a></p>
@@ -25,4 +32,14 @@
             <p><a asp-area="" asp-controller="PaymentMedia" asp-action="Index" class="btn btn-primary">Medios de pagos</a></p>
         </li>
     </ul>
+    }
+    else
+    {
+    <ul class="nav navbar-nav">
+        
+        <li style="padding-right: 3px">
+            <p><a asp-area="" asp-controller="Payroll" asp-action="Index" class="btn btn-primary">Administración sueldos</a></p>
+        </li>
+    </ul>
+    }
 </div>
