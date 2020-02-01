@@ -10,7 +10,7 @@
 <h2>Administración General</h2>
 
 <div class="row">
-    @if (!UserManager.GetUserName(User).Contains(AppSettingsOptions.Value.UserOnlyForJourneys))
+    @if (!UserManager.GetUserName(User).ToLower().Contains(AppSettingsOptions.Value.UserOnlyForJourneys.ToLower()))
     {
     <ul class="nav navbar-nav">
         <li style="padding-right: 3px">
