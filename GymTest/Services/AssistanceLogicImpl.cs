@@ -25,6 +25,13 @@ namespace GymTest.Services
         public AssistanceInformation ProcessAssistance(string userToken, DateTime? assistanceDate = null)
         {
             var objectToReturn = new AssistanceInformation();
+
+            if (string.IsNullOrEmpty(userToken))
+            {
+                objectToReturn.Message = "El token no puede ser vacío.";
+                return objectToReturn;
+            }
+
             var users = from m in _context.User
                         select m;
 
