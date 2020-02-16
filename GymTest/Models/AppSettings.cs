@@ -35,6 +35,8 @@ namespace GymTest.Models
         public string UserOnlyForAssistances { get; set; }
         public string UserOnlyForJourneys { get; set; }
 
+        public string PageSize { get; set; }
+
         public string AssistanceConfiguration_DiffHours { get; set; }
         public string AssistanceConfiguration_DiffMins { get; set; }
         public string AssistanceConfiguration_DiffSecs { get; set; }

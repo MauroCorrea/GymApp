@@ -9,6 +9,7 @@ using GymTest.Services;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using PagedList;
+using Microsoft.Extensions.Options;
 
 namespace GymTest.Controllers
 {
@@ -21,9 +22,12 @@ namespace GymTest.Controllers
 
         private readonly IPaymentLogic _paymentLogic;
 
-        public PaymentsController(GymTestContext context, ISendEmail sendEmail, IPaymentLogic payLogic)
+        private readonly IOptionsSnapshot<AppSettings> _appSettings;
+
+        public PaymentsController(GymTestContext context, ISendEmail sendEmail, IPaymentLogic payLogic, IOptionsSnapshot<AppSettings> app)
         {
             _context = context;
+            _appSettings = app;
             _sendEmail = sendEmail;
             _paymentLogic = payLogic;
 
@@ -34,7 +38,7 @@ namespace GymTest.Controllers
         // GET: Payments
         public async Task<IActionResult> Index(int? page, string sortOrder, string searchString, DateTime FromDate, DateTime ToDate)
         {
-            int pageSize = 3;
+            int pageSize = int.Parse(_appSettings.Value.PageSize);
             int pageIndex = page.HasValue ? (int)page : 1;
 
             ViewData["PaymentSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("payment_desc") ? "payment_asc" : "payment_desc";
@@ -158,7 +162,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-       //[ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult Create([Bind("PaymentId,PaymentDate,MovementTypeId,QuantityMovmentType,Amount,PaymentMediaId,UserId,LimitUsableDate")] Payment payment)
         {
             if (ModelState.IsValid)
@@ -213,7 +217,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-       //[ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult Edit(int id, [Bind("PaymentId,PaymentDate,MovementTypeId,QuantityMovmentType,Amount,PaymentMediaId,UserId,LimitUsableDate")] Payment payment)
         {
             if (id != payment.PaymentId)
@@ -283,7 +287,7 @@ namespace GymTest.Controllers
 
         // POST: Payments/Delete/5
         [HttpPost, ActionName("Delete")]
-       //[ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var payment = await _context.Payment.FindAsync(id);

@@ -103,20 +103,20 @@ namespace GymTest.Services
                             #endregion
                             #region Por asistencias
                             case (int)PaymentTypeEnum.ByAssistances:
-                                var ass = from a in _context.Assistance select a;
+                                var userAssistance = from a in _context.Assistance select a;
 
-                                ass = ass.Where(a => a.UserId == objectToReturn.User.UserId &&
+                                userAssistance = userAssistance.Where(a => a.UserId == objectToReturn.User.UserId &&
                                                 a.AssistanceDate.Date >= newestPayment.PaymentDate.Date);
 
-                                if (ass.Count() >= newestPayment.QuantityMovmentType)
+                                if (userAssistance.Count() >= newestPayment.QuantityMovmentType)
                                 {
-                                    objectToReturn.Message = "Pago por asistencias consumido. Se habilitaron " + newestPayment.QuantityMovmentType + " asistencia(s) y se utilizaron " + ass.Count() + " asistencia(s).";
+                                    objectToReturn.Message = "Pago por asistencias consumido. Se habilitaron " + newestPayment.QuantityMovmentType + " asistencia(s) y se utilizaron " + userAssistance.Count() + " asistencia(s).";
                                     ProcessNotEntryNotification(objectToReturn.User.FullName, objectToReturn.Message, objectToReturn.User.Email,
                                         newestPayment.PaymentDate.ToString("dd/MM/yyyy HH:mm"));
                                     return objectToReturn; // ya se consumieron todas las asistencias
 
                                 }
-                                remainingAssistants = (newestPayment.QuantityMovmentType - ass.Count());
+                                remainingAssistants = (newestPayment.QuantityMovmentType - userAssistance.Count());
                                 objectToReturn.AdditionalData = "Cantidad de asistencias restantes: " + remainingAssistants.ToString() + ".";
                                 break;
                             #endregion

@@ -8,6 +8,7 @@ using GymTest.Models;
 using GymTest.Data;
 using Microsoft.AspNetCore.Authorization;
 using PagedList;
+using Microsoft.Extensions.Options;
 
 namespace GymTest.Controllers
 {
@@ -16,15 +17,18 @@ namespace GymTest.Controllers
     {
         private readonly GymTestContext _context;
 
-        public UsersController(GymTestContext context)
+        private readonly IOptionsSnapshot<AppSettings> _appSettings;
+
+        public UsersController(GymTestContext context, IOptionsSnapshot<AppSettings> app)
         {
             _context = context;
+            _appSettings = app;
         }
 
         // GET: Users
         public async Task<IActionResult> Index(int? page, string sortOrder, string searchString)
         {
-            int pageSize = 20;
+            int pageSize = int.Parse(_appSettings.Value.PageSize);
             int pageIndex = page.HasValue ? (int)page : 1;
 
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("name_desc") ? "name_asc" : "name_desc";
