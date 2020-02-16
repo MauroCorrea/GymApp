@@ -43,5 +43,9 @@ namespace GymTest.Data
         public DbSet<GymTest.Models.UserReport> UserReport { get; set; }
 
         public DbSet<GymTest.Models.AutomaticProcess> AutomaticProcess { get; set; }
+
+        public DbSet<GymTest.Models.Discipline> Discipline { get; set; }
+
+        public DbSet<GymTest.Models.Schedule> Schedule { get; set; }
     }
 }

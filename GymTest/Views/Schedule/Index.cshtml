@@ -1,0 +1,100 @@
+@model IEnumerable<GymTest.Models.Schedule>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Calendario de Actividades</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Agregar Evento</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Discipline)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mondey)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tuesday)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Wednesday)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Thursday)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Friday)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Saturday)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sunday)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndTime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Discipline.DisciplineDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mondey)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tuesday)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Wednesday)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Thursday)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Friday)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Saturday)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sunday)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndTime)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ScheduleId" class="btn btn-primary">Modificar</a>
+                <a asp-action="Delete" asp-route-id="@item.ScheduleId" class="btn btn-danger">Eliminar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

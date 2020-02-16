@@ -1,0 +1,33 @@
+@model GymTest.Models.Discipline
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Eliminar Disciplina</h2>
+
+<h3>Está seguro que desea eliminarla?</h3>
+<div>
+    <h4>Discipline</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DisciplineDescription)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DisciplineDescription)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Resource)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Resource.Email)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="DisciplineId" />
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+        <a asp-action="Index"class="btn btn-default">Volver</a>
+    </form>
+</div>
