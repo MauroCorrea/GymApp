@@ -8,6 +8,8 @@ using GymTest.Models;
 using GymTest.Data;
 using GymTest.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
+using PagedList;
 
 namespace GymTest.Controllers
 {
@@ -18,15 +20,21 @@ namespace GymTest.Controllers
 
         private readonly IAssistanceLogic _assistanceLogic;
 
-        public AssistancesController(GymTestContext context, IAssistanceLogic assistanceLogic)
+        private readonly IOptionsSnapshot<AppSettings> _appSettings;
+
+        public AssistancesController(GymTestContext context, IAssistanceLogic assistanceLogic, IOptionsSnapshot<AppSettings> app)
         {
             _context = context;
             _assistanceLogic = assistanceLogic;
+            _appSettings = app;
         }
 
         // GET: Assistances
-        public async Task<IActionResult> Index(string sortOrder, string searchString, DateTime dateFilter, int? id)
+        public IActionResult Index(int? page, string sortOrder, string searchString, DateTime dateFilter, int? id)
         {
+            int pageSize = int.Parse(_appSettings.Value.PageSize);
+            int pageIndex = page.HasValue ? (int)page : 1;
+
             ViewData["DateSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("date_desc") ? "date_asc" : "date_desc";
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("name_desc") ? "name_asc" : "name_desc";
             ViewData["CurrentSort"] = sortOrder;
@@ -71,7 +79,9 @@ namespace GymTest.Controllers
                     break;
             }
 
-            return View(await ret.AsNoTracking().ToListAsync());
+            IPagedList<Assistance> assistancePaged = ret.ToPagedList(pageIndex, pageSize);
+
+            return View(assistancePaged);
         }
 
 

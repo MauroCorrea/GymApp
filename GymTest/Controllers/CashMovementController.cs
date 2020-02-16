@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using PagedList;
 
 namespace GymTest.Controllers
 {
@@ -39,8 +40,11 @@ namespace GymTest.Controllers
         }
 
         // GET: CashMovement
-        public IActionResult Index(string sortOrder)
+        public IActionResult Index(int? page, string sortOrder)
         {
+            int pageSize = int.Parse(_appSettings.Value.PageSize);
+            int pageIndex = page.HasValue ? (int)page : 1;
+
             ViewData["CashMovSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("cashMov_desc") ? "cashMov_asc" : "cashMov_desc";
             ViewData["AmountSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("amount_desc") ? "amount_asc" : "amount_desc";
             ViewData["CashMovDateSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("cashMovDate_desc") ? "cashMovDate_asc" : "cashMovDate_desc";
@@ -60,36 +64,54 @@ namespace GymTest.Controllers
             switch (sortOrder)
             {
                 case "cashMov_asc":
-                    return View(cashMovements.ToList().OrderBy(s => s.CashMovementDetails));
+                    cashMovements.ToList().OrderBy(s => s.CashMovementDetails);
+                    break;
                 case "cashMov_desc":
-                    return View(cashMovements.ToList().OrderByDescending(s => s.CashMovementDetails));
+                    cashMovements.ToList().OrderByDescending(s => s.CashMovementDetails);
+                    break;
                 case "amount_asc":
-                    return View(cashMovements.ToList().OrderBy(s => s.Amount));
+                    cashMovements.ToList().OrderBy(s => s.Amount);
+                    break;
                 case "amount_desc":
-                    return View(cashMovements.ToList().OrderByDescending(s => s.Amount));
+                    cashMovements.ToList().OrderByDescending(s => s.Amount);
+                    break;
                 case "cashMovDate_asc":
-                    return View(cashMovements.ToList().OrderBy(s => s.CashMovementDate));
+                    cashMovements.ToList().OrderBy(s => s.CashMovementDate);
+                    break;
                 case "cashMovDate_desc":
-                    return View(cashMovements.ToList().OrderByDescending(s => s.CashMovementDate));
+                    cashMovements.ToList().OrderByDescending(s => s.CashMovementDate);
+                    break;
                 case "cashMovType_asc":
-                    return View(cashMovements.ToList().OrderBy(s => s.CashMovementType));
+                    cashMovements.ToList().OrderBy(s => s.CashMovementType);
+                    break;
                 case "cashMovType_desc":
-                    return View(cashMovements.ToList().OrderByDescending(s => s.CashMovementType));
+                    cashMovements.ToList().OrderByDescending(s => s.CashMovementType);
+                    break;
                 case "payMedia_asc":
-                    return View(cashMovements.ToList().OrderBy(s => s.PaymentMedia));
+                    cashMovements.ToList().OrderBy(s => s.PaymentMedia);
+                    break;
                 case "payMedia_desc":
-                    return View(cashMovements.ToList().OrderByDescending(s => s.PaymentMedia));
+                    cashMovements.ToList().OrderByDescending(s => s.PaymentMedia);
+                    break;
                 case "cashCat_asc":
-                    return View(cashMovements.ToList().OrderBy(s => s.CashCategory));
+                    cashMovements.ToList().OrderBy(s => s.CashCategory);
+                    break;
                 case "cashCat_desc":
-                    return View(cashMovements.ToList().OrderByDescending(s => s.CashCategory));
+                    cashMovements.ToList().OrderByDescending(s => s.CashCategory);
+                    break;
                 case "cashSubCat_asc":
-                    return View(cashMovements.ToList().OrderBy(s => s.CashSubcategory));
+                    cashMovements.ToList().OrderBy(s => s.CashSubcategory);
+                    break;
                 case "cashSubCat_desc":
-                    return View(cashMovements.ToList().OrderByDescending(s => s.CashSubcategory));
+                    cashMovements.ToList().OrderByDescending(s => s.CashSubcategory);
+                    break;
                 default:
-                    return View(cashMovements.ToList().OrderBy(s => s.CashMovementDate));
+                    cashMovements.ToList().OrderBy(s => s.CashMovementDate);
+                    break;
             }
+
+            IPagedList<CashMovement> acashMovementPaged = cashMovements.ToPagedList(pageIndex, pageSize);
+            return View(acashMovementPaged);
         }
 
         public async Task<IActionResult> ExportToExcel(DateTime FromDate, DateTime ToDate)

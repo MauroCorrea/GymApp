@@ -1,4 +1,5 @@
-﻿@model IEnumerable<GymTest.Models.CashMovement>
+﻿@model PagedList.IPagedList<GymTest.Models.CashMovement>
+@using PagedList.Mvc;
 
 @{
     ViewData["Title"] = "Index";
@@ -13,8 +14,8 @@
 <form asp-controller="CashMovement" asp-action="ExportToExcel">
     <p>
         Fecha desde: <input name="FromDate" class="datepicker" type="text" placeholder="dd/mm/aaaa">
-        Fecha hasta: <input name="ToDate"  class="datepicker" type="text" placeholder="dd/mm/aaaa">
-                     <input type="submit" value="Exportar a Excel" class="btn btn-primary" />
+        Fecha hasta: <input name="ToDate" class="datepicker" type="text" placeholder="dd/mm/aaaa">
+        <input type="submit" value="Exportar a Excel" class="btn btn-primary" />
     </p>
 </form>
 
@@ -22,25 +23,25 @@
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["CashMovSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.CashMovementDetails)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["CashMovSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.FirstOrDefault().CashMovementDetails)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["AmountSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.Amount)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["AmountSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.FirstOrDefault().Amount)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["CashMovDateSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.CashMovementDate)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["CashMovDateSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.FirstOrDefault().CashMovementDate)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["CashMovTypeSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.CashMovementType)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["CashMovTypeSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.FirstOrDefault().CashMovementType)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["PayMediaSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.PaymentMedia)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PayMediaSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.FirstOrDefault().PaymentMedia)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["CashCatSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.CashCategory)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["CashCatSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.FirstOrDefault().CashCategory)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["CashSubCatSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.CashSubcategory)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["CashSubCatSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.FirstOrDefault().CashSubcategory)</a>
             </th>
             <th></th>
         </tr>
@@ -84,3 +85,8 @@
         }
     </tbody>
 </table>
+<div id="container" style="width:100%">
+    <div id="left" style="float:left;width:20%;"><a asp-action="Index" asp-route-page=@(Model.PageNumber > 1 ? Model.PageNumber - 1 : 1) style="color:black"> < Anterior</a></div>
+    <div id="right" style="float:right;width:20%;text-align:right"><a asp-action="Index" asp-route-page=@(Model.PageNumber < Model.PageCount ? Model.PageNumber + 1 : Model.PageNumber) style="color:black">Siguiente > </a></div>
+    <div id="center" style="margin:0 auto;width:60%;"><p style="text-align:center"> - Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount - </p></div>
+</div>

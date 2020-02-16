@@ -1,4 +1,5 @@
-﻿@model IEnumerable<GymTest.Models.Assistance>
+﻿@model PagedList.IPagedList<GymTest.Models.Assistance>
+@using PagedList.Mvc;
 
 @{
     ViewData["Title"] = "Index";
@@ -15,7 +16,7 @@
         Filtro inteligente: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]">
         Fecha: <input name="DateFilter" class="datepicker" type="text" placeholder="dd/mm/aaaa" value="@ViewData["DateFilter"]">
         <input type="submit" value="Filtrar" class="btn btn-default" /> |
-        <a asp-action="Index">Limpiar lista</a>
+        <a asp-action="Index" class="btn btn-default">Limpiar lista</a>
     </p>
 </form>
 <table class="table">
@@ -49,3 +50,8 @@
         }
     </tbody>
 </table>
+<div id="container" style="width:100%">
+    <div id="left" style="float:left;width:20%;"><a asp-action="Index" asp-route-page=@(Model.PageNumber > 1 ? Model.PageNumber - 1 : 1) style="color:black"> < Anterior</a></div>
+    <div id="right" style="float:right;width:20%;text-align:right"><a asp-action="Index" asp-route-page=@(Model.PageNumber < Model.PageCount ? Model.PageNumber + 1 : Model.PageNumber) style="color:black">Siguiente > </a></div>
+    <div id="center" style="margin:0 auto;width:60%;"><p style="text-align:center"> - Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount - </p></div>
+</div>
