@@ -8,6 +8,7 @@ using GymTest.Models;
 
 using Microsoft.AspNetCore.Authorization;
 using System;
+using GymTest.Services;
 
 namespace GymTest.Controllers
 {
@@ -16,9 +17,12 @@ namespace GymTest.Controllers
     {
         private readonly GymTestContext _context;
 
-        public WorkdayController(GymTestContext context)
+        private readonly ITimezoneLogic _timeZone;
+
+        public WorkdayController(GymTestContext context, ITimezoneLogic timeZone)
         {
             _context = context;
+            _timeZone = timeZone;
         }
 
         // GET: Workday
@@ -31,7 +35,7 @@ namespace GymTest.Controllers
             if (FromDate != DateTime.MinValue)
                 workdays = workdays.Where(s => s.WorkingDate >= FromDate);
             else
-                workdays = workdays.Where(s => s.WorkingDate >= DateTime.Now.AddDays(-7));
+                workdays = workdays.Where(s => s.WorkingDate >= _timeZone.GetCurrentDateTime(DateTime.Now).AddDays(-7));
 
             if (ToDate != DateTime.MinValue)
                 workdays = workdays.Where(s => s.WorkingDate <= ToDate);

@@ -27,9 +27,11 @@ namespace GymTest.Controllers
         private readonly IOptionsSnapshot<AppSettings> _appSettings;
         private UserManager<IdentityUser> _userManager;
 
+        private readonly ITimezoneLogic _timeZone;
+
         private readonly ILogger<IPaymentLogic> _logger;
 
-        public CashMovementController(GymTestContext context, ISendEmail sendEmail, IHostingEnvironment env, IOptionsSnapshot<AppSettings> app, UserManager<IdentityUser> userManager, ILogger<IPaymentLogic> logger)
+        public CashMovementController(GymTestContext context, ISendEmail sendEmail, IHostingEnvironment env, IOptionsSnapshot<AppSettings> app, UserManager<IdentityUser> userManager, ILogger<IPaymentLogic> logger, ITimezoneLogic timeZone)
         {
             _logger = logger;
             _userManager = userManager;
@@ -37,6 +39,7 @@ namespace GymTest.Controllers
             _sendEmail = sendEmail;
             _env = env;
             _appSettings = app;
+            _timeZone = timeZone;
         }
 
         // GET: CashMovement
@@ -118,16 +121,16 @@ namespace GymTest.Controllers
         {
 
             if (FromDate == DateTime.MinValue)
-                FromDate = DateTime.Now.AddDays(-7);
+                FromDate = _timeZone.GetCurrentDateTime(DateTime.Now).AddDays(-7);
             if (ToDate == DateTime.MinValue)
-                ToDate = DateTime.Now.AddDays(1);
+                ToDate = _timeZone.GetCurrentDateTime(DateTime.Now).AddDays(1);
 
             var cashMovs = _context.CashMovement.Where(cm => cm.CashMovementDate >= FromDate && cm.CashMovementDate < ToDate);
 
             cashMovs.OrderByDescending(x => x.CashMovementDate);
 
             string path = _env.WebRootPath;
-            string Ruta_Publica_Excel = path + "/MovimientosDeCaja_" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".xlsx";
+            string Ruta_Publica_Excel = path + "/MovimientosDeCaja_" + _timeZone.GetCurrentDateTime(DateTime.Now).ToString("ddMMyyyyHHmmss") + ".xlsx";
 
             ExcelPackage Package = new ExcelPackage(new System.IO.FileInfo(Ruta_Publica_Excel));
             var Hoja_1 = Package.Workbook.Worksheets.Add("Contenido_1");
@@ -288,7 +291,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-       //[ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CashMovementId,CashMovementDate,CashMovementDetails,Amount,CashMovementTypeId,PaymentMediaId,CashCategoryId,SupplierId,CashSubcategoryId")] CashMovement cashMovement)
         {
             if (ModelState.IsValid)
@@ -330,7 +333,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-       //[ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CashMovementId,CashMovementDate,CashMovementDetails,Amount,CashMovementTypeId,CashCategoryId,SupplierId,CashSubcategoryId,PaymentMediaId")] CashMovement cashMovement)
         {
             if (id != cashMovement.CashMovementId)
@@ -391,7 +394,7 @@ namespace GymTest.Controllers
 
         // POST: CashMovement/Delete/5
         [HttpPost, ActionName("Delete")]
-       //[ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var cashMovement = await _context.CashMovement.FindAsync(id);

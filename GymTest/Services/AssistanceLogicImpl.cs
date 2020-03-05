@@ -15,11 +15,14 @@ namespace GymTest.Services
 
         private readonly IOptionsSnapshot<AppSettings> _appSettings;
 
-        public AssistanceLogicImpl(GymTestContext context, IOptionsSnapshot<AppSettings> app, ISendEmail sendEmail)
+        private readonly ITimezoneLogic _timeZone;
+
+        public AssistanceLogicImpl(GymTestContext context, IOptionsSnapshot<AppSettings> app, ISendEmail sendEmail, ITimezoneLogic timeZone)
         {
             _appSettings = app;
             _context = context;
             _sendEmail = sendEmail;
+            _timeZone = timeZone;
         }
 
         public AssistanceInformation ProcessAssistance(string userToken, DateTime? assistanceDate = null)
@@ -68,7 +71,7 @@ namespace GymTest.Services
                     var newestPayment = payments.OrderByDescending(p => p.PaymentDate).First();
                     if (newestPayment.MovementTypeId > 0)
                     {
-                        if (newestPayment.LimitUsableDate.Date < DateTime.Now.Date)
+                        if (newestPayment.LimitUsableDate.Date < _timeZone.GetCurrentDateTime(DateTime.Now).Date)
                         {
                             objectToReturn.Message = "Fecha límite de uso sobrepasada. La misma es " + newestPayment.LimitUsableDate.Date.ToShortDateString() + ".";
                             ProcessNotEntryNotification(objectToReturn.User.FullName, objectToReturn.Message, objectToReturn.User.Email,
@@ -82,9 +85,9 @@ namespace GymTest.Services
                             case (int)PaymentTypeEnum.Monthly:
                                 var monthsPayed = newestPayment.QuantityMovmentType;
 
-                                var monthsUsed = DateTime.Now.Month - newestPayment.PaymentDate.Month;
+                                var monthsUsed = _timeZone.GetCurrentDateTime(DateTime.Now).Month - newestPayment.PaymentDate.Month;
 
-                                if (DateTime.Now.Year > newestPayment.PaymentDate.Year)
+                                if (_timeZone.GetCurrentDateTime(DateTime.Now).Year > newestPayment.PaymentDate.Year)
                                     monthsUsed += 12;
 
                                 if (monthsUsed > monthsPayed)
@@ -132,7 +135,7 @@ namespace GymTest.Services
                                                     Where(a => a.UserId == objectToReturn.User.UserId).
                                                     OrderByDescending(a => a.AssistanceDate).FirstOrDefault();
 
-                        DateTime realAssistanceDate = assistanceDate.HasValue ? (DateTime)assistanceDate : DateTime.Now;
+                        DateTime realAssistanceDate = assistanceDate.HasValue ? (DateTime)assistanceDate : _timeZone.GetCurrentDateTime(DateTime.Now);
 
                         double diffTimeSecs = int.Parse(_appSettings.Value.AssistanceConfiguration_DiffHours) * 60 * 60
                             + int.Parse(_appSettings.Value.AssistanceConfiguration_DiffMins) * 60
@@ -159,13 +162,13 @@ namespace GymTest.Services
                                 objectToReturn.AdditionalData = "Cantidad de asistencias restantes: " + (newestPayment.QuantityMovmentType - ass.Count()) + ".";
                             }
 
-                            objectToReturn.Message = "Bienvenido. Disfrute de su jornada. Asistencia generada con fecha " + DateTime.Now + ".";
+                            objectToReturn.Message = "Bienvenido. Disfrute de su jornada. Asistencia generada con fecha " + _timeZone.GetCurrentDateTime(DateTime.Now) + ".";
 
                             ProcessAssistanceNotification(objectToReturn.User.UserId, remainingAssistants, newestPayment.MovementTypeId);
                         }
                         else
                         {
-                            objectToReturn.Message = "Bienvenido nuevamente. Su token ya fue ingresado " + (DateTime.Now - lastAsistance.AssistanceDate).TotalMinutes.ToString("0") + " minutos antes.";
+                            objectToReturn.Message = "Bienvenido nuevamente. Su token ya fue ingresado " + (_timeZone.GetCurrentDateTime(DateTime.Now) - lastAsistance.AssistanceDate).TotalMinutes.ToString("0") + " minutos antes.";
                         }
 
                         objectToReturn.AdditionalData = objectToReturn.AdditionalData + "Fecha límite de uso del pago: " + newestPayment.LimitUsableDate.ToShortDateString() + ".";
@@ -213,7 +216,7 @@ namespace GymTest.Services
             if (!string.IsNullOrEmpty(lastPaymentDate))
                 lastPaymentDate = "Su último pago fue realizado el día " + lastPaymentDate + ".";
 
-            var entryInfo = "Su entrada en " + DateTime.Now.ToString("dd/MM/yyyy HH:mm") + " no pudo ser registrada exitosamente.";
+            var entryInfo = "Su entrada en " + _timeZone.GetCurrentDateTime(DateTime.Now).ToString("dd/MM/yyyy HH:mm") + " no pudo ser registrada exitosamente.";
 
             var bodyData = new System.Collections.Generic.Dictionary<string, string>
                 {
@@ -276,7 +279,7 @@ namespace GymTest.Services
                     {
                         _sendEmail.SendEmail(bodyData,
                                              "AssistanceTemplateFinishPayment",
-                                             "Notificación de asistencia" + user.FullName,
+                                             "Notificación de asistencia a " + _appSettings.Value.Client,
                                              new System.Collections.Generic.List<string>() { user.Email }
                                             );
                     }
@@ -291,7 +294,7 @@ namespace GymTest.Services
 
                         _sendEmail.SendEmail(bodyData,
                                              "AssistanceTemplate",
-                                             "Notificación de asistencia" + user.FullName,
+                                             "Notificación de asistenciaa " + _appSettings.Value.Client,
                                              new System.Collections.Generic.List<string>() { user.Email }
                                             );
                     }

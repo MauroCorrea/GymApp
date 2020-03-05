@@ -9,6 +9,7 @@ using GymTest.Data;
 using Microsoft.AspNetCore.Authorization;
 using PagedList;
 using Microsoft.Extensions.Options;
+using GymTest.Services;
 
 namespace GymTest.Controllers
 {
@@ -19,10 +20,13 @@ namespace GymTest.Controllers
 
         private readonly IOptionsSnapshot<AppSettings> _appSettings;
 
-        public UsersController(GymTestContext context, IOptionsSnapshot<AppSettings> app)
+        private readonly ITimezoneLogic _timeZone;
+
+        public UsersController(GymTestContext context, IOptionsSnapshot<AppSettings> app, ITimezoneLogic timeZone)
         {
             _context = context;
             _appSettings = app;
+            _timeZone = timeZone;
         }
 
         // GET: Users
@@ -125,7 +129,7 @@ namespace GymTest.Controllers
                 var newestPayment = payments.OrderByDescending(p => p.PaymentDate).First();
                 if (newestPayment.MovementTypeId > 0)
                 {
-                    if (newestPayment.LimitUsableDate.Date < DateTime.Now.Date)
+                    if (newestPayment.LimitUsableDate.Date < _timeZone.GetCurrentDateTime(DateTime.Now).Date)
                         return "Fecha límite de uso sobrepasada. La misma es " + newestPayment.LimitUsableDate.Date.ToShortDateString() + ".";
 
                     switch (newestPayment.MovementTypeId)
@@ -134,9 +138,9 @@ namespace GymTest.Controllers
                         case (int)PaymentTypeEnum.Monthly:
                             var monthsPayed = newestPayment.QuantityMovmentType;
 
-                            var monthsUsed = DateTime.Now.Month - newestPayment.PaymentDate.Month;
+                            var monthsUsed = _timeZone.GetCurrentDateTime(DateTime.Now).Month - newestPayment.PaymentDate.Month;
 
-                            if (DateTime.Now.Year > newestPayment.PaymentDate.Year)
+                            if (_timeZone.GetCurrentDateTime(DateTime.Now).Year > newestPayment.PaymentDate.Year)
                                 monthsUsed += 12;
 
                             if (monthsUsed > monthsPayed)

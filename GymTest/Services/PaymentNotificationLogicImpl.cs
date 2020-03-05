@@ -18,12 +18,16 @@ namespace GymTest.Services
 
         private readonly ILogger<IPaymentLogic> _logger;
 
+        private readonly ITimezoneLogic _timeZone;
 
-        public PaymentNotificationLogicImpl(GymTestContext context, IOptionsSnapshot<AppSettings> app, ISendEmail sendEmail, ILogger<IPaymentLogic> logger)
+
+        public PaymentNotificationLogicImpl(GymTestContext context, IOptionsSnapshot<AppSettings> app, ISendEmail sendEmail, ILogger<IPaymentLogic> logger, ITimezoneLogic timeZone)
         {
             _appSettings = app;
             _context = context;
             _sendEmail = sendEmail;
+            _logger = logger;
+            _timeZone = timeZone;
         }
 
         public void NotifyUsers()
@@ -32,7 +36,7 @@ namespace GymTest.Services
             {
                 AutomaticProcess automaticSendMailProcess = _context.AutomaticProcess.
                     Where(x => x.AutomaticProcessId == int.Parse(_appSettings.Value.PaymentNotificationProcessId)).FirstOrDefault();
-                if (automaticSendMailProcess != null && automaticSendMailProcess.NextProcessDate <= DateTime.Today)
+                if (automaticSendMailProcess != null && automaticSendMailProcess.NextProcessDate <= _timeZone.GetCurrentDateTime(DateTime.Now).Date)
                 {
 
                     string notifyByDate = _appSettings.Value.PaymentNotificationByDate;
@@ -49,7 +53,7 @@ namespace GymTest.Services
                         NotifyByExpiration();
                     }
 
-                    automaticSendMailProcess.NextProcessDate = DateTime.Now.Date.AddDays(int.Parse(_appSettings.Value.PaymentNotificationProcessAddDays));
+                    automaticSendMailProcess.NextProcessDate = _timeZone.GetCurrentDateTime(DateTime.Now).Date.AddDays(int.Parse(_appSettings.Value.PaymentNotificationProcessAddDays));
 
                     _context.Update(automaticSendMailProcess);
                     _context.SaveChanges();
@@ -86,7 +90,7 @@ namespace GymTest.Services
                     if (newestPayment.MovementTypeId > 0)
                     {
                         var dateMinToNotify = newestPayment.LimitUsableDate.Date.AddDays(-int.Parse(_appSettings.Value.PaymentNotificationDaysBefore));
-                        if (DateTime.Now.Date >= dateMinToNotify)
+                        if (_timeZone.GetCurrentDateTime(DateTime.Now).Date >= dateMinToNotify)
                         {
                             // se venció el tiempo de uso del ultimo pago
                             message = "Fecha límite de uso cercana o sobrepasada. La misma es " + newestPayment.LimitUsableDate.Date.ToShortDateString() + ".";
@@ -138,7 +142,7 @@ namespace GymTest.Services
                     var newestPayment = payments.OrderByDescending(p => p.PaymentDate).First();
                     if (newestPayment.MovementTypeId > 0)
                     {
-                        if (newestPayment.LimitUsableDate.Date < DateTime.Now.Date)
+                        if (newestPayment.LimitUsableDate.Date < _timeZone.GetCurrentDateTime(DateTime.Now).Date)
                         {
                             // se venció el tiempo de uso del ultimo pago
                             message = "Fecha límite de uso sobrepasada. La misma es " + newestPayment.LimitUsableDate.Date.ToShortDateString() + ".";
@@ -151,9 +155,9 @@ namespace GymTest.Services
                             case (int)PaymentTypeEnum.Monthly:
                                 var monthsPayed = newestPayment.QuantityMovmentType;
 
-                                var monthsUsed = DateTime.Now.Month - newestPayment.PaymentDate.Month;
+                                var monthsUsed = _timeZone.GetCurrentDateTime(DateTime.Now).Month - newestPayment.PaymentDate.Month;
 
-                                if (DateTime.Now.Year > newestPayment.PaymentDate.Year)
+                                if (_timeZone.GetCurrentDateTime(DateTime.Now).Year > newestPayment.PaymentDate.Year)
                                     monthsUsed += 12;
 
                                 if (monthsUsed > monthsPayed)
@@ -169,7 +173,7 @@ namespace GymTest.Services
                                                     int.Parse(_appSettings.Value.PaymentNotificationDaysBefore);
 
                                 //Si estamos en mes vencido, tenemos que ver la fecha.
-                                if (monthsUsed == monthsPayed && DateTime.Now.Day >= dayMinToNotify)
+                                if (monthsUsed == monthsPayed && _timeZone.GetCurrentDateTime(DateTime.Now).Day >= dayMinToNotify)
                                 {
                                     message = "Pago mensual está por vencer. Su último fue por " + monthsPayed + " mes(es) el día " +
                                         newestPayment.PaymentDate.ToString("dd/MM/yyyy HH:mm")

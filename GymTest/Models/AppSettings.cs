@@ -42,6 +42,8 @@ namespace GymTest.Models
         public string AssistanceConfiguration_DiffSecs { get; set; }
 
         public string Client { get; set; }
+
+        public string TimeZone { get; set; }
     }
 
     public class Logging
