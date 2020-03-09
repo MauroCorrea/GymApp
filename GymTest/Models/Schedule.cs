@@ -29,7 +29,7 @@ namespace GymTest.Models
         public DateTime EndDate { get; set; }
 
         [Display(Name = "Lunes")]
-        public bool Mondey { get; set; }
+        public bool Monday { get; set; }
         [Display(Name = "Martes")]
         public bool Tuesday { get; set; }
         [Display(Name = "Miercoles")]

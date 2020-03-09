@@ -46,11 +46,11 @@ namespace GymTest.Controllers
         }
 
         // GET: Schedule/Create
-        public IActionResult Create()
-        {
-            ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "DisciplineDescription");
-            return View();
-        }
+        //public IActionResult Create()
+        //{
+        //    ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "DisciplineDescription");
+        //    return View();
+        //}
 
         // POST: Schedule/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
