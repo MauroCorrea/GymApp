@@ -1,4 +1,8 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.Extensions.Options
+@inject UserManager<IdentityUser> UserManager
+@inject IOptions<AppSettings> AppSettingsOptions
+@{
     ViewData["Title"] = "Administrador de Gym";
 }
 <br />
@@ -42,7 +46,13 @@
         <input type="button" onclick="deleteLasFingerValue()" value="Borrar" class="btn btn-warning btn-lg" style="position:relative; width:60%; height:100px; font-size:200%" />
     </p>
 </div>
-
+@if (UserManager.GetUserName(User) != null && AppSettingsOptions.Value.UserOnlyForJourneys != null)
+{
+    if (UserManager.GetUserName(User).ToLower().Contains(AppSettingsOptions.Value.UserOnlyForJourneys.ToLower()))
+    {
+        <meta http-equiv="Refresh" content="30; url=/home" />
+    }
+}
 
 
 <!--<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="5000">

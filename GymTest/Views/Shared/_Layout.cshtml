@@ -29,7 +29,7 @@
                     <div class="bar2"></div>
                     <div class="bar3"></div>
                 </div>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">GymApp</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">@AppSettingsOptions.Value.Client</a>
                 <!--<img src="~/images/logo.png" alt="logo" width="100px" height="30px" />-->
             </div>
 
@@ -74,7 +74,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2018 - GymTest</p>
+            <p>&copy; 2020 - Tyruy - @AppSettingsOptions.Value.Client</p>
         </footer>
     </div>
 
@@ -95,5 +95,6 @@
 
 
     @RenderSection("Scripts", required: false)
+
 </body>
 </html>
