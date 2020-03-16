@@ -42,7 +42,6 @@
         <Folder Include="Views\GeneralAdministration\" />
         <Folder Include="Views\Payroll\" />
         <Folder Include="Models\ReportModels\" />
-        <Folder Include="Migrations\GymTest\" />
     </ItemGroup>
     <ItemGroup>
         <Content Remove="wwwroot\images\ui-icons_444444_256x240.png" />

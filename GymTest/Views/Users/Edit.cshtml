@@ -70,7 +70,12 @@
                                 <span asp-validation-for="Phones" class="text-danger"></span>
                             </div>
                         </td>
-                        <td></td>
+                        <td>
+                            <div class="form-group">
+                                <label asp-for="SendNotification" class="control-label"></label>
+                                <input asp-for="SendNotification" class="form-control" />
+                            </div>
+                        </td>
                     </tr>
                 </table>
             </div>

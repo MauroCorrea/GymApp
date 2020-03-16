@@ -71,6 +71,7 @@ namespace GymTest.Services
         private void NotifyByDate()
         {
             var users = from m in _context.User
+                        where m.SendNotification
                         select m;
 
             var sendMail = false;
@@ -124,6 +125,7 @@ namespace GymTest.Services
         private void NotifyByExpiration()
         {
             var users = from m in _context.User
+                        where m.SendNotification
                         select m;
 
             var sendMail = false;

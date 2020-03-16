@@ -96,6 +96,9 @@ namespace GymTest.Models
         [Display(Name = "Comentarios")]
         public string Commentaries { get; set; }
 
+        [Display(Name = "Notificaciones?")]
+        public bool SendNotification { get; set; }
+
         public ICollection<Payment> Payments { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
