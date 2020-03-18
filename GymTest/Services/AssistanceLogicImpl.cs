@@ -243,7 +243,7 @@ namespace GymTest.Services
 
                 var user = users.First(u => u.UserId == userId);
 
-                if (user != null)
+                if (user != null && user.SendNotification)
                 {
                     var bodyData = new System.Collections.Generic.Dictionary<string, string>();
 
@@ -309,7 +309,7 @@ namespace GymTest.Services
 
             var user = users.First(u => u.UserId == userId);
 
-            if (user != null)
+            if (user != null && user.SendNotification)
             {
                 var bodyData = new System.Collections.Generic.Dictionary<string, string>
                 {
@@ -332,7 +332,7 @@ namespace GymTest.Services
 
             var user = users.First(u => u.UserId == userId);
 
-            if (user != null)
+            if (user != null && user.SendNotification)
             {
                 _sendEmail.SendEmail(new System.Collections.Generic.Dictionary<string, string>(),
                                      "AssistanceTemplate",
