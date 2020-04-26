@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GymTest.Models
 {
+    [IgnoreAntiforgeryToken(Order = 1001)]
     public class Discipline
     {
 
@@ -15,13 +17,5 @@ namespace GymTest.Models
         [StringLength(50)]
         [Display(Name = "Descripción")]
         public string DisciplineDescription { get; set; }
-
-        [Required(ErrorMessage = "Campo Recurso es obligatorio")]
-        [ForeignKey("ResourceId")]
-        [Display(Name = "Recurso")]
-        public int ResourceId { get; set; }
-
-        [Display(Name = "Profe")]
-        public virtual Resource Resource { get; set; }
     }
 }

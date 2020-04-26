@@ -10,6 +10,22 @@ namespace GymTest.Data
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ScheduleUser>()
+               .HasKey(x => new { x.ScheduleId, x.UserId });
+
+            modelBuilder.Entity<ScheduleUser>()
+                .HasOne(su => su.Schedule)
+                .WithMany(su => su.ScheduleUsers)
+                .HasForeignKey(su => su.ScheduleId);
+
+            modelBuilder.Entity<ScheduleUser>()
+                .HasOne(su => su.User)
+                .WithMany(su => su.ScheduleUsers)
+                .HasForeignKey(su => su.UserId);
+        }
+
         public DbSet<GymTest.Models.User> User { get; set; }
 
         public DbSet<GymTest.Models.Payment> Payment { get; set; }
@@ -47,5 +63,9 @@ namespace GymTest.Data
         public DbSet<GymTest.Models.Discipline> Discipline { get; set; }
 
         public DbSet<GymTest.Models.Schedule> Schedule { get; set; }
+
+        public DbSet<GymTest.Models.ScheduleUser> ScheduleUser { get; set; }
+
+
     }
 }

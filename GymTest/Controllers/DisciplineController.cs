@@ -22,8 +22,7 @@ namespace GymTest.Controllers
         // GET: Discipline
         public async Task<IActionResult> Index()
         {
-            var gymTestContext = _context.Discipline.Include(d => d.Resource);
-            return View(await gymTestContext.ToListAsync());
+            return View(await _context.Discipline.ToListAsync());
         }
 
         // GET: Discipline/Details/5
@@ -35,7 +34,6 @@ namespace GymTest.Controllers
             }
 
             var discipline = await _context.Discipline
-                .Include(d => d.Resource)
                 .FirstOrDefaultAsync(m => m.DisciplineId == id);
             if (discipline == null)
             {
@@ -46,18 +44,17 @@ namespace GymTest.Controllers
         }
 
         // GET: Discipline/Create
-        //public IActionResult Create()
-        //{
-        //    ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "FullName");
-        //    return View();
-        //}
+        public IActionResult Create()
+        {
+            return View();
+        }
 
         // POST: Discipline/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DisciplineId,DisciplineDescription,ResourceId")] Discipline discipline)
+        public async Task<IActionResult> Create([Bind("DisciplineId,DisciplineDescription")] Discipline discipline)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +62,6 @@ namespace GymTest.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "FullName", discipline.ResourceId);
             return View(discipline);
         }
 
@@ -82,7 +78,6 @@ namespace GymTest.Controllers
             {
                 return NotFound();
             }
-            ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "FullName", discipline.ResourceId);
             return View(discipline);
         }
 
@@ -91,7 +86,7 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DisciplineId,DisciplineDescription,ResourceId")] Discipline discipline)
+        public async Task<IActionResult> Edit(int id, [Bind("DisciplineId,DisciplineDescription")] Discipline discipline)
         {
             if (id != discipline.DisciplineId)
             {
@@ -118,7 +113,6 @@ namespace GymTest.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "FullName", discipline.ResourceId);
             return View(discipline);
         }
 
@@ -131,7 +125,6 @@ namespace GymTest.Controllers
             }
 
             var discipline = await _context.Discipline
-                .Include(d => d.Resource)
                 .FirstOrDefaultAsync(m => m.DisciplineId == id);
             if (discipline == null)
             {

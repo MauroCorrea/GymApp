@@ -109,6 +109,8 @@ namespace GymTest.Models
             }
         }
 
+        public ICollection<ScheduleUser> ScheduleUsers { get; set; }
+
         public User()
         {
         }

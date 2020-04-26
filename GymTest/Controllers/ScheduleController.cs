@@ -20,10 +20,25 @@ namespace GymTest.Controllers
         }
 
         // GET: Schedule
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(DateTime FromDate, DateTime ToDate)
         {
-            var gymTestContext = _context.Schedule.Include(s => s.Discipline);
-            return View(await gymTestContext.ToListAsync());
+
+            var schedules = from u
+                           in _context.Schedule.Include(p => p.Discipline)
+                                              .Include(p => p.Resource)
+                            select u;
+
+            if (FromDate == DateTime.MinValue)
+                FromDate = DateTime.Now.AddDays(-7).Date;
+
+            schedules = schedules.Where(s => s.ScheduleDate >= FromDate);
+
+            if (ToDate == DateTime.MinValue)
+                ToDate = DateTime.Now.Date;
+
+            schedules = schedules.Where(s => s.ScheduleDate <= ToDate);
+
+            return View(await schedules.ToListAsync());
         }
 
         // GET: Schedule/Details/5
@@ -36,6 +51,7 @@ namespace GymTest.Controllers
 
             var schedule = await _context.Schedule
                 .Include(s => s.Discipline)
+                .Include(s => s.Resource)
                 .FirstOrDefaultAsync(m => m.ScheduleId == id);
             if (schedule == null)
             {
@@ -46,18 +62,19 @@ namespace GymTest.Controllers
         }
 
         // GET: Schedule/Create
-        //public IActionResult Create()
-        //{
-        //    ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "DisciplineDescription");
-        //    return View();
-        //}
+        public IActionResult Create()
+        {
+            ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "DisciplineDescription");
+            ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "FullName");
+            return View();
+        }
 
         // POST: Schedule/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ScheduleId,DisciplineId,StartDate,EndDate,Mondey,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday,StartTime,EndTime")] Schedule schedule)
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("ScheduleId,DisciplineId,StartTime,EndTime,ResourceId,Places,ScheduleDate")] Schedule schedule)
         {
             if (ModelState.IsValid)
             {
@@ -66,6 +83,7 @@ namespace GymTest.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "DisciplineDescription", schedule.DisciplineId);
+            ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "FullName", schedule.ResourceId);
             return View(schedule);
         }
 
@@ -83,6 +101,7 @@ namespace GymTest.Controllers
                 return NotFound();
             }
             ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "DisciplineDescription", schedule.DisciplineId);
+            ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "FullName", schedule.ResourceId);
             return View(schedule);
         }
 
@@ -90,8 +109,8 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ScheduleId,DisciplineId,StartDate,EndDate,Mondey,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday,StartTime,EndTime")] Schedule schedule)
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("ScheduleId,DisciplineId,StartTime,EndTime,ResourceId,Places,ScheduleDate")] Schedule schedule)
         {
             if (id != schedule.ScheduleId)
             {
@@ -119,6 +138,7 @@ namespace GymTest.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "DisciplineDescription", schedule.DisciplineId);
+            ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "FullName", schedule.ResourceId);
             return View(schedule);
         }
 
@@ -132,6 +152,7 @@ namespace GymTest.Controllers
 
             var schedule = await _context.Schedule
                 .Include(s => s.Discipline)
+                .Include(s => s.Resource)
                 .FirstOrDefaultAsync(m => m.ScheduleId == id);
             if (schedule == null)
             {
@@ -143,7 +164,7 @@ namespace GymTest.Controllers
 
         // POST: Schedule/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var schedule = await _context.Schedule.FindAsync(id);
