@@ -8,8 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using GymTest.Data;
 using GymTest.Models;
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace GymTest.Controllers
 {
+    [Authorize]
     public class AutomaticProcessController : Controller
     {
         private readonly GymTestContext _context;
