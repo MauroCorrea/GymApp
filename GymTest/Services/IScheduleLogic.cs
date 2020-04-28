@@ -3,7 +3,7 @@ namespace GymTest.Services
 {
     public interface IScheduleLogic
     {
-        bool RegisterUser(int UserId, int ScheduleId);
-        int GetSchedulePlaces(int ScheduleId);
+        bool RegisterUser(int userId, int scheduleId);
+        int GetSchedulePlaces(int scheduleId);
     }
 }

@@ -2,6 +2,8 @@
 using GymTest.Data;
 using GymTest.Models;
 using Microsoft.Extensions.Logging;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace GymTest.Services
 {
@@ -13,11 +15,96 @@ namespace GymTest.Services
 
         private readonly ILogger<IPaymentLogic> _logger;
 
-        public PaymentLogicImpl(GymTestContext context, ISendEmail sendEmail, ILogger<IPaymentLogic> logger)
+        private readonly ITimezoneLogic _timeZone;
+
+        public PaymentLogicImpl(GymTestContext context, ISendEmail sendEmail, ILogger<IPaymentLogic> logger, ITimezoneLogic timeZone)
         {
             _logger = logger;
             _context = context;
             _sendEmail = sendEmail;
+            _timeZone = timeZone;
+        }
+
+        public bool HasPaymentValid(int userId)
+        {
+            var users = from m in _context.User
+                        select m;
+
+            users = users.Where(s => s.UserId == userId);
+
+            if (users.Count() == 1)
+            {
+                var user = users.First();
+
+                var payments = from m in _context.Payment
+                               select m;
+
+                payments = payments.Where(p => p.UserId == userId);
+
+                if (payments.Count() > 0)
+                {
+                    var newestPayment = payments.OrderByDescending(p => p.PaymentDate).First();
+                    if (newestPayment.MovementTypeId > 0)
+                    {
+                        if (newestPayment.LimitUsableDate.Date < _timeZone.GetCurrentDateTime(DateTime.Now).Date)
+                        {
+                            return false; // se venció el tiempo de uso del ultimo pago
+                        }
+
+                        switch (newestPayment.MovementTypeId)
+                        {
+                            #region Mensual
+                            case (int)PaymentTypeEnum.Monthly:
+                                var monthsPayed = newestPayment.QuantityMovmentType;
+
+                                var monthsUsed = _timeZone.GetCurrentDateTime(DateTime.Now).Month - newestPayment.PaymentDate.Month;
+
+                                if (_timeZone.GetCurrentDateTime(DateTime.Now).Year > newestPayment.PaymentDate.Year)
+                                    monthsUsed += 12;
+
+                                if (monthsUsed > monthsPayed)
+                                {
+                                    return false; // el pago actual ya no es válido
+                                }
+
+                                break;
+                            #endregion
+                            #region Por asistencias
+                            case (int)PaymentTypeEnum.ByAssistances:
+                                var userAssistance = from a in _context.Assistance select a;
+
+                                userAssistance = userAssistance.Where(a => a.UserId == userId &&
+                                                a.AssistanceDate.Date >= newestPayment.PaymentDate.Date);
+
+                                if (userAssistance.Count() >= newestPayment.QuantityMovmentType)
+                                {
+                                    return false; // ya se consumieron todas las asistencias
+                                }
+
+                                break;
+                            #endregion
+
+                            default:
+                                return false;//formato de pago inválido
+                        }
+
+                        //el usuario existe y tiene un pago válido
+                        return true;
+                    }
+                    return false; //error: ultimo pago sin tipo de membresía
+
+                }
+                return false; //error: usuario sin pagos
+
+
+            }
+            else if (users.Count() > 1)
+            {
+                //error: solo 1 usuario deber identificado por id
+                return false;
+            }
+
+            return false;
         }
 
         public bool ProcessPayment(Payment payment, string userName, string userEmail)

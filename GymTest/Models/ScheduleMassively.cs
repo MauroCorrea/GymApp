@@ -51,8 +51,6 @@ namespace GymTest.Models
         [DataType(DataType.Date)]
         public DateTime DataFormatEndString { get; set; }
 
-        public ICollection<ScheduleUser> ScheduleUsers { get; set; }
-
         public ScheduleMassively()
         {
         }

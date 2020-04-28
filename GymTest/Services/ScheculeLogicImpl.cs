@@ -1,7 +1,9 @@
 ﻿using System;
 using GymTest.Data;
+using System.Linq;
 using GymTest.Models;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace GymTest.Services
 {
@@ -14,26 +16,63 @@ namespace GymTest.Services
 
         private readonly ILogger<IPaymentLogic> _logger;
 
-        public ScheculeLogicImpl(GymTestContext context, ISendEmail sendEmail, ILogger<IPaymentLogic> logger)
+        private readonly IPaymentLogic _paymentLogic;
+
+
+        public ScheculeLogicImpl(GymTestContext context, ISendEmail sendEmail, ILogger<IPaymentLogic> logger, IPaymentLogic paymentLogic)
         {
             _logger = logger;
             _context = context;
             _sendEmail = sendEmail;
+            _paymentLogic = paymentLogic;
         }
 
 
-        public int GetSchedulePlaces(int ScheduleId)
+        public int GetSchedulePlaces(int scheduleId)
         {
-            //TODO: acá debemos de obtener el calendario y si es correcto devolver la cantidad de cupos
+            var calendars = from m in _context.Schedule
+                            select m;
+
+            calendars = calendars.Where(s => s.ScheduleId == scheduleId);
+
+            if (calendars.Count() == 1)
+            {
+                return calendars.First().Places - calendars.First().ScheduleUsers.Count;
+            }
             return 0;
         }
 
-        public bool RegisterUser(int UserId, int ScheduleId)
+        public bool RegisterUser(int userId, int scheduleId)
         {
-            //TODO: acá debemos de obtener el usuario y si el id del calendario es correcto y tiene cupos ->
-            // 1.agregarlo a los participantes
-            // 2. devolver true
-            // caso contrario devolver false
+            try
+            {
+                if (GetSchedulePlaces(scheduleId) > 0 && _paymentLogic.HasPaymentValid(userId))
+                {
+                    var calendar = _context.Schedule
+                                    .Include(p => p.ScheduleUsers)
+                                    .Single(c => c.ScheduleId == scheduleId);
+
+                    var user = _context.User
+                                    .Single(c => c.UserId == userId);
+
+                    calendar.ScheduleUsers.Add(new ScheduleUser
+                    {
+                        Schedule = calendar,
+                        User = user
+                    });
+
+                    _context.SaveChanges();
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                var messageError = ex.Message;
+                _logger.LogError("Error registering a user. Detail: " + messageError);
+                if (ex.InnerException != null)
+                    _logger.LogError("Error registering a user. Detail: " + ex.InnerException.Message);
+            }
             return false;
         }
     }
