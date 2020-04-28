@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -7,16 +6,32 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GymTest.Data;
 using GymTest.Models;
+using Microsoft.AspNetCore.Authorization;
+using GymTest.Services;
 
 namespace GymTest.Controllers
 {
+    [Authorize]
     public class ScheduleController : Controller
     {
         private readonly GymTestContext _context;
 
-        public ScheduleController(GymTestContext context)
+        private readonly IScheduleLogic _scheduleLogic;
+
+        public ScheduleController(GymTestContext context, IScheduleLogic scheduleLogic)
         {
             _context = context;
+            _scheduleLogic = scheduleLogic;
+        }
+
+        public bool RegisterUser(int userId, int scheduleId)
+        {
+            return _scheduleLogic.RegisterUser(userId, scheduleId);
+        }
+
+        public int GetSchedulePlaces(int scheduleId)
+        {
+            return _scheduleLogic.GetSchedulePlaces(scheduleId);
         }
 
         // GET: Schedule

@@ -67,7 +67,10 @@ namespace GymTest.Data
         public DbSet<GymTest.Models.ScheduleUser> ScheduleUser { get; set; }
 
         public DbSet<GymTest.Models.ScheduleMassively> ScheduleMassively { get; set; }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5dda17a9bb6e30858b9a1412c0292ab127eccc03
 
     }
 }

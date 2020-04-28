@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GymTest.Data;
 using GymTest.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GymTest.Controllers
 {
+    [Authorize]
     public class PaymentMediaController : Controller
     {
         private readonly GymTestContext _context;
@@ -53,7 +55,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-       //[ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PaymentMediaId,PaymentMediaDescription")] PaymentMedia paymentMedia)
         {
             if (ModelState.IsValid)
@@ -85,7 +87,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-       //[ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PaymentMediaId,PaymentMediaDescription")] PaymentMedia paymentMedia)
         {
             if (id != paymentMedia.PaymentMediaId)
@@ -136,7 +138,7 @@ namespace GymTest.Controllers
 
         // POST: PaymentMedia/Delete/5
         [HttpPost, ActionName("Delete")]
-       //[ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var paymentMedia = await _context.PaymentMedia.FindAsync(id);

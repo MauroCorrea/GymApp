@@ -16,17 +16,14 @@ namespace GymTest.Services
     {
         private readonly IOptionsSnapshot<AppSettings> _appSettings;
 
-        private readonly GymTestContext _context;
-
         private IHostingEnvironment _env;
 
         private readonly ILogger<ISendEmail> _logger;
 
-        public SendEmailImpl(GymTestContext context, IHostingEnvironment env, IOptionsSnapshot<AppSettings> app, ILogger<ISendEmail> logger)
+        public SendEmailImpl(IHostingEnvironment env, IOptionsSnapshot<AppSettings> app, ILogger<ISendEmail> logger)
         {
             _logger = logger;
             _appSettings = app;
-            _context = context;
             _env = env;
         }
 
