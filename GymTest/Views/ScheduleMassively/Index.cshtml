@@ -1,0 +1,71 @@
+@model IEnumerable<GymTest.Models.ScheduleMassively>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Discipline)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Resource)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Places)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataFormatStartString)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataFormatEndString)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Discipline.DisciplineDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Resource.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Places)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataFormatStartString)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataFormatEndString)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ScheduleMassivelyId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ScheduleMassivelyId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ScheduleMassivelyId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -26,7 +26,7 @@ namespace GymTest.Controllers
         // GET: Notifications
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Notification.ToListAsync());
+            return View(await _context.Notification.OrderByDescending(x => x.NotificationId).ToListAsync());
         }
 
         // GET: Notifications/Details/5
@@ -58,7 +58,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+       //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("NotificationId,Everyone,Send,To,Message")] Notification notification)
         {
             if (ModelState.IsValid)
@@ -133,7 +133,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+       //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("NotificationId,Everyone,Send,To,Message")] Notification notification)
         {
             if (id != notification.NotificationId)
@@ -187,7 +187,7 @@ namespace GymTest.Controllers
 
         // POST: Notifications/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+       //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var notification = await _context.Notification.FindAsync(id);

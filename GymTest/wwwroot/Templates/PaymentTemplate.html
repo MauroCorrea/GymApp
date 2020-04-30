@@ -2,47 +2,92 @@
 
 <head>
     <title></title>
+    <style type="text/css">
+
+
+
+
+
+
+
+        .bodyClass {
+            background-color: #9fb8ad; /* For browsers that do not support gradients */
+            /*background-image: linear-gradient(141deg, #9fb8ad 0%, #F6C053 75%, #F2B740 95%);*/
+            color: white;
+            opacity: 0.95;
+            font-size: 17px;
+            font-weight: bold;
+            font-family: "Times New Roman", Times, serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        .buttonBannerMail {
+            display: inline-block;
+            padding: 15px 25px;
+            font-size: 30px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            color: #fff;
+            background-color: orange;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 9px #999;
+        }
+
+            .buttonBannerMail:hover {
+                background-color: darkorange;
+            }
+
+            .buttonBannerMail:active {
+                background-color: darkorange;
+                box-shadow: 0 5px #666;
+                transform: translateY(4px);
+            }
+
+        .headerMail {
+            text-align: left;
+            margin-left: 5%;
+            padding-top: 5%;
+            color: white;
+        }
+
+        .bodyMail {
+            color: white;
+        }
+
+        .footerMail {
+            text-align: left;
+            margin-left: 5%;
+            padding-bottom: 5%;
+            color: white;
+        }
+    </style>
 </head>
 
-<body>
+<body class="bodyClass">
 
-    <table>
+    <div class="headerMail">
 
-        <tr>
+        Estimado/a <b>{UserName}</b>,<br /><br />
 
-            <td>
+        <a style="color:#22BCE5" href="{Url}">{Title}</a><br />
 
-                <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" width="150px" height="60px" />
-                <br />
-                <br />
+        Hemos {action} correctamente su pago {paymentId} por un monto de ${amount} correspondiente a {quantity} {type}.
 
-                <div style="border-top:3px solid #22BCE5"> </div>
+        <br /><br />
+        Fecha de pago: {paymentDate}.
 
-                <span style="font-family:Arial;font-size:10pt">
+        <br /><br />
+        Fecha de vencimiento: {limitDate}.
 
-                    Estimado/a <b>{UserName}</b>,<br /><br />
+    </div>
 
-                    <a style="color:#22BCE5" href="{Url}">{Title}</a><br />
-
-                    Hemos {action} correctamente su pago {paymentId}por un monto de ${amount} correspondiente a {quantity} {type}.
-
-                    Fecha de pago: {paymentDate}.
-
-                    Fecha de vencimiento: {limitDate}.
-
-                    <br /><br />
-
-                    Gracias,<br />
-
-                    {client}.
-
-                </span>
-
-            </td>
-
-        </tr>
-
-    </table>
+    <div class="footerMail">
+        Gracias, {client}.
+    </div>
 
 </body>
 

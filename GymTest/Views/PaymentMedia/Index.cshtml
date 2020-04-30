@@ -1,0 +1,35 @@
+@model IEnumerable<GymTest.Models.PaymentMedia>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Medios de Pagos</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Crear Medio de Pago</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PaymentMediaDescription)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentMediaDescription)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.PaymentMediaId" class="btn btn-primary">Modificar</a>
+                <a asp-action="Details" asp-route-id="@item.PaymentMediaId" class="btn btn-primary">Detalles</a>
+                <a asp-action="Delete" asp-route-id="@item.PaymentMediaId" class="btn btn-danger">Eliminar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

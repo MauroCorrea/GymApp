@@ -1,8 +1,10 @@
-﻿@model IEnumerable<GymTest.Models.User>
+﻿@model PagedList.IPagedList<GymTest.Models.User>
+@using PagedList.Mvc;
 
 @{
     ViewData["Title"] = "Index";
 }
+
 <br />
 <h2>Administración de Usuarios</h2>
 
@@ -13,7 +15,7 @@
 <form asp-controller="Users" asp-action="Index">
     <p>
         Filtro inteligente: <input type="text" name="SearchString">
-        <input type="submit" value="Filtrar" class="btn btn-default"/>
+        <input type="submit" value="Filtrar" class="btn btn-default" />
     </p>
 </form>
 
@@ -21,19 +23,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FullName)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.FirstOrDefault().FullName)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DocumentNumber)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DocSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.FirstOrDefault().DocumentNumber)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["EmailSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.FirstOrDefault().Email)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Address)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["AddressSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.FirstOrDefault().Address)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Phones)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PhoneSortParm"]" style="color:white">@Html.DisplayNameFor(model => model.FirstOrDefault().Phones)</a>
             </th>
             <th></th>
         </tr>
@@ -68,3 +70,8 @@
         }
     </tbody>
 </table>
+<div id="container" style="width:100%">
+  <div id="left" style="float:left;width:20%;"><a asp-action="Index" asp-route-page=@(Model.PageNumber > 1 ? Model.PageNumber - 1 : 1) style="color:black"> < Anterior</a></div>
+    <div id="right" style="float:right;width:20%;text-align:right"><a asp-action="Index" asp-route-page=@(Model.PageNumber < Model.PageCount ? Model.PageNumber + 1 : Model.PageNumber) style="color:black">Siguiente > </a></div>
+  <div id="center" style="margin:0 auto;width:60%;"><p style="text-align:center"> - Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount - </p></div>
+</div>

@@ -21,7 +21,7 @@ namespace GymTest.Controllers
         // GET: CashCategory
         public async Task<IActionResult> Index()
         {
-            return View(await _context.CashCategory.ToListAsync());
+            return View(await _context.CashCategory.Where(m => !m.CashCategoryDescription.Equals("Movimiento de pago")).ToListAsync());
         }
 
         // GET: CashCategory/Details/5
@@ -52,9 +52,13 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+       //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CashCategoryId,CashCategoryDescription")] CashCategory cashCategory)
         {
+            if (cashCategory.CashCategoryDescription.Equals("Movimiento de pago"))
+            {
+                ModelState.AddModelError("DataError", "No se puede crear entidad con esa descripción.");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(cashCategory);
@@ -84,14 +88,17 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+       //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CashCategoryId,CashCategoryDescription")] CashCategory cashCategory)
         {
             if (id != cashCategory.CashCategoryId)
             {
                 return NotFound();
             }
-
+            if (cashCategory.CashCategoryDescription.Equals("Movimiento de pago"))
+            {
+                ModelState.AddModelError("DataError", "No se puede crear entidad con esa descripción.");
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -135,7 +142,7 @@ namespace GymTest.Controllers
 
         // POST: CashCategory/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+       //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var cashCategory = await _context.CashCategory.FindAsync(id);

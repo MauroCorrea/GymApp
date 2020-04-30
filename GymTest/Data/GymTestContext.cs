@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using GymTest.Models;
 
 namespace GymTest.Data
 {
@@ -7,6 +8,22 @@ namespace GymTest.Data
         public GymTestContext(DbContextOptions<GymTestContext> options)
             : base(options)
         {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ScheduleUser>()
+               .HasKey(x => new { x.ScheduleId, x.UserId });
+
+            modelBuilder.Entity<ScheduleUser>()
+                .HasOne(su => su.Schedule)
+                .WithMany(su => su.ScheduleUsers)
+                .HasForeignKey(su => su.ScheduleId);
+
+            modelBuilder.Entity<ScheduleUser>()
+                .HasOne(su => su.User)
+                .WithMany(su => su.ScheduleUsers)
+                .HasForeignKey(su => su.UserId);
         }
 
         public DbSet<GymTest.Models.User> User { get; set; }
@@ -36,5 +53,24 @@ namespace GymTest.Data
         public DbSet<GymTest.Models.Role> Role { get; set; }
 
         public DbSet<GymTest.Models.Workday> Workday { get; set; }
+
+        public DbSet<GymTest.Models.PaymentMedia> PaymentMedia { get; set; }
+
+        public DbSet<GymTest.Models.UserReport> UserReport { get; set; }
+
+        public DbSet<GymTest.Models.AutomaticProcess> AutomaticProcess { get; set; }
+
+        public DbSet<GymTest.Models.Discipline> Discipline { get; set; }
+
+        public DbSet<GymTest.Models.Schedule> Schedule { get; set; }
+
+        public DbSet<GymTest.Models.ScheduleUser> ScheduleUser { get; set; }
+
+        public DbSet<GymTest.Models.ScheduleMassively> ScheduleMassively { get; set; }
+<<<<<<< HEAD
+
+=======
+>>>>>>> 5dda17a9bb6e30858b9a1412c0292ab127eccc03
+
     }
 }

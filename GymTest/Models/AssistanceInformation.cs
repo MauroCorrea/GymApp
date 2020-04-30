@@ -1,5 +1,4 @@
-﻿using System;
-namespace GymTest.Models
+﻿namespace GymTest.Models
 {
     public class AssistanceInformation
     {

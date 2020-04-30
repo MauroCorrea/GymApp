@@ -1,0 +1,36 @@
+@model IEnumerable<GymTest.Models.Discipline>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Administración de disciplinas</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Nueva disciplina</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DisciplineDescription)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DisciplineDescription)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.DisciplineId" class="btn btn-primary">Modificar</a>
+                    <a asp-action="Details" asp-route-id="@item.DisciplineId" class="btn btn-primary">Detalles</a>
+                    <a asp-action="Delete" asp-route-id="@item.DisciplineId" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

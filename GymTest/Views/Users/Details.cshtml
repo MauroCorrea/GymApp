@@ -5,9 +5,14 @@
 <br />
 <h2>Detalles Usuario</h2>
 <div>
-    <h4>Usuario</h4>
     <hr />
     <dl class="dl-horizontal">
+        <dt>
+            Información de pago
+        </dt>
+        <dd>
+            @ViewData["PaymentInfo"]
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Token)
         </dt>
@@ -114,8 +119,8 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.UserId" class="btn btn-default">Editar Usuario</a> |
-    <a asp-controller="Payments" asp-action="Create" asp-route-id="@Model.UserId" class="btn btn-default">Agregar Pago</a> |
-    <a asp-controller="Assistances" asp-action="Index" asp-route-id="@Model.UserId" class="btn btn-default">Ver Asistencias</a> |
+    <a asp-action="Edit" asp-route-id="@Model.UserId" class="btn btn-primary">Editar Usuario</a> |
+    <a asp-controller="Payments" asp-action="Create" asp-route-id="@Model.UserId" class="btn btn-primary">Agregar Pago</a> |
+    <a asp-controller="Assistances" asp-action="Index" asp-route-id="@Model.UserId" class="btn btn-primary">Ver Asistencias</a> |
     <a asp-action="Index" class="btn btn-default">Volver</a>
 </div>

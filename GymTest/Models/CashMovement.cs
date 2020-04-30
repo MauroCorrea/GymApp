@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+
 namespace GymTest.Models
 {
-
     public class CashMovement
     {
         public int CashMovementId { get; set; }
@@ -21,6 +21,10 @@ namespace GymTest.Models
         [Required(ErrorMessage = "Campo Tipo es obligatorio")]
         public int CashMovementTypeId { get; set; }
 
+        [Display(Name = "Medio de Pago")]
+        [Required(ErrorMessage = "Campo Tipo es obligatorio")]
+        public int PaymentMediaId { get; set; }
+
         [Required(ErrorMessage = "La fecha de movimiento es obligatoria")]
         [Display(Name = "Fecha de movimiento")]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
@@ -29,6 +33,9 @@ namespace GymTest.Models
 
         [Display(Name = "Tipo")]
         public virtual CashMovementType CashMovementType { get; set; }
+
+        [Display(Name = "Medio de Pago")]
+        public virtual PaymentMedia PaymentMedia { get; set; }
 
         [Display(Name = "Categoría")]
         [Required(ErrorMessage = "Campo Categoría es obligatorio")]
@@ -50,6 +57,10 @@ namespace GymTest.Models
 
         [Display(Name = "Proveedor")]
         public virtual Supplier Supplier { get; set; }
+
+        public int? PaymentId { get; set; }
+
+        public virtual Payment Payment { get; set; }
 
         public CashMovement()
         {

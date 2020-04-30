@@ -30,6 +30,12 @@
             @Html.DisplayFor(model => model.CashMovementType.CashMovementTypeDescription)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.PaymentMedia)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PaymentMedia.PaymentMediaDescription)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.CashCategory)
         </dt>
         <dd>
@@ -46,7 +52,7 @@
         </dd>
     </dl>
 
-    <form asp-action="Delete">
+    <form asp-action="Delete" asp-antiforgery="false">
         <input type="hidden" asp-for="CashMovementId" />
         <input type="submit" value="Eliminar" class="btn btn-danger" /> |
         <a asp-action="Index" class="btn btn-default">Regresar</a>

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GymTest.Models
 {
+    [IgnoreAntiforgeryToken(Order = 1001)]
     public class Workday
     {
         public int WorkdayId { get; set; }
@@ -21,12 +23,12 @@ namespace GymTest.Models
         [DataType(DataType.Date)]
         public DateTime WorkingDate { get; set; }
 
-        [Display(Name = "Cantidad 1")]
-        [Required(ErrorMessage = "Campo Cantidad 1 es obligatorio.")]
+        [Display(Name = "Cantidad Horas")]
+        [Required(ErrorMessage = "Campo Cantidad Horas es obligatorio.")]
         public int QuantityOne { get; set; }
 
-        [Display(Name = "Cantidad 2")]
-        [Required(ErrorMessage = "Campo Cantidad 2 es obligatorio.")]
+        [Display(Name = "Monto Total ($)")]
+        [Required(ErrorMessage = "Campo Monto Total es obligatorio.")]
         public int QuantityTwo { get; set; }
 
         public Workday()

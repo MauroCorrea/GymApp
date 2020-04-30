@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using GymTest.Services;
 using GymTest.Models;
 using System.Globalization;
+using System;
 
 namespace GymTest
 {
@@ -51,6 +52,15 @@ namespace GymTest
 
             //*******Services Injection*******
             services.AddScoped<IPaymentLogic, PaymentLogicImpl>();
+
+            //*******Services Injection*******
+            services.AddScoped<IPaymentNotificationLogic, PaymentNotificationLogicImpl>();
+
+            //*******Services Injection*******
+            services.AddScoped<ITimezoneLogic, TimeZoneLogicImpl>();
+
+            //*******Services Injection*******
+            services.AddScoped<IScheduleLogic, ScheculeLogicImpl>();
 
             //*******Database context implementation*******
             services.AddDbContext<GymTestContext>(options =>

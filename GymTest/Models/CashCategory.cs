@@ -1,6 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
+
 namespace GymTest.Models
 {
+    [IgnoreAntiforgeryToken(Order = 1001)]
     public class CashCategory
     {
         public int CashCategoryId { get; set; }

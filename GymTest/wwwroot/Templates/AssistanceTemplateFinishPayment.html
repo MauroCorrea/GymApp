@@ -1,0 +1,93 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title></title>
+    <style type="text/css">
+
+
+
+
+        .bodyClass {
+            background-color: #9fb8ad; /* For browsers that do not support gradients */
+            /*background-image: linear-gradient(141deg, #9fb8ad 0%, #F6C053 75%, #F2B740 95%);*/
+            color: white;
+            opacity: 0.95;
+            font-size: 17px;
+            font-weight: bold;
+            font-family: "Times New Roman", Times, serif;
+            text-align: center;
+            margin: 20px;
+        }
+
+        .buttonBannerMail {
+            display: inline-block;
+            padding: 15px 25px;
+            font-size: 30px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            color: #fff;
+            background-color: orange;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 9px #999;
+        }
+
+            .buttonBannerMail:hover {
+                background-color: darkorange;
+            }
+
+            .buttonBannerMail:active {
+                background-color: darkorange;
+                box-shadow: 0 5px #666;
+                transform: translateY(4px);
+            }
+
+        .headerMail {
+            text-align: left;
+            margin-left: 5%;
+            padding-top: 5%;
+            color: white;
+        }
+
+        .bodyMail {
+            color: white;
+        }
+
+        .footerMail {
+            text-align: left;
+            margin-left: 5%;
+            padding-bottom: 5%;
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="bodyClass">
+
+
+    <div class="headerMail">
+        Hola <b>{UserName}</b>,
+        <br />
+
+        Aviso de renovación de pago.<br />
+    </div>
+
+    <div class="bodyMail">
+        <br /><br />
+        {Message}
+        <br /><br />
+
+    </div>
+
+
+
+    <div class="footerMail">
+        Gracias, {client}.
+    </div>
+
+
+</body>
+
+</html> 

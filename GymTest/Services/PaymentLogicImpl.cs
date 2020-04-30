@@ -28,8 +28,17 @@ namespace GymTest.Services
 
             try
             {
-                _context.Add(payment);
-                _context.SaveChangesAsync();
+                if (isEdit)
+                {
+                    _context.Update(payment);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    _context.Add(payment);
+                    _context.SaveChanges();
+                }
+
             }
             catch (Exception ex)
             {

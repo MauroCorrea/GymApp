@@ -1,10 +1,17 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.Extensions.Options
+@inject UserManager<IdentityUser> UserManager
+@inject IOptions<AppSettings> AppSettingsOptions
+
+@{
     ViewData["Title"] = "Admin. Sueldos";
 }
 
 <h2>Administración de Sueldos</h2>
 
 <div class="row">
+    @if (!UserManager.GetUserName(User).ToLower().Contains(AppSettingsOptions.Value.UserOnlyForJourneys.ToLower()))
+    {
     <ul class="nav navbar-nav">
         <li style="padding-right: 3px">
             <p><a asp-area="" asp-controller="Role" asp-action="Index" class="btn btn-primary">Roles</a></p>
@@ -16,4 +23,13 @@
             <p><a asp-area="" asp-controller="Workday" asp-action="Index" class="btn btn-primary">Jornadas</a></p>
         </li>
     </ul>
+    }
+    else
+    {
+        <ul class="nav navbar-nav">
+        <li style="padding-right: 3px">
+            <p><a asp-area="" asp-controller="Workday" asp-action="Index" class="btn btn-primary">Jornadas</a></p>
+        </li>
+    </ul>
+    }
 </div>

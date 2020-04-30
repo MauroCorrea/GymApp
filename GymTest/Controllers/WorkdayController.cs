@@ -7,6 +7,8 @@ using GymTest.Data;
 using GymTest.Models;
 
 using Microsoft.AspNetCore.Authorization;
+using System;
+using GymTest.Services;
 
 namespace GymTest.Controllers
 {
@@ -15,16 +17,30 @@ namespace GymTest.Controllers
     {
         private readonly GymTestContext _context;
 
-        public WorkdayController(GymTestContext context)
+        private readonly ITimezoneLogic _timeZone;
+
+        public WorkdayController(GymTestContext context, ITimezoneLogic timeZone)
         {
             _context = context;
+            _timeZone = timeZone;
         }
 
         // GET: Workday
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(DateTime FromDate, DateTime ToDate)
         {
-            var gymTestContext = _context.Workday.Include(w => w.Resource);
-            return View(await gymTestContext.ToListAsync());
+            var workdays = from wd
+                           in _context.Workday.Include(w => w.Resource)
+                           select wd;
+
+            if (FromDate != DateTime.MinValue)
+                workdays = workdays.Where(s => s.WorkingDate >= FromDate);
+            else
+                workdays = workdays.Where(s => s.WorkingDate >= _timeZone.GetCurrentDateTime(DateTime.Now).AddDays(-7));
+
+            if (ToDate != DateTime.MinValue)
+                workdays = workdays.Where(s => s.WorkingDate <= ToDate);
+
+            return View(await workdays.ToListAsync());
         }
 
         // GET: Workday/Details/5
@@ -57,7 +73,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("WorkdayId,ResourceId,WorkingDate,QuantityOne,QuantityTwo")] Workday workday)
         {
             if (ModelState.IsValid)
@@ -91,7 +107,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("WorkdayId,ResourceId,WorkingDate,QuantityOne,QuantityTwo")] Workday workday)
         {
             if (id != workday.WorkdayId)

@@ -4,6 +4,9 @@ using GymTest.Models;
 using GymTest.Services;
 using GymTest.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
+using System;
+using System.Linq;
 
 namespace GymTest.Controllers
 {
@@ -14,14 +17,19 @@ namespace GymTest.Controllers
 
         private readonly IAssistanceLogic _assistanceLogic;
 
-        public HomeController(GymTestContext context, IAssistanceLogic assistanceLogic)
+        private readonly IOptionsSnapshot<AppSettings> _appSettings;
+
+        public HomeController(GymTestContext context, IAssistanceLogic assistanceLogic, IOptionsSnapshot<AppSettings> app)
         {
             _context = context;
             _assistanceLogic = assistanceLogic;
+            _appSettings = app;
         }
 
         public IActionResult Index()
         {
+            ViewBag.Articles = false;
+
             return View();
         }
 
@@ -32,8 +40,6 @@ namespace GymTest.Controllers
 
             if (Request.Form["1"] != "")
                 fingerprint += 1;
-
-
         }
 
         public IActionResult Contact(string fingerprint)

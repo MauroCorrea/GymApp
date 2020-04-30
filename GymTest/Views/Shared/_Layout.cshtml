@@ -1,26 +1,23 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.Extensions.Options
+@inject UserManager<IdentityUser> UserManager
+@inject IOptions<AppSettings> AppSettingsOptions
+
+<!DOCTYPE html>
 <html>
 <head class="headerHome">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
 
-    <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
-        <link rel="stylesheet" href="~/css/users.css" />
-        <link rel="stylesheet" href="~/css/jquery-ui.css" />
-        <link rel="stylesheet" href="~/css/style.css" />
-    </environment>
-    <environment exclude="Development">
-        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/css/users.min.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/css/site.css" />
-        <link rel="stylesheet" href="~/css/users.css" />
-    </environment>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/users.css" />
+    <link rel="stylesheet" href="~/css/jquery-ui.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+
+
 </head>
 <!--<body style="background-image: linear-gradient(to bottom right,#DEDFDF,#017383)">-->
 <body>
@@ -32,17 +29,40 @@
                     <div class="bar2"></div>
                     <div class="bar3"></div>
                 </div>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">GymApp</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">@AppSettingsOptions.Value.Client</a>
+                <!--<img src="~/images/logo.png" alt="logo" width="100px" height="30px" />-->
             </div>
+
             <div id="main-menu" class="collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Users" asp-action="Index">Usuarios</a></li>
-                    <li><a asp-area="" asp-controller="Payments" asp-action="Index">Pagos</a></li>
-                    <li><a asp-area="" asp-controller="Assistances" asp-action="Index">Asistencias</a></li>
-                    <li><a asp-area="" asp-controller="CashMovement" asp-action="Index">Movimientos caja</a></li>
-                    <li><a asp-area="" asp-controller="GeneralAdministration" asp-action="Index">Administración General</a></li>
-                    <li><a asp-area="" asp-controller="Notifications" asp-action="Index">Avisos</a></li>
-                </ul>
+                @if (UserManager.GetUserName(User) != null && AppSettingsOptions.Value.UserOnlyForJourneys != null)
+                {
+                    @if (!UserManager.GetUserName(User).ToLower().Contains(AppSettingsOptions.Value.UserOnlyForJourneys.ToLower()))
+                    {
+                        <ul class="nav navbar-nav">
+                            <li><a asp-area="" asp-controller="Users" asp-action="Index">Usuarios</a></li>
+                            <li><a asp-area="" asp-controller="Payments" asp-action="Index">Pagos</a></li>
+                            <li><a asp-area="" asp-controller="Assistances" asp-action="Index">Asistencias</a></li>
+                            <li><a asp-area="" asp-controller="CashMovement" asp-action="Index">Movimientos caja</a></li>
+                            <li><a asp-area="" asp-controller="GeneralAdministration" asp-action="Index">Administración General</a></li>
+                            @if (ViewBag.Articles != null && ViewBag.Articles)
+                            {
+                                <li><a asp-area="" asp-controller="Notifications" asp-action="Index" style="background-color:red">Avisos</a></li>
+                            }
+                            else
+                            {
+                                <li><a asp-area="" asp-controller="Notifications" asp-action="Index">Avisos</a></li>
+                            }
+                            <!--<li><a asp-area="" asp-controller="UserReport" asp-action="Index">Reportes Manuales</a></li>-->
+                        </ul>
+                    }
+                    else
+                    {
+                        <ul class="nav navbar-nav">
+                            <li><a asp-area="" asp-controller="GeneralAdministration" asp-action="Index">Administración General</a></li>
+
+                        </ul>
+                    }
+                }
                 <partial name="_LoginPartial" />
             </div>
         </div>
@@ -54,47 +74,27 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2018 - GymTest</p>
+            <p>&copy; 2020 - Tyruy - @AppSettingsOptions.Value.Client</p>
         </footer>
     </div>
 
-    <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="~/js/jquery-1.12.4.js" asp-append-version="true"></script>
-        <script src="~/js/jquery-ui.js" asp-append-version="true"></script>
-        <script>
-                $(function () {
-                    $(".datepicker").datepicker();
-                    $( ".datepicker" ).datepicker( "option", "dateFormat", "dd/mm/yy");
-                });</script>
-        <script>
-                function showX(x) {
-                    x.classList.toggle("change");
-                }
-        </script>
-        <script src="~/lib/jquery-validation/dist/jquery.validate.date.js"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
-        </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                crossorigin="anonymous"
-                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
-        </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-        <script src="~/js/jquery-1.12.4.js" asp-append-version="true"></script>
-        <script src="~/js/jquery-ui.js" asp-append-version="true"></script>
-        <script src="~/lib/jquery-validation/dist/jquery.validate.date.js"></script>
-    </environment>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/jquery-1.12.4.js" asp-append-version="true"></script>
+    <script src="~/js/jquery-ui.js" asp-append-version="true"></script>
+    <script>$(function () {
+            $(".datepicker").datepicker();
+            $(".datepicker").datepicker("option", "dateFormat", "dd/mm/yy");
+        });</script>
+    <script>function showX(x) {
+            x.classList.toggle("change");
+        }</script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.date.js"></script>
+
+
 
     @RenderSection("Scripts", required: false)
+
 </body>
 </html>

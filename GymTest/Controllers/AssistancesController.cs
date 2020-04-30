@@ -8,6 +8,8 @@ using GymTest.Models;
 using GymTest.Data;
 using GymTest.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
+using PagedList;
 
 namespace GymTest.Controllers
 {
@@ -18,15 +20,27 @@ namespace GymTest.Controllers
 
         private readonly IAssistanceLogic _assistanceLogic;
 
-        public AssistancesController(GymTestContext context, IAssistanceLogic assistanceLogic)
+        private readonly IOptionsSnapshot<AppSettings> _appSettings;
+
+        public AssistancesController(GymTestContext context, IAssistanceLogic assistanceLogic, IOptionsSnapshot<AppSettings> app)
         {
             _context = context;
             _assistanceLogic = assistanceLogic;
+            _appSettings = app;
         }
 
         // GET: Assistances
-        public async Task<IActionResult> Index(string searchString, int? id)
+        public IActionResult Index(int? page, string sortOrder, string searchString, DateTime dateFilter, int? id)
         {
+            int pageSize = int.Parse(_appSettings.Value.PageSize);
+            int pageIndex = page.HasValue ? (int)page : 1;
+
+            ViewData["DateSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("date_desc") ? "date_asc" : "date_desc";
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("name_desc") ? "name_asc" : "name_desc";
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["DateFilter"] = dateFilter;
+
             var ret = from ass in _context.Assistance.Include("User")
                       select ass;
 
@@ -34,14 +48,40 @@ namespace GymTest.Controllers
             {
                 ret = ret.Where(x => x.UserId == id);
             }
-
-            if (!String.IsNullOrEmpty(searchString))
+            else
             {
-                ret = ret.Where(s => s.User.FullName.ToLower().Contains(searchString.ToLower()));
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    ret = ret.Where(s => s.User.FullName.ToLower().Contains(searchString.ToLower()));
 
+                }
+
+                if (dateFilter > new DateTime(2010, 1, 1))
+                    ret = ret.Where(s => s.AssistanceDate.Date == dateFilter.Date);
             }
 
-            return View(await ret.ToListAsync());
+            switch (sortOrder)
+            {
+                case "name_asc":
+                    ret = ret.OrderBy(s => s.User.FullName);
+                    break;
+                case "name_desc":
+                    ret = ret.OrderByDescending(s => s.User.FullName);
+                    break;
+                case "date_desc":
+                    ret = ret.OrderBy(s => s.AssistanceDate);
+                    break;
+                case "date_asc":
+                    ret = ret.OrderByDescending(s => s.AssistanceDate);
+                    break;
+                default:
+                    ret = ret.OrderBy(s => s.AssistanceDate);
+                    break;
+            }
+
+            IPagedList<Assistance> assistancePaged = ret.ToPagedList(pageIndex, pageSize);
+
+            return View(assistancePaged);
         }
 
 
@@ -75,7 +115,7 @@ namespace GymTest.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+       //[ValidateAntiForgeryToken]
         public IActionResult Create([Bind("AssistanceId,AssistanceDate,UserId")] Assistance assistance)
         {
             if (ModelState.IsValid)
@@ -115,7 +155,7 @@ namespace GymTest.Controllers
         //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         //[HttpPost]
-        //[ValidateAntiForgeryToken]
+        ////[ValidateAntiForgeryToken]
         //public async Task<IActionResult> Edit(int id, [Bind("AssistanceId,AssistanceDate,UserId")] Assistance assistance)
         //{
         //    if (id != assistance.AssistanceId)
@@ -168,7 +208,6 @@ namespace GymTest.Controllers
 
         // POST: Assistances/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var assistance = await _context.Assistance.FindAsync(id);

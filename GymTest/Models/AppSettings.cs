@@ -12,12 +12,30 @@ namespace GymTest.Models
         public string EmailConfiguration_Username { get; set; }
         public string EmailConfiguration_Password { get; set; }
         public string EmailConfiguration_BlindCopy { get; set; }
+        public string EmailOnlyForAssistances { get; set; }
+
+        public string PaymentNotificationProcessId { get; set; }
+        public string PaymentNotificationProcessAddDays { get; set; }
+        public string PaymentNotificationDayToPay { get; set; }
+        public string SendMailOnAssistance { get; set; }
+        public string PaymentNotificationByDate { get; set; }
+        public string PaymentNotificationByExpiration { get; set; }
+        public string PaymentNotificationDaysBefore { get; set; }
+        public string PaymentNotificationAssitanceBefore { get; set; }
 
         public MySQLConfiguration MySQLConfiguration { get; set; }
 
         public string TemplateEmailPath { get; set; }
 
+        public string AlwaysRememberUser { get; set; }
+
         public string EnableAdminRegister { get; set; }
+        public string EmailAdminRegistration { get; set; }
+
+        public string UserOnlyForAssistances { get; set; }
+        public string UserOnlyForJourneys { get; set; }
+
+        public string PageSize { get; set; }
 
         public string AssistanceConfiguration_DiffHours { get; set; }
         public string AssistanceConfiguration_DiffMins { get; set; }
@@ -25,6 +43,7 @@ namespace GymTest.Models
 
         public string Client { get; set; }
 
+        public string TimeZone { get; set; }
     }
 
     public class Logging
