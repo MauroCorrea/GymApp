@@ -4,10 +4,10 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+<h2>Agregar Alumno</h2>
 
 <div>
-    <h4>Schedule</h4>
+    <h4>Actividad</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -32,7 +32,7 @@
             @Html.DisplayNameFor(model => model.Resource)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Resource.Email)
+            @Html.DisplayFor(model => model.Resource.FullName)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Places)
@@ -48,7 +48,12 @@
         </dd>
     </dl>
 </div>
+<div class="form-group">
+    @Html.DropDownList("MySkills", (IEnumerable
+                <SelectListItem>)ViewBag.MySkills)
+</div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ScheduleId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.ScheduleId" class="btn btn-success">Edit</a>
+    <a asp-action="InsertuserIntoScheduler" asp-route-idSchedule="@Model.ScheduleId" asp-route-IdUser="" class="btn btn-success">Agregar</a>
+    <a asp-action="Index" class="btn btn-default">Volver</a>
 </div>

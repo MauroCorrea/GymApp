@@ -8,6 +8,7 @@ using GymTest.Data;
 using GymTest.Models;
 using Microsoft.AspNetCore.Authorization;
 using GymTest.Services;
+using System.Collections.Generic;
 
 namespace GymTest.Controllers
 {
@@ -68,6 +69,21 @@ namespace GymTest.Controllers
                 .Include(s => s.Discipline)
                 .Include(s => s.Resource)
                 .FirstOrDefaultAsync(m => m.ScheduleId == id);
+
+            List<SelectListItem> mySkills = new List<SelectListItem>();
+            var userList = _context.User;
+            foreach (var user in userList)
+            {
+                var justIn = schedule.ScheduleUsers?.Where(u => u.UserId == user.UserId).FirstOrDefault();
+                if (justIn == null)
+                {
+                    var item = new SelectListItem { Text = user.FullName, Value = user.UserId.ToString() };
+                    mySkills.Add(item);
+                }
+            }
+
+            ViewBag.MySkills = mySkills;
+
             if (schedule == null)
             {
                 return NotFound();
@@ -75,6 +91,13 @@ namespace GymTest.Controllers
 
             return View(schedule);
         }
+
+        public async Task<IActionResult> InsertuserIntoScheduler(int idSchedule, int idUser)
+        {
+
+            return RedirectToAction(nameof(Edit));
+        }
+
 
         // GET: Schedule/Create
         public IActionResult Create()
