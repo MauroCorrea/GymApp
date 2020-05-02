@@ -94,8 +94,15 @@ namespace GymTest.Controllers
 
         public async Task<IActionResult> InsertuserIntoScheduler(int idSchedule, int idUser)
         {
+            if (idSchedule <= 0 || idUser <= 0)
+                return RedirectToAction(nameof(Details));
 
-            return RedirectToAction(nameof(Edit));
+            var updated = _scheduleLogic.RegisterUser(idUser, idSchedule);
+
+            if (updated)
+                return RedirectToAction(nameof(Index));
+
+            return RedirectToAction(nameof(Details));
         }
 
 
