@@ -70,6 +70,11 @@ namespace GymTest.Controllers
                 .Include(s => s.Resource)
                 .FirstOrDefaultAsync(m => m.ScheduleId == id);
 
+            if(schedule.ScheduleUsers == null)
+            {
+                schedule.ScheduleUsers = new List<ScheduleUser>();
+            }
+
             List<SelectListItem> mySkills = new List<SelectListItem>();
             var userList = _context.User;
             foreach (var user in userList)
@@ -92,9 +97,9 @@ namespace GymTest.Controllers
             return View(schedule);
         }
 
-        public async Task<IActionResult> InsertuserIntoScheduler(int idSchedule, int idUser)
+        public async Task<IActionResult> InsertuserIntoScheduler(int idSchedule, string id)
         {
-
+            var idUser = Request.Form["MySkills"];
             return RedirectToAction(nameof(Edit));
         }
 
