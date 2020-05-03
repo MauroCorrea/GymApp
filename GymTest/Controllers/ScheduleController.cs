@@ -19,10 +19,13 @@ namespace GymTest.Controllers
 
         private readonly IScheduleLogic _scheduleLogic;
 
-        public ScheduleController(GymTestContext context, IScheduleLogic scheduleLogic)
+        private readonly IPaymentLogic _paymentLogic;
+
+        public ScheduleController(GymTestContext context, IScheduleLogic scheduleLogic, IPaymentLogic paymentLogic)
         {
             _context = context;
             _scheduleLogic = scheduleLogic;
+            _paymentLogic = paymentLogic;
         }
 
         public bool RegisterUser(int userId, int scheduleId)
@@ -76,7 +79,7 @@ namespace GymTest.Controllers
                 schedule.ScheduleUsers = new List<ScheduleUser>();
             }
 
-            var userList = _context.User;
+            var userList = GetUserWithValidPayment(schedule.ScheduleUsers.ToList());
 
             if (schedule == null)
             {
@@ -95,28 +98,40 @@ namespace GymTest.Controllers
             return View(modelView);
         }
 
-<<<<<<< HEAD
-        public async Task<IActionResult> InsertuserIntoScheduler(int idSchedule, long idUser)
+        private List<User> GetUserWithValidPayment(List<ScheduleUser> addedUsers)
         {
-            //return RedirectToAction(nameof(Edit));
+            var result = new List<User>();
 
-            if (idSchedule <= 0 || idUser <= 0)
-                return RedirectToAction(nameof(Details));
-=======
+            var users = _context.User.ToList();
+            foreach(var user in users)
+            {
+                var userIsIn = addedUsers.Where(u => u.UserId == user.UserId).FirstOrDefault() != null;
+                if (!userIsIn && _paymentLogic.HasPaymentValid(user.UserId))
+                {
+                    result.Add(user);
+                }
+            }
+
+            return result;
+        }
+
         public async Task<IActionResult> InsertUserIntoScheduler(ScheduleView viewmodel)
         {
             if (viewmodel.Schedule.ScheduleId <= 0 || viewmodel.SelectedUser <= 0)
                 return RedirectToAction("Details", new { id = viewmodel.Schedule.ScheduleId });
->>>>>>> 012e98580c7414a074a4aed5936c9a2d00b96711
 
             var updated = _scheduleLogic.RegisterUser(viewmodel.SelectedUser, viewmodel.Schedule.ScheduleId);
-
-            if (updated)
-                return RedirectToAction(nameof(Index));
 
             return RedirectToAction("Details", new { id = viewmodel.Schedule.ScheduleId });
         }
 
+
+        public async Task<IActionResult> DeleteUserIntoScheduler(int idSchedule, int idUser)
+        {
+
+            _scheduleLogic.DeleteUserFromSchedule(idUser, idSchedule);
+            return RedirectToAction("Details", new { id = idSchedule });
+        }
 
         // GET: Schedule/Create
         public IActionResult Create()

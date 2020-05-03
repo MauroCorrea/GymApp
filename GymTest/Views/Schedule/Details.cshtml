@@ -49,47 +49,12 @@
         </dd>
     </dl>
 </div>
-<<<<<<< HEAD
-<div class="form-group">
-    @Html.DropDownList("MySkills", (IEnumerable<SelectListItem>)ViewBag.MySkills)
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.ScheduleId" class="btn btn-success">Edit</a>
-    <a asp-action="InsertuserIntoScheduler" asp-route-idSchedule="@Model.ScheduleId" asp-route-id="" class="btn btn-success">Agregar</a>
-    <a asp-action="Index" class="btn btn-default">Volver</a>
-</div>
 
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ScheduleUsers.FirstOrDefault().User.FullName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.ScheduleUsers)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.User.FullName)
-                </td>
-                
-                <td>
-                    <a asp-action="Delete" asp-route-id="@item.ScheduleId" class="btn btn-danger">Eliminar</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-=======
 
 <form asp-controller="Schedule" asp-action="InsertuserIntoScheduler">
     <input type="hidden" asp-for="Schedule.ScheduleId" />
     @Html.DropDownListFor(m => m.SelectedUser, Model.User, "Seleccionar usuario")
-    <input type="submit" value="Agregar usuario" class="btn btn-default" />
+    <input type="submit" value="Agregar usuario" class="btn btn-success" />
 </form>
 
 <table class="table">
@@ -109,7 +74,7 @@
                     @Html.DisplayFor(modelItem => item.User.FullName)
                 </td>
                 <td>
-                    <a asp-action="Delete" asp-route-id="@item.ScheduleId" class="btn btn-danger">Eliminar</a>
+                    <a asp-action="DeleteUserIntoScheduler" asp-route-idSchedule="@item.ScheduleId" asp-route-idUser="@item.User.UserId" class="btn btn-danger">Eliminar</a>
                 </td>
             </tr>
 
@@ -118,7 +83,5 @@
 </table>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Schedule.ScheduleId" class="btn btn-success">Editar</a>
     <a asp-action="Index" class="btn btn-default">Volver</a>
 </div>
->>>>>>> 012e98580c7414a074a4aed5936c9a2d00b96711

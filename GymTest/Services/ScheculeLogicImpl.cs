@@ -78,5 +78,27 @@ namespace GymTest.Services
             }
             return false;
         }
+
+        public void DeleteUserFromSchedule(int userId, int scheduleId)
+        {
+            try
+            {
+                var calendar = _context.Schedule
+                                    .Include(p => p.ScheduleUsers)
+                                    .Single(c => c.ScheduleId == scheduleId);
+
+                var userToRemove = calendar.ScheduleUsers.Where(u => u.UserId == userId).First();
+                calendar.ScheduleUsers.Remove(userToRemove);
+
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                var messageError = ex.Message;
+                _logger.LogError("Error deleting a user from schedule. Detail: " + messageError);
+                if (ex.InnerException != null)
+                    _logger.LogError("Error deleting a user from schedule. Detail: " + ex.InnerException.Message);
+            }
+        }
     }
 }

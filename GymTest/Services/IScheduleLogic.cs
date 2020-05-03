@@ -5,5 +5,6 @@ namespace GymTest.Services
     {
         bool RegisterUser(int userId, int scheduleId);
         int GetSchedulePlaces(int scheduleId);
+        void DeleteUserFromSchedule(int idUser, int idSchedule);
     }
 }
