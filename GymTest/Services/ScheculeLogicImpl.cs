@@ -37,6 +37,8 @@ namespace GymTest.Services
 
             if (calendars.Count() == 1)
             {
+                if (calendars.First().ScheduleUsers == null)
+                    return calendars.First().Places;
                 return calendars.First().Places - calendars.First().ScheduleUsers.Count;
             }
             return 0;
@@ -53,6 +55,7 @@ namespace GymTest.Services
                                     .Single(c => c.ScheduleId == scheduleId);
 
                     var user = _context.User
+                                    .AsNoTracking()
                                     .Single(c => c.UserId == userId);
 
                     calendar.ScheduleUsers.Add(new ScheduleUser

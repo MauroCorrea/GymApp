@@ -1,4 +1,5 @@
-@model GymTest.Models.Schedule
+
+@model GymTest.Models.ScheduleView
 
 @{
     ViewData["Title"] = "Details";
@@ -11,49 +12,76 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Discipline)
+            @Html.DisplayNameFor(model => model.Schedule.Discipline)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Discipline.DisciplineDescription)
+            @Html.DisplayFor(model => model.Schedule.Discipline.DisciplineDescription)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.StartTime)
+            @Html.DisplayNameFor(model => model.Schedule.StartTime)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.StartTime)
+            @Html.DisplayFor(model => model.Schedule.StartTime)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.EndTime)
+            @Html.DisplayNameFor(model => model.Schedule.EndTime)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.EndTime)
+            @Html.DisplayFor(model => model.Schedule.EndTime)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Resource)
+            @Html.DisplayNameFor(model => model.Schedule.Resource)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Resource.FullName)
+            @Html.DisplayFor(model => model.Schedule.Resource.FullName)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Places)
+            @Html.DisplayNameFor(model => model.Schedule.Places)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Places)
+            @Html.DisplayFor(model => model.Schedule.Places)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ScheduleDate)
+            @Html.DisplayNameFor(model => model.Schedule.ScheduleDate)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ScheduleDate)
+            @Html.DisplayFor(model => model.Schedule.ScheduleDate)
         </dd>
     </dl>
 </div>
-<div class="form-group">
-    @Html.DropDownList("MySkills", (IEnumerable
-                <SelectListItem>)ViewBag.MySkills)
-</div>
+
+<form asp-controller="Schedule" asp-action="InsertuserIntoScheduler">
+    <input type="hidden" asp-for="Schedule.ScheduleId" />
+    @Html.DropDownListFor(m => m.SelectedUser, Model.User, "Seleccionar usuario")
+    <input type="submit" value="Agregar usuario" class="btn btn-default" />
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Schedule.ScheduleUsers.FirstOrDefault().User.FullName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Schedule.ScheduleUsers)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.FullName)
+                </td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@item.ScheduleId" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.ScheduleId" class="btn btn-success">Edit</a>
-    <a asp-action="InsertuserIntoScheduler" asp-route-idSchedule="@Model.ScheduleId" asp-route-IdUser="" class="btn btn-success">Agregar</a>
+    <a asp-action="Edit" asp-route-id="@Model.Schedule.ScheduleId" class="btn btn-success">Editar</a>
     <a asp-action="Index" class="btn btn-default">Volver</a>
 </div>

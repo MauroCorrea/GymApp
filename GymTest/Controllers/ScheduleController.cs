@@ -68,41 +68,39 @@ namespace GymTest.Controllers
             var schedule = await _context.Schedule
                 .Include(s => s.Discipline)
                 .Include(s => s.Resource)
+                .Include(s => s.ScheduleUsers)
                 .FirstOrDefaultAsync(m => m.ScheduleId == id);
 
-            List<SelectListItem> mySkills = new List<SelectListItem>();
             var userList = _context.User;
-            foreach (var user in userList)
-            {
-                var justIn = schedule.ScheduleUsers?.Where(u => u.UserId == user.UserId).FirstOrDefault();
-                if (justIn == null)
-                {
-                    var item = new SelectListItem { Text = user.FullName, Value = user.UserId.ToString() };
-                    mySkills.Add(item);
-                }
-            }
-
-            ViewBag.MySkills = mySkills;
 
             if (schedule == null)
             {
                 return NotFound();
             }
 
-            return View(schedule);
+            if (schedule.ScheduleUsers == null)
+                schedule.ScheduleUsers = new List<ScheduleUser>();
+
+            var modelView = new ScheduleView()
+            {
+                Schedule = schedule,
+                User = new SelectList(userList, "UserId", "FullName")
+            };
+
+            return View(modelView);
         }
 
-        public async Task<IActionResult> InsertuserIntoScheduler(int idSchedule, int idUser)
+        public async Task<IActionResult> InsertUserIntoScheduler(ScheduleView viewmodel)
         {
-            if (idSchedule <= 0 || idUser <= 0)
-                return RedirectToAction(nameof(Details));
+            if (viewmodel.Schedule.ScheduleId <= 0 || viewmodel.SelectedUser <= 0)
+                return RedirectToAction("Details", new { id = viewmodel.Schedule.ScheduleId });
 
-            var updated = _scheduleLogic.RegisterUser(idUser, idSchedule);
+            var updated = _scheduleLogic.RegisterUser(viewmodel.SelectedUser, viewmodel.Schedule.ScheduleId);
 
             if (updated)
                 return RedirectToAction(nameof(Index));
 
-            return RedirectToAction(nameof(Details));
+            return RedirectToAction("Details", new { id = viewmodel.Schedule.ScheduleId });
         }
 
 
