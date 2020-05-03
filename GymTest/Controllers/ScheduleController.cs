@@ -97,10 +97,19 @@ namespace GymTest.Controllers
             return View(schedule);
         }
 
-        public async Task<IActionResult> InsertuserIntoScheduler(int idSchedule, string id)
+        public async Task<IActionResult> InsertuserIntoScheduler(int idSchedule, long idUser)
         {
-            var idUser = Request.Form["MySkills"];
-            return RedirectToAction(nameof(Edit));
+            //return RedirectToAction(nameof(Edit));
+
+            if (idSchedule <= 0 || idUser <= 0)
+                return RedirectToAction(nameof(Details));
+
+            var updated = _scheduleLogic.RegisterUser(idUser, idSchedule);
+
+            if (updated)
+                return RedirectToAction(nameof(Index));
+
+            return RedirectToAction(nameof(Details));
         }
 
 
