@@ -15,6 +15,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using PagedList;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace GymTest.Controllers
 {
@@ -48,13 +49,7 @@ namespace GymTest.Controllers
             int pageSize = int.Parse(_appSettings.Value.PageSize);
             int pageIndex = page.HasValue ? (int)page : 1;
 
-            ViewData["CashMovSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("cashMov_desc") ? "cashMov_asc" : "cashMov_desc";
-            ViewData["AmountSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("amount_desc") ? "amount_asc" : "amount_desc";
-            ViewData["CashMovDateSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("cashMovDate_desc") ? "cashMovDate_asc" : "cashMovDate_desc";
-            ViewData["CashMovTypeSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("cashMovType_desc") ? "cashMovType_asc" : "cashMovType_desc";
-            ViewData["PayMediaSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("payMedia_desc") ? "payMedia_asc" : "payMedia_desc";
-            ViewData["CashCatSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("cashCat_desc") ? "cashCat_asc" : "cashCat_desc";
-            ViewData["CashSubCatSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("cashSubCat_desc") ? "cashSubCat_asc" : "cashSubCat_desc";
+            LoadViewData(sortOrder);
 
             var cashMovements = _context.CashMovement
                                          .Include(c => c.CashCategory)
@@ -63,6 +58,7 @@ namespace GymTest.Controllers
                                          .Include(c => c.CashMovementType)
                                          .Include(c => c.Supplier);
 
+            CalculationCloseCashMovements(cashMovements);
 
             switch (sortOrder)
             {
@@ -115,6 +111,52 @@ namespace GymTest.Controllers
 
             IPagedList<CashMovement> acashMovementPaged = cashMovements.ToPagedList(pageIndex, pageSize);
             return View(acashMovementPaged);
+        }
+
+        private void CalculationCloseCashMovements(IIncludableQueryable<CashMovement, Supplier> cashMovements)
+        {
+            float dailyAmount = 0;
+            float monthlyAmount = 0;
+
+            var allDaylyMovement = cashMovements.Where(m => m.CashMovementDate.ToString("dd.MM.yyyy") == DateTime.Today.ToString("dd.MM.yyyy"));
+            foreach(var mov in allDaylyMovement)
+            {
+                if(mov.CashMovementTypeId == 1)
+                {
+                    dailyAmount += (float)mov.Amount;
+                }
+                else
+                {
+                    dailyAmount -= (float)mov.Amount;
+                }
+            }
+
+            var allMonthlyMovement = cashMovements.Where(m => m.CashMovementDate.ToString("MM.yyyy") == DateTime.Today.ToString("MM.yyyy"));
+            foreach (var mov in allMonthlyMovement)
+            {
+                if (mov.CashMovementTypeId == 1)
+                {
+                    monthlyAmount += (float)mov.Amount;
+                }
+                else
+                {
+                    monthlyAmount -= (float)mov.Amount;
+                }
+            }
+
+            ViewBag.DailyAmount = "$ " + dailyAmount.ToString();
+            ViewBag.MonthlyAmount = "$ " + monthlyAmount.ToString();
+        }
+
+        private void LoadViewData(string sortOrder)
+        {
+            ViewData["CashMovSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("cashMov_desc") ? "cashMov_asc" : "cashMov_desc";
+            ViewData["AmountSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("amount_desc") ? "amount_asc" : "amount_desc";
+            ViewData["CashMovDateSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("cashMovDate_desc") ? "cashMovDate_asc" : "cashMovDate_desc";
+            ViewData["CashMovTypeSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("cashMovType_desc") ? "cashMovType_asc" : "cashMovType_desc";
+            ViewData["PayMediaSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("payMedia_desc") ? "payMedia_asc" : "payMedia_desc";
+            ViewData["CashCatSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("cashCat_desc") ? "cashCat_asc" : "cashCat_desc";
+            ViewData["CashSubCatSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("cashSubCat_desc") ? "cashSubCat_asc" : "cashSubCat_desc";
         }
 
         public async Task<IActionResult> ExportToExcel(DateTime FromDate, DateTime ToDate)

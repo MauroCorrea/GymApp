@@ -1,5 +1,4 @@
 ﻿@model PagedList.IPagedList<GymTest.Models.CashMovement>
-@using PagedList.Mvc;
 
 @{
     ViewData["Title"] = "Index";
@@ -9,6 +8,15 @@
 
 <p>
     <a asp-action="Create" class="btn btn-primary">Crear movimiento de caja</a>
+</p>
+
+<p>
+    Cierre de Caja Diario:
+    <input name="DailyCloseCashMovement" type="text" style="border: 0" value="@ViewBag.DailyAmount">
+</p>
+<p>
+    Cierre de Caja Mensual:
+    <input name="MonthlyCloseCashMovement" type="text" style="border: 0" value="@ViewBag.MonthlyAmount">
 </p>
 
 <form asp-controller="CashMovement" asp-action="ExportToExcel">
