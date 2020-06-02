@@ -24,24 +24,6 @@ namespace GymTest.Controllers
             return View(await _context.CashCategory.Where(m => !m.CashCategoryDescription.Equals("Movimiento de pago")).ToListAsync());
         }
 
-        // GET: CashCategory/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var cashCategory = await _context.CashCategory
-                .FirstOrDefaultAsync(m => m.CashCategoryId == id);
-            if (cashCategory == null)
-            {
-                return NotFound();
-            }
-
-            return View(cashCategory);
-        }
-
         // GET: CashCategory/Create
         public IActionResult Create()
         {

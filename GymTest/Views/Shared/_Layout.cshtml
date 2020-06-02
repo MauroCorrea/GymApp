@@ -38,28 +38,27 @@
                 {
                     @if (!UserManager.GetUserName(User).ToLower().Contains(AppSettingsOptions.Value.UserOnlyForJourneys.ToLower()))
                     {
-                        <ul class="nav navbar-nav">
-                            <li><a asp-area="" asp-controller="Users" asp-action="Index">Usuarios</a></li>
-                            <li><a asp-area="" asp-controller="Payments" asp-action="Index">Pagos</a></li>
-                            <li><a asp-area="" asp-controller="Assistances" asp-action="Index">Asistencias</a></li>
-                            <li><a asp-area="" asp-controller="CashMovement" asp-action="Index">Movimientos caja</a></li>
-                            <li><a asp-area="" asp-controller="GeneralAdministration" asp-action="Index">Administración General</a></li>
-                            @if (ViewBag.Articles != null && ViewBag.Articles)
-                            {
-                                <li><a asp-area="" asp-controller="Notifications" asp-action="Index" style="background-color:red">Avisos</a></li>
-                            }
-                            else
-                            {
-                                <li><a asp-area="" asp-controller="Notifications" asp-action="Index">Avisos</a></li>
-                            }
-                            <!--<li><a asp-area="" asp-controller="UserReport" asp-action="Index">Reportes Manuales</a></li>-->
-                        </ul>
+                    <ul class="nav navbar-nav">
+                        <li><a asp-area="" asp-controller="Users" asp-action="Index">Usuarios</a></li>
+                        <li><a asp-area="" asp-controller="Payments" asp-action="Index">Pagos</a></li>
+                        <li><a asp-area="" asp-controller="Assistances" asp-action="Index">Asistencias</a></li>
+                        <li><a asp-area="" asp-controller="CashMovement" asp-action="Index">Movimientos caja</a></li>
+                        <li><a asp-area="" asp-controller="GeneralAdministration" asp-action="Index">Admin General</a></li>
+                        @if (ViewBag.Articles != null && ViewBag.Articles)
+                        {
+                            <li><a asp-area="" asp-controller="Notifications" asp-action="Index" style="background-color:red">Avisos</a></li>
+                        }
+                        else
+                        {
+                            <li><a asp-area="" asp-controller="Notifications" asp-action="Index">Avisos</a></li>
+                        }
+                        <!--<li><a asp-area="" asp-controller="UserReport" asp-action="Index">Reportes Manuales</a></li>-->
+                    </ul>
                     }
                     else
                     {
                         <ul class="nav navbar-nav">
                             <li><a asp-area="" asp-controller="GeneralAdministration" asp-action="Index">Administración General</a></li>
-
                         </ul>
                     }
                 }

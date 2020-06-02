@@ -24,24 +24,6 @@ namespace GymTest.Controllers
             return View(await _context.MedicalEmergency.ToListAsync());
         }
 
-        // GET: MedicalEmergency/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var medicalEmergency = await _context.MedicalEmergency
-                .FirstOrDefaultAsync(m => m.MedicalEmergencyId == id);
-            if (medicalEmergency == null)
-            {
-                return NotFound();
-            }
-
-            return View(medicalEmergency);
-        }
-
         // GET: MedicalEmergency/Create
         public IActionResult Create()
         {

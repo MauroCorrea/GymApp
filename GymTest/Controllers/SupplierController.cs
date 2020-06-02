@@ -22,25 +22,7 @@ namespace GymTest.Controllers
         public async Task<IActionResult> Index()
         {
             return View(await _context.Supplier.Where(m => !m.SupplierDescription.Equals("Movimiento de Pago")).ToListAsync());
-        }
-
-        // GET: Supplier/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var supplier = await _context.Supplier
-                .FirstOrDefaultAsync(m => m.SupplierId == id);
-            if (supplier == null)
-            {
-                return NotFound();
-            }
-
-            return View(supplier);
-        }
+        }       
 
         // GET: Supplier/Create
         public IActionResult Create()

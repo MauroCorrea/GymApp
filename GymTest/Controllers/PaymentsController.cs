@@ -115,7 +115,6 @@ namespace GymTest.Controllers
             IPagedList<Payment> paymentPaged = payments.ToPagedList(pageIndex, pageSize);
 
             return View(paymentPaged);
-            //return View(await payments.AsNoTracking().ToListAsync());
         }
 
         // GET: Payments/Details/5
@@ -153,7 +152,7 @@ namespace GymTest.Controllers
             }
             else
             {
-                ViewData["UserId"] = new SelectList(_context.User, "UserId", "FullName");
+                ViewData["UserId"] = new SelectList(_context.User.Where(u => u.Available == true), "UserId", "FullName");
             }
             return View();
         }

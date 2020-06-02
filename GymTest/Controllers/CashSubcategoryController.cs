@@ -27,25 +27,6 @@ namespace GymTest.Controllers
             return View(await gymTestContext.ToListAsync());
         }
 
-        // GET: CashSubcategory/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var cashSubcategory = await _context.CashSubcategory
-                .Include(c => c.CashCategory)
-                .FirstOrDefaultAsync(m => m.CashSubcategoryId == id);
-            if (cashSubcategory == null)
-            {
-                return NotFound();
-            }
-
-            return View(cashSubcategory);
-        }
-
         // GET: CashSubcategory/Create
         public IActionResult Create()
         {

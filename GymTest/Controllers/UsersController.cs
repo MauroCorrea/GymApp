@@ -41,7 +41,7 @@ namespace GymTest.Controllers
             ViewData["AddressSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("address_desc") ? "address_asc" : "address_desc";
             ViewData["PhoneSortParm"] = String.IsNullOrEmpty(sortOrder) || sortOrder.Equals("phone_desc") ? "phone_asc" : "phone_desc";
 
-            var users = from m in _context.User
+            var users = from m in _context.User where m.Available == true
                         select m;
 
             if (!String.IsNullOrEmpty(searchString))
@@ -194,6 +194,7 @@ namespace GymTest.Controllers
         {
             if (ModelState.IsValid)
             {
+                user.Available = true;
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -235,6 +236,7 @@ namespace GymTest.Controllers
             {
                 try
                 {
+                    user.Available = true;
                     _context.Update(user);
                     await _context.SaveChangesAsync();
                 }
@@ -280,8 +282,19 @@ namespace GymTest.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var user = await _context.User.FindAsync(id);
-            _context.User.Remove(user);
-            await _context.SaveChangesAsync();
+
+            try
+            {
+                _context.User.Remove(user);
+                await _context.SaveChangesAsync();
+            }
+            catch(Exception e)
+            {
+                user.Available = false;
+                _context.Update(user);
+                await _context.SaveChangesAsync();
+            }
+            
             return RedirectToAction(nameof(Index));
         }
 

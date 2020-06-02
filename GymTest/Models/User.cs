@@ -99,6 +99,8 @@ namespace GymTest.Models
         [Display(Name = "Notificaciones?")]
         public bool SendNotification { get; set; }
 
+        public bool Available { get; set; }
+
         public ICollection<Payment> Payments { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
