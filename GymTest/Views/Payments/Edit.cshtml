@@ -6,45 +6,70 @@
 <h2>Editar Pago</h2>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-10">
         <form asp-action="Edit" asp-antiforgery="false">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="PaymentId" />
-            <div class="form-group">
-                <label asp-for="PaymentDate" class="control-label"></label>
-                <input asp-for="PaymentDate" class="form-control datepicker" type="text" placeholder="dd/mm/aaaa"/>
-                <span asp-validation-for="PaymentDate" class="text-danger"></span>
+            <div>
+                <table>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label asp-for="UserId" class="control-label"></label>
+                                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label asp-for="PaymentDate" class="control-label"></label>
+                                <input asp-for="PaymentDate" class="form-control datepicker" type="text" placeholder="dd/mm/aaaa" />
+                                <span asp-validation-for="PaymentDate" class="text-danger"></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label asp-for="MovementTypeId" class="control-label"></label>
+                                <select asp-for="MovementTypeId" class="form-control" asp-items="ViewBag.MovementTypeId"></select>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label asp-for="QuantityMovmentType" class="control-label"></label>
+                                <input asp-for="QuantityMovmentType" class="form-control" />
+                                <span asp-validation-for="QuantityMovmentType" class="text-danger"></span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label asp-for="LimitUsableDate" class="control-label"></label>
+                                <input asp-for="LimitUsableDate" class="form-control datepicker" type="text" placeholder="dd/mm/aaaa" />
+                                <span asp-validation-for="LimitUsableDate" class="text-danger"></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label asp-for="Amount" class="control-label"></label>
+                                <input asp-for="Amount" class="form-control" />
+                                <span asp-validation-for="Amount" class="text-danger"></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label asp-for="PaymentMediaId" class="control-label"></label>
+                                <select asp-for="PaymentMediaId" class="form-control" asp-items="ViewBag.PaymentMediaId"></select>
+                                <span asp-validation-for="PaymentMediaId" class="text-danger"></span>
+                            </div>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                </table>
             </div>
-            <div class="form-group">
-                <label asp-for="MovementTypeId" class="control-label"></label>
-                <select asp-for="MovementTypeId" class="form-control" asp-items="ViewBag.MovementTypeId"></select>
-                <span asp-validation-for="MovementTypeId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="QuantityMovmentType" class="control-label"></label>
-                <input asp-for="QuantityMovmentType" class="form-control" />
-                <span asp-validation-for="QuantityMovmentType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Amount" class="control-label"></label>
-                <input asp-for="Amount" class="form-control" />
-                <span asp-validation-for="Amount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PaymentMediaId" class="control-label"></label>
-                <select asp-for="PaymentMediaId" class="form-control" asp-items="ViewBag.PaymentMediaId"></select>
-                <span asp-validation-for="PaymentMediaId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LimitUsableDate" class="control-label"></label>
-                <input asp-for="LimitUsableDate" class="form-control datepicker" type="text" placeholder="dd/mm/aaaa"/>
-                <span asp-validation-for="LimitUsableDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
+
+            <br />
             <div class="form-group">
                 <input type="submit" value="Guardar" class="btn btn-success" />
             </div>

@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using PagedList;
 using Microsoft.EntityFrameworkCore.Query;
+using System.Globalization;
 
 namespace GymTest.Controllers
 {
@@ -115,19 +116,19 @@ namespace GymTest.Controllers
 
         private void CalculationCloseCashMovements(IIncludableQueryable<CashMovement, Supplier> cashMovements)
         {
-            float dailyAmount = 0;
-            float monthlyAmount = 0;
+            double dailyAmount = 0;
+            double monthlyAmount = 0;
 
             var allDaylyMovement = cashMovements.Where(m => m.CashMovementDate.ToString("dd.MM.yyyy") == DateTime.Today.ToString("dd.MM.yyyy"));
             foreach(var mov in allDaylyMovement)
             {
                 if(mov.CashMovementTypeId == 1)
                 {
-                    dailyAmount += (float)mov.Amount;
+                    dailyAmount += mov.Amount;
                 }
                 else
                 {
-                    dailyAmount -= (float)mov.Amount;
+                    dailyAmount -= mov.Amount;
                 }
             }
 
@@ -136,16 +137,16 @@ namespace GymTest.Controllers
             {
                 if (mov.CashMovementTypeId == 1)
                 {
-                    monthlyAmount += (float)mov.Amount;
+                    monthlyAmount += mov.Amount;
                 }
                 else
                 {
-                    monthlyAmount -= (float)mov.Amount;
+                    monthlyAmount -= mov.Amount;
                 }
             }
 
-            ViewBag.DailyAmount = "$ " + dailyAmount.ToString();
-            ViewBag.MonthlyAmount = "$ " + monthlyAmount.ToString();
+            ViewBag.DailyAmount = dailyAmount.ToString("0.00");
+            ViewBag.MonthlyAmount = monthlyAmount.ToString("0.00");
         }
 
         private void LoadViewData(string sortOrder)
@@ -334,10 +335,11 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CashMovementId,CashMovementDate,CashMovementDetails,Amount,CashMovementTypeId,PaymentMediaId,CashCategoryId,SupplierId,CashSubcategoryId")] CashMovement cashMovement)
+        public async Task<IActionResult> Create([Bind("CashMovementId,CashMovementDate,CashMovementDetails,Amount,CashMovementTypeId,PaymentMediaId,CashCategoryId,SupplierId,CashSubcategoryId")] CashMovement cashMovement, string Amount)
         {
             if (ModelState.IsValid)
             {
+                cashMovement.Amount = Convert.ToDouble(Amount, new CultureInfo("en-US"));
                 _context.Add(cashMovement);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -376,7 +378,7 @@ namespace GymTest.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CashMovementId,CashMovementDate,CashMovementDetails,Amount,CashMovementTypeId,CashCategoryId,SupplierId,CashSubcategoryId,PaymentMediaId")] CashMovement cashMovement)
+        public async Task<IActionResult> Edit(int id, [Bind("CashMovementId,CashMovementDate,CashMovementDetails,Amount,CashMovementTypeId,CashCategoryId,SupplierId,CashSubcategoryId,PaymentMediaId")] CashMovement cashMovement, string Amount)
         {
             if (id != cashMovement.CashMovementId)
             {
@@ -387,6 +389,7 @@ namespace GymTest.Controllers
             {
                 try
                 {
+                    cashMovement.Amount = Convert.ToDouble(Amount, new CultureInfo("en-US"));
                     _context.Update(cashMovement);
                     await _context.SaveChangesAsync();
                 }

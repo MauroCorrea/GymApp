@@ -11,11 +11,10 @@ namespace GymTest.Models
         [Display(Name = "Detalles")]
         public string CashMovementDetails { get; set; }
 
-        [DataType(DataType.Currency)]
         [Display(Name = "Monto")]
         [Required]
-        [DisplayFormat(DataFormatString = "$ {0:n}")]
-        public float? Amount { get; set; }
+        [DisplayFormat(DataFormatString = "$ {0:0.00}")]
+        public double Amount { get; set; }
 
         [Display(Name = "Tipo")]
         [Required(ErrorMessage = "Campo Tipo es obligatorio")]

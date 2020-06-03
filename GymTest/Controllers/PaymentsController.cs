@@ -172,7 +172,7 @@ namespace GymTest.Controllers
                 {
                     CashMovement cashMov = new CashMovement
                     {
-                        Amount = payment.Amount,
+                        Amount = (double)payment.Amount,
                         PaymentMediaId = payment.PaymentMediaId,
                         CashMovementDate = payment.PaymentDate,
                         CashMovementDetails = "Movimiento de Pago",
@@ -236,7 +236,7 @@ namespace GymTest.Controllers
                         if (cashMovsPayment.Count() > 0)
                         {
                             CashMovement cashMov = cashMovsPayment.FirstOrDefault();
-                            cashMov.Amount = payment.Amount;
+                            cashMov.Amount = (double)payment.Amount;
                             cashMov.CashMovementDate = payment.PaymentDate;
                             cashMov.PaymentMediaId = payment.PaymentMediaId;
 

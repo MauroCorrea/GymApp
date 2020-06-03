@@ -8,50 +8,85 @@
 
 <h4>Movimiento de caja</h4>
 <hr />
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    function ChangeCommaForDot() {
+        $('#Amount').val($('#Amount').val().replace(/,/g, '.'));
+    }
+</script>
+
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-10">
         <form asp-action="Create" asp-antiforgery="false">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="CashMovementDetails" class="control-label"></label>
-                <input asp-for="CashMovementDetails" class="form-control" />
-                <span asp-validation-for="CashMovementDetails" class="text-danger"></span>
+
+            <div>
+                <table>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label asp-for="CashMovementDetails" class="control-label"></label>
+                                <input asp-for="CashMovementDetails" class="form-control" />
+                                <span asp-validation-for="CashMovementDetails" class="text-danger"></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label asp-for="Amount" class="control-label"></label>
+                                <input asp-for="Amount" id="Amount" class="form-control" type="text" lang="es" onchange="ChangeCommaForDot();" />
+                                <span asp-validation-for="Amount" class="text-danger"></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label asp-for="CashMovementDate" class="control-label"></label>
+                                <input asp-for="CashMovementDate" class="form-control datepicker" type="text" placeholder="dd/mm/aaaa" />
+                                <span asp-validation-for="CashMovementDate" class="text-danger"></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label asp-for="CashMovementTypeId" class="control-label"></label>
+                                <select asp-for="CashMovementTypeId" class="form-control" asp-items="ViewBag.CashMovementTypeId"></select>
+                                <span asp-validation-for="CashMovementTypeId" class="text-danger"></span>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label asp-for="PaymentMediaId" class="control-label"></label>
+                                <select asp-for="PaymentMediaId" class="form-control" asp-items="ViewBag.PaymentMediaId"></select>
+                                <span asp-validation-for="PaymentMediaId" class="text-danger"></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label asp-for="CashCategoryId" class="control-label"></label>
+                                <select asp-for="CashCategoryId" class="form-control" asp-items="ViewBag.CashCategoryId" id="selectCategroy"></select>
+                                <span asp-validation-for="CashCategoryId" class="text-danger"></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group" id="DataTypeOptions">
+                                <label asp-for="CashSubcategoryId" class="control-label"></label>
+                                <select asp-for="CashSubcategoryId" class="form-control" asp-items="ViewBag.CashSubcategoryId" id="selectSubCategroy"></select>
+                                <span asp-validation-for="CashSubcategoryId" class="text-danger"></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label asp-for="SupplierId" class="control-label"></label>
+                                <select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
+                                <span asp-validation-for="SupplierId" class="text-danger"></span>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             </div>
-            <div class="form-group">
-                <label asp-for="Amount" class="control-label"></label>
-                <input asp-for="Amount" class="form-control" />
-                <span asp-validation-for="Amount" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CashMovementDate" class="control-label"></label>
-                <input asp-for="CashMovementDate" class="form-control datepicker" type="text" placeholder="dd/mm/aaaa"/>
-                <span asp-validation-for="CashMovementDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CashMovementTypeId" class="control-label"></label>
-                <select asp-for="CashMovementTypeId" class="form-control" asp-items="ViewBag.CashMovementTypeId"></select>
-                <span asp-validation-for="CashMovementTypeId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PaymentMediaId" class="control-label"></label>
-                <select asp-for="PaymentMediaId" class="form-control" asp-items="ViewBag.PaymentMediaId"></select>
-                <span asp-validation-for="PaymentMediaId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CashCategoryId" class="control-label"></label>
-                <select asp-for="CashCategoryId" class="form-control" asp-items="ViewBag.CashCategoryId" id="selectCategroy"></select>
-                <span asp-validation-for="CashCategoryId" class="text-danger"></span>
-            </div>
-            <div class="form-group" id="DataTypeOptions">
-                <label asp-for="CashSubcategoryId" class="control-label"></label>
-                <select asp-for="CashSubcategoryId" class="form-control" asp-items="ViewBag.CashSubcategoryId" id="selectSubCategroy"></select>
-                <span asp-validation-for="CashSubcategoryId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SupplierId" class="control-label"></label>
-                <select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
-                <span asp-validation-for="SupplierId" class="text-danger"></span>
-            </div>
+
+            <br />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-success" />
             </div>
@@ -64,30 +99,30 @@
 </div>
 
 @section Scripts {
-<script>$(document).ready(function () {
-        $(document).on("change", "#selectCategroy", function () {
-            var subCat = this;
-            $.ajax({
-                url: "ReturnJsonSubCategories/?categoryId=" + $(subCat).val(),
-                type: "GET",
-                contentType: "application/json; charset=utf-8",
-                datatype: JSON,
-                success: function (result) {
-                    var categories = "";
-                    $(result).each(function () {
-                        categories = categories + '<option value="' + this.cashSubcategoryId + '">' + this.cashSubcategoryDescription + '</option>'
-                    });
+    <script>$(document).ready(function () {
+            $(document).on("change", "#selectCategroy", function () {
+                var subCat = this;
+                $.ajax({
+                    url: "ReturnJsonSubCategories/?categoryId=" + $(subCat).val(),
+                    type: "GET",
+                    contentType: "application/json; charset=utf-8",
+                    datatype: JSON,
+                    success: function (result) {
+                        var categories = "";
+                        $(result).each(function () {
+                            categories = categories + '<option value="' + this.cashSubcategoryId + '">' + this.cashSubcategoryDescription + '</option>'
+                        });
 
-                    var subCateList = $("#selectSubCategroy");
-                    subCateList.empty();
-                    subCateList.append(categories);
-                },
-                error: function (data) {
-                    return "Error";
-                }
+                        var subCateList = $("#selectSubCategroy");
+                        subCateList.empty();
+                        subCateList.append(categories);
+                    },
+                    error: function (data) {
+                        return "Error";
+                    }
+                });
             });
-        });
-    });</script>
+        });</script>
 
 
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
