@@ -52,14 +52,15 @@ namespace GymTest.Controllers
                 FromDate = DateTime.Now.AddDays(1 - DateTime.Now.Day);
             }
 
-            schedules = schedules.Where(s => s.ScheduleDate >= FromDate);
-
             if (ToDate == DateTime.MinValue)
             {
                 ToDate = DateTime.Now.AddDays(7);
             }
 
-            schedules = schedules.Where(s => s.ScheduleDate <= ToDate);
+            schedules = schedules
+                .Where(s => s.ScheduleDate >= FromDate && s.ScheduleDate <= ToDate)
+                .OrderBy(s => s.ScheduleDate)
+                .OrderBy(s => s.StartTime);
 
             return View(await schedules.ToListAsync());
         }
