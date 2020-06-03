@@ -19,38 +19,11 @@ namespace GymTest.Controllers
             _context = context;
         }
 
-        // GET: ScheduleMassively
-        //public async Task<IActionResult> Index()
-        //{
-        //    var gymTestContext = _context.ScheduleMassively.Include(s => s.Discipline).Include(s => s.Resource);
-        //    return View(await gymTestContext.ToListAsync());
-        //}
-
-        //// GET: ScheduleMassively/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var scheduleMassively = await _context.ScheduleMassively
-        //        .Include(s => s.Discipline)
-        //        .Include(s => s.Resource)
-        //        .FirstOrDefaultAsync(m => m.ScheduleMassivelyId == id);
-        //    if (scheduleMassively == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(scheduleMassively);
-        //}
-
         // GET: ScheduleMassively/Create
         public IActionResult Create()
         {
             ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "DisciplineDescription");
-            ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "Email");
+            ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "FullName");
             return View();
         }
 
@@ -68,8 +41,6 @@ namespace GymTest.Controllers
                 await _context.SaveChangesAsync();
                 return Redirect("../Schedule/Index");//RedirectToAction(nameof(Index));
             }
-            //ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "DisciplineDescription", scheduleMassively.DisciplineId);
-            //ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "Email", scheduleMassively.ResourceId);
 
             return Redirect("../Schedule/Index");//View(scheduleMassively);
         }
@@ -105,96 +76,5 @@ namespace GymTest.Controllers
 
             return dates;
         }
-
-        // GET: ScheduleMassively/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var scheduleMassively = await _context.ScheduleMassively.FindAsync(id);
-        //    if (scheduleMassively == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "DisciplineDescription", scheduleMassively.DisciplineId);
-        //    ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "Email", scheduleMassively.ResourceId);
-        //    return View(scheduleMassively);
-        //}
-
-        // POST: ScheduleMassively/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("ScheduleMassivelyId,DisciplineId,StartTime,EndTime,ResourceId,Places,DataFormatStartString,DataFormatEndString")] ScheduleMassively scheduleMassively)
-        //{
-        //    if (id != scheduleMassively.ScheduleMassivelyId)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(scheduleMassively);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!ScheduleMassivelyExists(scheduleMassively.ScheduleMassivelyId))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "DisciplineDescription", scheduleMassively.DisciplineId);
-        //    ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "Email", scheduleMassively.ResourceId);
-        //    return View(scheduleMassively);
-        //}
-
-        //// GET: ScheduleMassively/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var scheduleMassively = await _context.ScheduleMassively
-        //        .Include(s => s.Discipline)
-        //        .Include(s => s.Resource)
-        //        .FirstOrDefaultAsync(m => m.ScheduleMassivelyId == id);
-        //    if (scheduleMassively == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(scheduleMassively);
-        //}
-
-        //// POST: ScheduleMassively/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var scheduleMassively = await _context.ScheduleMassively.FindAsync(id);
-        //    _context.ScheduleMassively.Remove(scheduleMassively);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //private bool ScheduleMassivelyExists(int id)
-        //{
-        //    return _context.ScheduleMassively.Any(e => e.ScheduleMassivelyId == id);
-        //}
     }
 }

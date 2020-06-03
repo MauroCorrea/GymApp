@@ -48,12 +48,16 @@ namespace GymTest.Controllers
                             select u;
 
             if (FromDate == DateTime.MinValue)
-                FromDate = DateTime.Now.AddDays(-7).Date;
+            {
+                FromDate = DateTime.Now.AddDays(1 - DateTime.Now.Day);
+            }
 
             schedules = schedules.Where(s => s.ScheduleDate >= FromDate);
 
             if (ToDate == DateTime.MinValue)
-                ToDate = DateTime.Now.Date;
+            {
+                ToDate = DateTime.Now.AddDays(7);
+            }
 
             schedules = schedules.Where(s => s.ScheduleDate <= ToDate);
 
