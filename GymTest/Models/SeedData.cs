@@ -163,6 +163,11 @@ namespace GymTest.Models
                     {
                         CashCategoryId = 2,
                         CashSubcategoryDescription = "Movimiento de pago"
+                    },
+                    new CashSubcategory
+                    {
+                        CashCategoryId = 3,
+                        CashSubcategoryDescription = "Venta"
                     }
                 );
             }
@@ -185,6 +190,11 @@ namespace GymTest.Models
                     {
                         CashCategoryId = 2,
                         CashCategoryDescription = "Movimiento de pago"
+                    },
+                    new CashCategory
+                    {
+                        CashCategoryId = 3,
+                        CashCategoryDescription = "Venta"
                     }
                 );
             }
@@ -227,6 +237,11 @@ namespace GymTest.Models
                     {
                         SupplierId = 2,
                         SupplierDescription = "Movimiento de pago"
+                    },
+                    new Supplier
+                    {
+                        SupplierId = 3,
+                        SupplierDescription = "Venta"
                     }
                 );
             }
