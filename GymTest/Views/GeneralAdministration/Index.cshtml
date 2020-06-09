@@ -12,29 +12,32 @@
 <div class="row">
     @if (!UserManager.GetUserName(User).ToLower().Contains(AppSettingsOptions.Value.UserOnlyForJourneys.ToLower()))
     {
-        <ul class="nav navbar-nav">
-            <li style="padding-right: 3px">
-                <p><a asp-area="" asp-controller="CashCategory" asp-action="Index" class="btn btn-primary">Categorías movimientos</a></p>
-            </li>
-            <li style="padding-right: 3px">
-                <p><a asp-area="" asp-controller="CashSubcategory" asp-action="Index" class="btn btn-primary">Subcategorías movimientos</a></p>
-            </li>
-            <li style="padding-right: 3px">
-                <p><a asp-area="" asp-controller="Supplier" asp-action="Index" class="btn btn-primary">Proveedores</a></p>
-            </li>
-            <li style="padding-right: 3px">
-                <p><a asp-area="" asp-controller="MedicalEmergency" asp-action="Index" class="btn btn-primary">Emergencias médicas</a></p>
-            </li>
-            <li style="padding-right: 3px">
-                <p><a asp-area="" asp-controller="Payroll" asp-action="Index" class="btn btn-primary">Administración sueldos</a></p>
-            </li>
-            <li style="padding-right: 3px">
-                <p><a asp-area="" asp-controller="PaymentMedia" asp-action="Index" class="btn btn-primary">Medios de pagos</a></p>
-            </li>
-            <li style="padding-right: 3px">
-                <p><a asp-area="" asp-controller="Discipline" asp-action="Index" class="btn btn-primary">Disciplinas</a></p>
-            </li>
-        </ul>
+    <ul class="nav navbar-nav">
+        <li style="padding-right: 3px">
+            <p><a asp-area="" asp-controller="Payroll" asp-action="Index" class="btn btn-primary">Administración sueldos</a></p>
+        </li>
+        <li style="padding-right: 3px">
+            <p><a asp-area="" asp-controller="Discipline" asp-action="Index" class="btn btn-primary">Disciplinas</a></p>
+        </li>
+        <li style="padding-right: 3px">
+            <p><a asp-area="" asp-controller="Assistances" asp-action="Index" class="btn btn-primary">Admin. Asistencias</a></p>
+        </li>
+        <li style="padding-right: 3px">
+            <p><a asp-area="" asp-controller="Product" asp-action="Index" class="btn btn-primary">Productos</a></p>
+        </li>
+        <li style="padding-right: 3px">
+            <p><a asp-area="" asp-controller="Supplier" asp-action="Index" class="btn btn-primary">Proveedores</a></p>
+        </li>
+        <li style="padding-right: 3px">
+            <p><a asp-area="" asp-controller="CategoryAdmin" asp-action="Index" class="btn btn-primary">Admin. Categorias Movimientos</a></p>
+        </li>
+        <li style="padding-right: 3px">
+            <p><a asp-area="" asp-controller="PaymentMedia" asp-action="Index" class="btn btn-primary">Medios de pagos</a></p>
+        </li>
+        <li style="padding-right: 3px">
+            <p><a asp-area="" asp-controller="MedicalEmergency" asp-action="Index" class="btn btn-primary">Emergencias médicas</a></p>
+        </li>
+    </ul>
     }
     else
     {

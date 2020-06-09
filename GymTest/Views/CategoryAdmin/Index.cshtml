@@ -1,0 +1,21 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.Extensions.Options
+@inject UserManager<IdentityUser> UserManager
+@inject IOptions<AppSettings> AppSettingsOptions
+
+@{
+    ViewData["Title"] = "Admin. Categorias Movimientos";
+}
+
+<h2>Administración Categorias Movimientos</h2>
+
+<div class="row">
+    <ul class="nav navbar-nav">
+        <li style="padding-right: 3px">
+            <p><a asp-area="" asp-controller="CashCategory" asp-action="Index" class="btn btn-primary">Categorías movimientos</a></p>
+        </li>
+        <li style="padding-right: 3px">
+            <p><a asp-area="" asp-controller="CashSubcategory" asp-action="Index" class="btn btn-primary">Subcategorías movimientos</a></p>
+        </li>
+    </ul>
+</div>

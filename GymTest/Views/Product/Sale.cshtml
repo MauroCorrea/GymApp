@@ -1,0 +1,52 @@
+@model GymTest.Models.Sale
+
+@{
+    ViewData["Title"] = "Detail";
+}
+
+<h2>Detalles</h2>
+<div style="overflow: auto; width: 80%;float:left;">
+    @foreach (var product in Model.Products)
+        {
+            <div style="width: 19%;
+                height: 100px;
+                display: inline-grid;
+                margin-top: 0.4%;">
+                <a asp-action="Sale" asp-route-productId="@product.ProductId" class="btn btn-primary" style="width: 100%; text-align: center">@Html.DisplayFor(modelItem => product.ProductDescription)</a>
+            </div>
+        }
+    
+</div>
+<div style="overflow: auto; width: 20%; height: 90%; float:right; border: solid">
+    <table>
+        @foreach (var invoiceProduct in Model.InvoiceProducts)
+        {
+            <tr style="border: outset">
+
+                @if (!invoiceProduct.Value.Contains("TOTAL"))
+                {
+                    <td style="width: 5%;">
+                        <a asp-action="Sale" asp-route-productId="@invoiceProduct.Key" asp-route-isDelete="true" class="btn btn-primary" style="width: 100%; text-align: center">X</a>
+                    </td>
+                    <td style="width: 80%;">
+                        <p style="text-align: right">@invoiceProduct.Value</p>
+                    </td>
+                }
+                else
+                {
+                    <td></td>
+                    <td style="width: 98%;display: inline-grid;">
+                        <p style="text-align: right">@invoiceProduct.Value</p>
+                    </td>
+                }
+
+            </tr>
+        }
+    </table>
+
+    <br />
+    <a asp-action="CreatePayment" asp-route-totalLine="@Model.InvoiceProducts.Values.Where(v => v.Contains("TOTAL")).FirstOrDefault()" class="btn btn-success" style="width: 100%; text-align: center">Pagar</a>
+    <br />
+    <br />
+    <a asp-action="CancelPayment" class="btn btn-danger" style="width: 100%; text-align: center">Cancelar</a>
+</div>

@@ -42,6 +42,7 @@
         <Folder Include="Views\GeneralAdministration\" />
         <Folder Include="Views\Payroll\" />
         <Folder Include="Models\ReportModels\" />
+        <Folder Include="Views\CategoryAdmin\" />
     </ItemGroup>
     <ItemGroup>
         <Content Remove="wwwroot\images\ui-icons_444444_256x240.png" />
@@ -52,6 +53,11 @@
         <Content Remove="wwwroot\Templates\AssistanceTemplate %28copy%29.html" />
         <Content Remove="wwwroot\images\logo.png" />
         <Content Remove="Views\AutomaticProcess\Details.cshtml" />
+        <Content Remove="Views\Prodduct\Create.cshtml" />
+        <Content Remove="Views\Prodduct\Edit.cshtml" />
+        <Content Remove="Views\Prodduct\Details.cshtml" />
+        <Content Remove="Views\Prodduct\Delete.cshtml" />
+        <Content Remove="Views\Prodduct\Index.cshtml" />
     </ItemGroup>
     <ItemGroup>
         <None Include="wwwroot\css\jquery-ui.css" />

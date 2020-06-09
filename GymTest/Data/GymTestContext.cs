@@ -66,5 +66,7 @@ namespace GymTest.Data
 
         public DbSet<GymTest.Models.ScheduleUser> ScheduleUser { get; set; }
 
+        public DbSet<GymTest.Models.Product> Product { get; set; }
+
     }
 }
