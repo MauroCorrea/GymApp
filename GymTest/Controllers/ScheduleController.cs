@@ -58,6 +58,7 @@ namespace GymTest.Controllers
 
         public IActionResult Create()
         {
+            ViewBag.ReservationError = null;
             ViewData["FieldId"] = new SelectList(_context.Field, "FieldId", "FieldDescription");
             return View();
         }
@@ -66,21 +67,65 @@ namespace GymTest.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ScheduleId,FieldId,ScheduleDate,StartTime,HourQuantity,Amount,ClientName,ClientPhoneNumber,isPayed")] Schedule schedule)
         {
+            ViewBag.ReservationError = null;
+
             if (ModelState.IsValid)
             {
-                if (schedule.Amount > 0)
+                var canIDoReservation = ConcurrencyControl(schedule);
+                if (canIDoReservation)
                 {
-                    var field = _context.Field.Where(f => f.FieldId == schedule.FieldId).First();
-                    schedule.Field = field;
-                    CashMovement cashMov = CreateCashMovement(schedule);
-                    _context.CashMovement.Add(cashMov);
+                    if (schedule.Amount > 0)
+                    {
+                        var field = _context.Field.Where(f => f.FieldId == schedule.FieldId).First();
+                        schedule.Field = field;
+                        CashMovement cashMov = CreateCashMovement(schedule);
+                        _context.CashMovement.Add(cashMov);
+                    }
+                    _context.Add(schedule);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index", "Home");
                 }
-                _context.Add(schedule);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Home");
+                else
+                {
+                    ViewBag.ReservationError = "La reserva no se puede concluir. Existe una reserva para esa Hora/Cancha.";
+                    ViewData["FieldId"] = new SelectList(_context.Field, "FieldId", "FieldDescription", schedule.FieldId);
+                    return View(schedule);
+                }
             }
             ViewData["FieldId"] = new SelectList(_context.Field, "FieldId", "FieldDescription", schedule.FieldId);
             return View(schedule);
+        }
+
+        private bool ConcurrencyControl(Schedule schedule)
+        {
+            var allScheduleSameDayAndField = _context.Schedule.Where(s => s.FieldId == schedule.FieldId && s.ScheduleDate == s.ScheduleDate);
+            if(allScheduleSameDayAndField.Count() > 0)
+            {
+                var mineStartHour = Convert.ToInt16(schedule.StartTime.Split(':')[0]);
+                var mineStartMinute = Convert.ToInt16(schedule.StartTime.Split(':')[1]);
+                var mineFinishHour = mineStartHour + schedule.HourQuantity;
+                foreach(var scheduleElement in allScheduleSameDayAndField)
+                {
+                    var comparativeStartHour = Convert.ToInt16(scheduleElement.StartTime.Split(':')[0]);
+                    var comparativeStartMinute = Convert.ToInt16(scheduleElement.StartTime.Split(':')[1]);
+                    var comparativeFinishHour = comparativeStartHour + scheduleElement.HourQuantity;
+
+                    if (mineFinishHour > comparativeStartHour && mineStartHour < comparativeFinishHour)
+                    {
+                        return false;
+                    }
+                    else if(mineFinishHour == comparativeStartHour && mineStartMinute > comparativeStartMinute)
+                    {
+                        return false;
+                    }
+
+                    if(mineStartHour == comparativeFinishHour && mineStartMinute < comparativeStartMinute)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
 
         private CashMovement CreateCashMovement(Schedule schedule)
