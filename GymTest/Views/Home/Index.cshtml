@@ -9,6 +9,14 @@
 <p>
     <a asp-controller="Schedule" asp-action="Create" class="btn btn-primary">Nueva Reserva</a>
 </p>
+
+<form asp-controller="Home" asp-action="Index">
+    <p>
+        Fecha: <input name="FromDate" class="datepicker" type="text" placeholder="dd/mm/aaaa">
+        <input type="submit" value="Consultar" class="btn btn-primary" />
+    </p>
+</form>
+
 <table class="table">
     <thead>
         <tr>

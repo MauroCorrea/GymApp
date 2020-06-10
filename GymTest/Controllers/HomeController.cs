@@ -27,11 +27,12 @@ namespace GymTest.Controllers
             _appSettings = app;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(DateTime? FromDate)
         {
             ViewBag.Articles = false;
+            if (FromDate == null) FromDate = DateTime.Today;
 
-            var scheduleElements = _context.Schedule.Include(s => s.Field).ToList();
+            var scheduleElements = _context.Schedule.Where(s => s.ScheduleDate == FromDate).Include(s => s.Field).ToList();
             return View(scheduleElements);
         }
 

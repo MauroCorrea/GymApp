@@ -21,7 +21,7 @@ namespace GymTest.Controllers
         // GET: Schedule
         public async Task<IActionResult> Index()
         {
-            var gymTestContext = _context.Schedule.Include(s => s.Field);
+            var gymTestContext = _context.Schedule.Where(s => s.ScheduleDate == DateTime.Today).Include(s => s.Field);
             return View(await gymTestContext.ToListAsync());
         }
 
