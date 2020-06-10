@@ -4,71 +4,79 @@
     ViewData["Title"] = "Index";
 }
 
-<h2>Calendario</h2>
+<h2>Reservas</h2>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Nueva clase</a>
-    <a asp-controller="ScheduleMassively" asp-action="Create" class="btn btn-primary">Ingreso clases fijas</a>
+    <a asp-controller="Schedule" asp-action="Create" class="btn btn-primary">Nueva Reserva</a>
 </p>
-<form asp-controller="Schedule" asp-action="Index">
-    <p>
-        Fecha desde: <input name="FromDate" class="datepicker" type="text" placeholder="dd/mm/aaaa">
-        Fecha hasta: <input name="ToDate" class="datepicker" type="text" placeholder="dd/mm/aaaa">
-        <input type="submit" value="Filtrar" class="btn btn-default" />
-    </p>
-</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Discipline)
+                @Html.DisplayNameFor(model => model.Field)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScheduleDate)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.StartTime)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EndTime)
+                @Html.DisplayNameFor(model => model.HourQuantity)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Resource)
+                @Html.DisplayNameFor(model => model.Amount)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Places)
+                @Html.DisplayNameFor(model => model.ClientName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ScheduleDate)
+                @Html.DisplayNameFor(model => model.ClientPhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.isPayed)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
-        {
+@foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Discipline.DisciplineDescription)
+                @Html.DisplayFor(modelItem => item.Field.FieldDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ScheduleDate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.StartTime)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EndTime)
+                @Html.DisplayFor(modelItem => item.HourQuantity)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Resource.FullName)
+                @Html.DisplayFor(modelItem => item.Amount)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Places)
+                @Html.DisplayFor(modelItem => item.ClientName)
             </td>
             <td>
-                @(item.ScheduleDate.ToString("dddd").ToUpper() + " - " + item.ScheduleDate.ToString("dd/MM/yy"))
+                @Html.DisplayFor(modelItem => item.ClientPhoneNumber)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ScheduleId" class="btn btn-primary">Modificar</a>
-                <a asp-action="Details" asp-route-id="@item.ScheduleId" class="btn btn-primary">Agregar Alumno</a>
-                <a asp-action="Delete" asp-route-id="@item.ScheduleId" class="btn btn-danger">Eliminar</a>
+                @Html.DisplayFor(modelItem => item.isPayed)
+            </td>
+            <td>
+                <div class="btn-group">
+                    <a asp-action="Edit" asp-route-id="@item.ScheduleId" class="btn btn-primary">Modificar</a>
+                    @if (!item.isPayed)
+                    {
+                        <a asp-action="Pay" asp-route-id="@item.ScheduleId" class="btn btn-primary">Pago</a>
+                    }
+                    <a asp-action="Delete" asp-route-id="@item.ScheduleId" class="btn btn-danger">Eliminar</a>
+                </div>
             </td>
         </tr>
-        }
+}
     </tbody>
 </table>

@@ -1,55 +1,83 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using Microsoft.Extensions.Options
-@inject UserManager<IdentityUser> UserManager
-@inject IOptions<AppSettings> AppSettingsOptions
+﻿@model IEnumerable<GymTest.Models.Schedule>
+
 @{
-    ViewData["Title"] = "Administrador de Gym";
+    ViewData["Title"] = "Index";
 }
-<br />
 
-<script>function fingerPrimtValue(val) {
-        document.getElementById("fingerprint").value += val;
-    }
+<h2>Reservas</h2>
 
-    function deleteLasFingerValue() {
-        document.getElementById("fingerprint").value = document.getElementById("fingerprint").value.substring(0, document.getElementById("fingerprint").value.length - 1);
-    }</script>
-
-
-<div>
-    <form asp-controller="Home" asp-action="Contact" asp-antiforgery="false">
-        <p>
-            <input type="text" name="Fingerprint" id="fingerprint" autofocus style="position: relative;width: 60%; height:80px; font-size:200%">
-            <input type="submit" value="Entrar" class="btn btn-success btn-lg" style="position: relative;width: 30%; height:100px; font-size:200%" />
-        </p>
-    </form>
-</div>
-
-<div>
-    <p>
-        <input type="button" onclick="fingerPrimtValue(1)" value="1" class="btn btn-info btn-lg" style="position:relative; width:30%; height:100px; font-size:500%" />
-        <input type="button" onclick="fingerPrimtValue(2)" value="2" class="btn btn-info btn-lg" style="position:relative; width:30%; height:100px; font-size:500%" />
-        <input type="button" onclick="fingerPrimtValue(3)" value="3" class="btn btn-info btn-lg" style="position:relative; width:30%; height:100px; font-size:500%" />
-    </p>
-    <p>
-        <input type="button" onclick="fingerPrimtValue(4)" value="4" class="btn btn-info btn-lg" style="position:relative; width:30%; height:100px; font-size:500%" />
-        <input type="button" onclick="fingerPrimtValue(5)" value="5" class="btn btn-info btn-lg" style="position:relative; width:30%; height:100px; font-size:500%" />
-        <input type="button" onclick="fingerPrimtValue(6)" value="6" class="btn btn-info btn-lg" style="position:relative; width:30%; height:100px; font-size:500%" />
-    </p>
-    <p>
-        <input type="button" onclick="fingerPrimtValue(7)" value="7" class="btn btn-info btn-lg" style="position:relative; width:30%; height:100px; font-size:500%" />
-        <input type="button" onclick="fingerPrimtValue(8)" value="8" class="btn btn-info btn-lg" style="position:relative; width:30%; height:100px; font-size:500%" />
-        <input type="button" onclick="fingerPrimtValue(9)" value="9" class="btn btn-info btn-lg" style="position:relative; width:30%; height:100px; font-size:500%" />
-    </p>
-    <p>
-        <input type="button" onclick="fingerPrimtValue(0)" value="0" class="btn btn-info btn-lg" style="position:relative; width:30%; height:100px; font-size:500%" />
-        <input type="button" onclick="deleteLasFingerValue()" value="Borrar" class="btn btn-warning btn-lg" style="position:relative; width:60%; height:100px; font-size:200%" />
-    </p>
-</div>
-@if (UserManager.GetUserName(User) != null && AppSettingsOptions.Value.UserOnlyForJourneys != null)
-{
-    if (UserManager.GetUserName(User).ToLower().Contains(AppSettingsOptions.Value.UserOnlyForJourneys.ToLower()))
-    {
-        <meta http-equiv="Refresh" content="30; url=/home" />
-    }
-}
+<p>
+    <a asp-controller="Schedule" asp-action="Create" class="btn btn-primary">Nueva Reserva</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Field.FieldDescription)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScheduleDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HourQuantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientPhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.isPayed)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Field.FieldDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ScheduleDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HourQuantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientPhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.isPayed)
+            </td>
+            <td>
+                <div class="btn-group">
+                    <a asp-controller="Schedule" asp-action="Edit" asp-route-id="@item.ScheduleId" class="btn btn-primary">Modificar</a>
+                    @if (!item.isPayed)
+                    {
+                        <a asp-controller="Schedule" asp-action="Pay" asp-route-id="@item.ScheduleId" class="btn btn-success">Pagó</a>
+                    }
+                    <a asp-controller="Schedule" asp-action="Delete" asp-route-id="@item.ScheduleId" class="btn btn-danger">Eliminar</a>
+                </div>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

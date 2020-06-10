@@ -4,17 +4,24 @@
     ViewData["Title"] = "Delete";
 }
 <br />
-<h2>Eliminar Actividad del Calendatio</h2>
+<h2>Eliminar Reserva</h2>
 
-<h3>Está seguro que desea eliminar la actividad del calendario?</h3>
+<h3>¿Seguro que desea Eliminar la Reserva?</h3>
 <div>
+    <h4>Schedule</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Discipline)
+            @Html.DisplayNameFor(model => model.Field)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Discipline.DisciplineDescription)
+            @Html.DisplayFor(model => model.Field.FieldDescription)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ScheduleDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ScheduleDate)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.StartTime)
@@ -23,34 +30,40 @@
             @Html.DisplayFor(model => model.StartTime)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.EndTime)
+            @Html.DisplayNameFor(model => model.HourQuantity)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.EndTime)
+            @Html.DisplayFor(model => model.HourQuantity)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Resource)
+            @Html.DisplayNameFor(model => model.Amount)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Resource.Email)
+            @Html.DisplayFor(model => model.Amount)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Places)
+            @Html.DisplayNameFor(model => model.ClientName)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Places)
+            @Html.DisplayFor(model => model.ClientName)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ScheduleDate)
+            @Html.DisplayNameFor(model => model.ClientPhoneNumber)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ScheduleDate)
+            @Html.DisplayFor(model => model.ClientPhoneNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.isPayed)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.isPayed)
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="ScheduleId" />
         <input type="submit" value="Eliminar" class="btn btn-danger" /> |
-        <a asp-action="Index" class="btn btn-default">Volver</a>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-default">Volver</a>
     </form>
 </div>

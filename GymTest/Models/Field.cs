@@ -10,7 +10,7 @@ namespace GymTest.Models
 
         [Required(ErrorMessage = "Campo descripción es obligatorio")]
         [StringLength(50)]
-        [Display(Name = "Descripción")]
+        [Display(Name = "Cancha")]
         public string FieldDescription { get; set; }
 
         public Field()

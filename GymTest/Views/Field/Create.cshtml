@@ -3,10 +3,8 @@
 @{
     ViewData["Title"] = "Create";
 }
-
-<h2>Create</h2>
-
-<h4>Field</h4>
+<br />
+<h2>Crear Cancha</h2>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -18,14 +16,14 @@
                 <span asp-validation-for="FieldDescription" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Crear" class="btn btn-success" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-default">Volver</a>
 </div>
 
 @section Scripts {

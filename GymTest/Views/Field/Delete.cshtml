@@ -4,9 +4,10 @@
     ViewData["Title"] = "Delete";
 }
 
-<h2>Delete</h2>
+<br />
+<h2>Eliminar Cancha</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>¿Seguro que desea Eliminar la Cancha?</h3>
 <div>
     <h4>Field</h4>
     <hr />
@@ -18,10 +19,10 @@
             @Html.DisplayFor(model => model.FieldDescription)
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="FieldId" />
-        <input type="submit" value="Delete" class="btn btn-default" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-default">Volver</a>
     </form>
 </div>

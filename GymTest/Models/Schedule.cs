@@ -12,40 +12,43 @@ namespace GymTest.Models
         [Required]
         public int ScheduleId { get; set; }
 
-        [Required(ErrorMessage = "Campo Disciplina es obligatorio")]
-        [ForeignKey("DisciplineId")]
-        [Display(Name = "Discipline")]
-        public int DisciplineId { get; set; }
+        [Required(ErrorMessage = "La selección de la cancha es obligatoria")]
+        [ForeignKey("FielId")]
+        [Display(Name = "Cancha")]
+        public int FieldId { get; set; }
 
-        public virtual Discipline Discipline { get; set; }
+        public virtual Field Field { get; set; }
+
+        [Required(ErrorMessage = "La fecha de la reserva es obligatoria")]
+        [Display(Name = "Fecha de reserva")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.Date)]
+        public DateTime ScheduleDate { get; set; }
 
         [Required]
         [Display(Name = "Hora Inicio")]
         public string StartTime { get; set; }
 
         [Required]
-        [Display(Name = "Hora Fin")]
-        public string EndTime { get; set; }
+        [Display(Name = "Cantidad de Horas")]
+        public short HourQuantity { get; set; }
 
-        [Required(ErrorMessage = "Campo Recurso es obligatorio")]
-        [ForeignKey("ResourceId")]
-        [Display(Name = "Recurso")]
-        public int ResourceId { get; set; }
-
-        [Display(Name = "Recurso")]
-        public virtual Resource Resource { get; set; }
+        [Required(ErrorMessage = "Campo monto es obligatorio")]
+        [DataType(DataType.Currency)]
+        [Display(Name = "Monto")]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
+        public int Amount { get; set; }
 
         [Required]
-        [Display(Name = "Cupos")]
-        public int Places { get; set; }
+        [Display(Name = "A nombre de")]
+        public string ClientName { get; set; }
 
-        [Required(ErrorMessage = "La fecha de la clase es obligatoria")]
-        [Display(Name = "Fecha de clase")]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-        [DataType(DataType.Date)]
-        public DateTime ScheduleDate { get; set; }
+        [Display(Name = "Teléfono")]
+        public string ClientPhoneNumber { get; set; }
 
-        public ICollection<ScheduleUser> ScheduleUsers { get; set; }
+        [Display(Name = "Pago?")]
+        public bool isPayed { get; set; }
+
 
         public Schedule()
         {

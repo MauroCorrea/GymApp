@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace GymTest.Controllers
 {
@@ -30,7 +31,8 @@ namespace GymTest.Controllers
         {
             ViewBag.Articles = false;
 
-            return View();
+            var scheduleElements = _context.Schedule.Include(s => s.Field).ToList();
+            return View(scheduleElements);
         }
 
         public void About(string fingerprint)

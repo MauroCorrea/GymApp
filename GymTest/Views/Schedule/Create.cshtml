@@ -4,40 +4,68 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>Crear Clase</h2>
-
+<br />
+<h2>Crear Reserva</h2>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" asp-antiforgery="false">
+        <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="DisciplineId" class="control-label"></label>
-                <select asp-for="DisciplineId" class="form-control" asp-items="ViewBag.DisciplineId"></select>
+                <label asp-for="FieldId" class="control-label"></label>
+                <select asp-for="FieldId" class="form-control" asp-items="ViewBag.FieldId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ScheduleDate" class="control-label"></label>
+                <input asp-for="ScheduleDate" class="form-control datepicker" />
+                <span asp-validation-for="ScheduleDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="StartTime" class="control-label"></label>
                 <input asp-for="StartTime" class="form-control" />
                 <span asp-validation-for="StartTime" class="text-danger"></span>
             </div>
+            <!--<div class="hr-time-picker">
+                <div class="picked-time-wrapper">
+                    <input type="text" class="picked-time">
+                </div>
+                <div class="pick-time-now">
+                    <div class="hours hr-timer">
+                        <div class="movable-area">
+                            <ul></ul>
+                        </div>
+                    </div>
+                    <div class="minutes hr-timer">
+                        <ul></ul>
+                    </div>
+                </div>
+            </div>-->
             <div class="form-group">
-                <label asp-for="EndTime" class="control-label"></label>
-                <input asp-for="EndTime" class="form-control" />
-                <span asp-validation-for="EndTime" class="text-danger"></span>
+                <label asp-for="HourQuantity" class="control-label"></label>
+                <input asp-for="HourQuantity" class="form-control" />
+                <span asp-validation-for="HourQuantity" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ResourceId" class="control-label"></label>
-                <select asp-for="ResourceId" class="form-control" asp-items="ViewBag.ResourceId"></select>
+                <label asp-for="Amount" class="control-label"></label>
+                <input asp-for="Amount" class="form-control" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Places" class="control-label"></label>
-                <input asp-for="Places" class="form-control" />
-                <span asp-validation-for="Places" class="text-danger"></span>
+                <label asp-for="ClientName" class="control-label"></label>
+                <input asp-for="ClientName" class="form-control" />
+                <span asp-validation-for="ClientName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ScheduleDate" class="control-label"></label>
-                <input asp-for="ScheduleDate" class="form-control datepicker" type="text" placeholder="dd/mm/aaaa" />
-                <span asp-validation-for="ScheduleDate" class="text-danger"></span>
+                <label asp-for="ClientPhoneNumber" class="control-label"></label>
+                <input asp-for="ClientPhoneNumber" class="form-control" />
+                <span asp-validation-for="ClientPhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="isPayed" /> @Html.DisplayNameFor(model => model.isPayed)
+                    </label>
+                </div>
             </div>
             <div class="form-group">
                 <input type="submit" value="Crear" class="btn btn-success" />
@@ -47,7 +75,7 @@
 </div>
 
 <div>
-    <a asp-action="Index" class="btn btn-default">Volver</a>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-default">Volver</a>
 </div>
 
 @section Scripts {

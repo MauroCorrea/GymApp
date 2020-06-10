@@ -37,9 +37,9 @@ namespace GymTest.Services
 
             if (calendars.Count() == 1)
             {
-                if (calendars.First().ScheduleUsers == null)
+                /*if (calendars.First().ScheduleUsers == null)
                     return calendars.First().Places;
-                return calendars.First().Places - calendars.First().ScheduleUsers.Count;
+                return calendars.First().Places - calendars.First().ScheduleUsers.Count;*/
             }
             return 0;
         }
@@ -50,7 +50,7 @@ namespace GymTest.Services
             {
                 if (GetSchedulePlaces(scheduleId) > 0 && _paymentLogic.HasPaymentValid(userId))
                 {
-                    var calendar = _context.Schedule
+                    /*var calendar = _context.Schedule
                                     .Include(p => p.ScheduleUsers)
                                     .Single(c => c.ScheduleId == scheduleId);
 
@@ -64,7 +64,7 @@ namespace GymTest.Services
                         User = user
                     });
 
-                    _context.SaveChanges();
+                    _context.SaveChanges();*/
 
                     return true;
                 }
@@ -83,14 +83,14 @@ namespace GymTest.Services
         {
             try
             {
-                var calendar = _context.Schedule
+                /*var calendar = _context.Schedule
                                     .Include(p => p.ScheduleUsers)
                                     .Single(c => c.ScheduleId == scheduleId);
 
                 var userToRemove = calendar.ScheduleUsers.Where(u => u.UserId == userId).First();
                 calendar.ScheduleUsers.Remove(userToRemove);
 
-                _context.SaveChanges();
+                _context.SaveChanges();*/
             }
             catch (Exception ex)
             {

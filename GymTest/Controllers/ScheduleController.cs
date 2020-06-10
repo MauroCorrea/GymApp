@@ -6,67 +6,27 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GymTest.Data;
 using GymTest.Models;
-using Microsoft.AspNetCore.Authorization;
-using GymTest.Services;
-using System.Collections.Generic;
 
 namespace GymTest.Controllers
 {
-    [Authorize]
     public class ScheduleController : Controller
     {
         private readonly GymTestContext _context;
 
-        private readonly IScheduleLogic _scheduleLogic;
-
-        private readonly IPaymentLogic _paymentLogic;
-
-        public ScheduleController(GymTestContext context, IScheduleLogic scheduleLogic, IPaymentLogic paymentLogic)
+        public ScheduleController(GymTestContext context)
         {
             _context = context;
-            _scheduleLogic = scheduleLogic;
-            _paymentLogic = paymentLogic;
-        }
-
-        public bool RegisterUser(int userId, int scheduleId)
-        {
-            return _scheduleLogic.RegisterUser(userId, scheduleId);
-        }
-
-        public int GetSchedulePlaces(int scheduleId)
-        {
-            return _scheduleLogic.GetSchedulePlaces(scheduleId);
         }
 
         // GET: Schedule
-        public async Task<IActionResult> Index(DateTime FromDate, DateTime ToDate)
+        public async Task<IActionResult> Index()
         {
-
-            var schedules = from u
-                           in _context.Schedule.Include(p => p.Discipline)
-                                              .Include(p => p.Resource)
-                            select u;
-
-            if (FromDate == DateTime.MinValue)
-            {
-                FromDate = DateTime.Now.AddDays(1 - DateTime.Now.Day);
-            }
-
-            if (ToDate == DateTime.MinValue)
-            {
-                ToDate = DateTime.Now.AddDays(7);
-            }
-
-            schedules = schedules
-                .Where(s => s.ScheduleDate >= FromDate && s.ScheduleDate <= ToDate)
-                .OrderBy(s => s.ScheduleDate)
-                .OrderBy(s => s.StartTime);
-
-            return View(await schedules.ToListAsync());
+            var gymTestContext = _context.Schedule.Include(s => s.Field);
+            return View(await gymTestContext.ToListAsync());
         }
 
         // GET: Schedule/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Pay(int? id)
         {
             if (id == null)
             {
@@ -74,97 +34,72 @@ namespace GymTest.Controllers
             }
 
             var schedule = await _context.Schedule
-                .Include(s => s.Discipline)
-                .Include(s => s.Resource)
-                .Include(s => s.ScheduleUsers)
+                .Include(s => s.Field)
                 .FirstOrDefaultAsync(m => m.ScheduleId == id);
-
-            if(schedule.ScheduleUsers == null)
-            {
-                schedule.ScheduleUsers = new List<ScheduleUser>();
-            }
-
-            var userList = GetUserWithValidPayment(schedule.ScheduleUsers.ToList());
-
             if (schedule == null)
             {
                 return NotFound();
             }
-
-            if (schedule.ScheduleUsers == null)
-                schedule.ScheduleUsers = new List<ScheduleUser>();
-
-            var modelView = new ScheduleView()
+            else
             {
-                Schedule = schedule,
-                User = new SelectList(userList, "UserId", "FullName")
-            };
-
-            return View(modelView);
-        }
-
-        private List<User> GetUserWithValidPayment(List<ScheduleUser> addedUsers)
-        {
-            var result = new List<User>();
-
-            var users = _context.User.ToList();
-            foreach(var user in users)
-            {
-                var userIsIn = addedUsers.Where(u => u.UserId == user.UserId).FirstOrDefault() != null;
-                if (!userIsIn && _paymentLogic.HasPaymentValid(user.UserId))
+                if (schedule.Amount > 0)
                 {
-                    result.Add(user);
+                    CashMovement cashMov = CreateCashMovement(schedule);
+                    _context.CashMovement.Add(cashMov);
                 }
+
+                schedule.isPayed = true;
+                _context.Update(schedule);
+                _context.SaveChanges();
             }
 
-            return result;
+            return RedirectToAction("Index", "Home");
         }
 
-        public async Task<IActionResult> InsertUserIntoScheduler(ScheduleView viewmodel)
-        {
-            if (viewmodel.Schedule.ScheduleId <= 0 || viewmodel.SelectedUser <= 0)
-                return RedirectToAction("Details", new { id = viewmodel.Schedule.ScheduleId });
-
-            var updated = _scheduleLogic.RegisterUser(viewmodel.SelectedUser, viewmodel.Schedule.ScheduleId);
-
-            return RedirectToAction("Details", new { id = viewmodel.Schedule.ScheduleId });
-        }
-
-
-        public async Task<IActionResult> DeleteUserIntoScheduler(int idSchedule, int idUser)
-        {
-
-            _scheduleLogic.DeleteUserFromSchedule(idUser, idSchedule);
-            return RedirectToAction("Details", new { id = idSchedule });
-        }
-
-        // GET: Schedule/Create
         public IActionResult Create()
         {
-            ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "DisciplineDescription");
-            ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "FullName");
+            ViewData["FieldId"] = new SelectList(_context.Field, "FieldId", "FieldDescription");
             return View();
         }
 
-        // POST: Schedule/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ScheduleId,DisciplineId,StartTime,EndTime,ResourceId,Places,ScheduleDate")] Schedule schedule)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("ScheduleId,FieldId,ScheduleDate,StartTime,HourQuantity,Amount,ClientName,ClientPhoneNumber,isPayed")] Schedule schedule)
         {
             if (ModelState.IsValid)
             {
+                if (schedule.Amount > 0)
+                {
+                    var field = _context.Field.Where(f => f.FieldId == schedule.FieldId).First();
+                    schedule.Field = field;
+                    CashMovement cashMov = CreateCashMovement(schedule);
+                    _context.CashMovement.Add(cashMov);
+                }
                 _context.Add(schedule);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Home");
             }
-            ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "DisciplineDescription", schedule.DisciplineId);
-            ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "FullName", schedule.ResourceId);
+            ViewData["FieldId"] = new SelectList(_context.Field, "FieldId", "FieldDescription", schedule.FieldId);
             return View(schedule);
         }
 
-        // GET: Schedule/Edit/5
+        private CashMovement CreateCashMovement(Schedule schedule)
+        {
+            var cashMov = new CashMovement();
+
+            cashMov.Amount = schedule.Amount;
+            cashMov.PaymentMediaId = 1;
+            cashMov.CashMovementDate = DateTime.Now;
+            cashMov.CashMovementDetails = "Reserva " + schedule.Field.FieldDescription + " " + schedule.HourQuantity + "h, " + schedule.ClientName;
+            cashMov.CashMovementTypeId = 1;//1 es de tipo entrada
+            cashMov.CashCategoryId = _context.CashCategory.Where(x => x.CashCategoryDescription == "Reserva Cancha").FirstOrDefault().CashCategoryId;
+            cashMov.CashSubcategoryId = _context.CashSubcategory.Where(x => x.CashSubcategoryDescription == "Reserva Cancha").FirstOrDefault().CashSubcategoryId;
+            cashMov.SupplierId = _context.Supplier.Where(x => x.SupplierDescription == "Reserva Cancha").FirstOrDefault().SupplierId;
+            cashMov.PaymentId = null;
+
+            return cashMov;
+        }
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -177,17 +112,13 @@ namespace GymTest.Controllers
             {
                 return NotFound();
             }
-            ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "DisciplineDescription", schedule.DisciplineId);
-            ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "FullName", schedule.ResourceId);
+            ViewData["FieldId"] = new SelectList(_context.Field, "FieldId", "FieldDescription", schedule.FieldId);
             return View(schedule);
         }
 
-        // POST: Schedule/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ScheduleId,DisciplineId,StartTime,EndTime,ResourceId,Places,ScheduleDate")] Schedule schedule)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("ScheduleId,FieldId,ScheduleDate,StartTime,HourQuantity,Amount,ClientName,ClientPhoneNumber,isPayed")] Schedule schedule)
         {
             if (id != schedule.ScheduleId)
             {
@@ -212,10 +143,10 @@ namespace GymTest.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction("Index", "Home");
             }
-            ViewData["DisciplineId"] = new SelectList(_context.Discipline, "DisciplineId", "DisciplineDescription", schedule.DisciplineId);
-            ViewData["ResourceId"] = new SelectList(_context.Resource, "ResourceId", "FullName", schedule.ResourceId);
+            ViewData["FieldId"] = new SelectList(_context.Field, "FieldId", "FieldDescription", schedule.FieldId);
             return View(schedule);
         }
 
@@ -228,8 +159,7 @@ namespace GymTest.Controllers
             }
 
             var schedule = await _context.Schedule
-                .Include(s => s.Discipline)
-                .Include(s => s.Resource)
+                .Include(s => s.Field)
                 .FirstOrDefaultAsync(m => m.ScheduleId == id);
             if (schedule == null)
             {
@@ -241,13 +171,14 @@ namespace GymTest.Controllers
 
         // POST: Schedule/Delete/5
         [HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var schedule = await _context.Schedule.FindAsync(id);
             _context.Schedule.Remove(schedule);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            return RedirectToAction("Index", "Home");
         }
 
         private bool ScheduleExists(int id)

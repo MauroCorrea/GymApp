@@ -15,10 +15,10 @@ namespace GymTest.Data
             modelBuilder.Entity<ScheduleUser>()
                .HasKey(x => new { x.ScheduleId, x.UserId });
 
-            modelBuilder.Entity<ScheduleUser>()
+            /*modelBuilder.Entity<ScheduleUser>()
                 .HasOne(su => su.Schedule)
                 .WithMany(su => su.ScheduleUsers)
-                .HasForeignKey(su => su.ScheduleId);
+                .HasForeignKey(su => su.ScheduleId);*/
 
             modelBuilder.Entity<ScheduleUser>()
                 .HasOne(su => su.User)

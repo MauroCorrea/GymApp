@@ -51,7 +51,7 @@ namespace GymTest.Controllers
 
             foreach (var date in datesForSchedule)
             {
-                var scheduleClass = new Schedule
+                /*var scheduleClass = new Schedule
                 {
                     Discipline = scheduleMassively.Discipline,
                     DisciplineId = scheduleMassively.DisciplineId,
@@ -63,7 +63,7 @@ namespace GymTest.Controllers
                     ScheduleDate = date
                 };
 
-                _context.Schedule.Add(scheduleClass);
+                _context.Schedule.Add(scheduleClass);*/
             }
         }
 

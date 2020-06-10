@@ -12,7 +12,7 @@ namespace GymTest.Models
 
         [Required(ErrorMessage = "Campo Recurso es obligatorio")]
         [ForeignKey("ResourceId")]
-        [Display(Name = "Recurso")]
+        [Display(Name = "Persona")]
         public int ResourceId { get; set; }
 
         public virtual Resource Resource { get; set; }

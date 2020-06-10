@@ -162,7 +162,7 @@ namespace GymTest.Models
                     new CashSubcategory
                     {
                         CashCategoryId = 2,
-                        CashSubcategoryDescription = "Movimiento de pago"
+                        CashSubcategoryDescription = "Reserva Cancha"
                     },
                     new CashSubcategory
                     {
@@ -189,7 +189,7 @@ namespace GymTest.Models
                     new CashCategory
                     {
                         CashCategoryId = 2,
-                        CashCategoryDescription = "Movimiento de pago"
+                        CashCategoryDescription = "Reserva Cancha"
                     },
                     new CashCategory
                     {
@@ -236,7 +236,7 @@ namespace GymTest.Models
                     new Supplier
                     {
                         SupplierId = 2,
-                        SupplierDescription = "Movimiento de pago"
+                        SupplierDescription = "Reserva Cancha"
                     },
                     new Supplier
                     {

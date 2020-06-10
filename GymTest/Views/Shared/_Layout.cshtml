@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="~/css/users.css" />
     <link rel="stylesheet" href="~/css/jquery-ui.css" />
     <link rel="stylesheet" href="~/css/style.css" />
+    <link rel="stylesheet" href="~/css/hr-timePicker.css">
 
 
 </head>
@@ -30,7 +31,6 @@
                     <div class="bar3"></div>
                 </div>
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">@AppSettingsOptions.Value.Client</a>
-                <!--<img src="~/images/logo.png" alt="logo" width="100px" height="30px" />-->
             </div>
 
             <div id="main-menu" class="collapse">
@@ -38,23 +38,11 @@
                 {
                     @if (!UserManager.GetUserName(User).ToLower().Contains(AppSettingsOptions.Value.UserOnlyForJourneys.ToLower()))
                     {
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Users" asp-action="Index">Usuarios</a></li>
-                    <li><a asp-area="" asp-controller="Payments" asp-action="Index">Pagos</a></li>
-                    <li><a asp-area="" asp-controller="Product" asp-action="Sale">Ventas</a></li>
-                    <li><a asp-area="" asp-controller="CashMovement" asp-action="Index">Movimientos caja</a></li>
-                    <li><a asp-area="" asp-controller="Schedule" asp-action="Index">Calendario</a></li>
-                    <li><a asp-area="" asp-controller="GeneralAdministration" asp-action="Index">Admin General</a></li>
-                    @if (ViewBag.Articles != null && ViewBag.Articles)
-                    {
-                        <li><a asp-area="" asp-controller="Notifications" asp-action="Index" style="background-color:red">Avisos</a></li>
-                    }
-                    else
-                    {
-                        <li><a asp-area="" asp-controller="Notifications" asp-action="Index">Avisos</a></li>
-                    }
-                    <!--<li><a asp-area="" asp-controller="UserReport" asp-action="Index">Reportes Manuales</a></li>-->
-                </ul>
+                        <ul class="nav navbar-nav">
+                            <li><a asp-area="" asp-controller="Product" asp-action="Sale">Ventas</a></li>
+                            <li><a asp-area="" asp-controller="CashMovement" asp-action="Index">Movimientos caja</a></li>
+                            <li><a asp-area="" asp-controller="GeneralAdministration" asp-action="Index">Administración General</a></li>
+                        </ul>
                     }
                     else
                     {
@@ -83,9 +71,16 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/jquery-1.12.4.js" asp-append-version="true"></script>
     <script src="~/js/jquery-ui.js" asp-append-version="true"></script>
+    <script src="~/js/hr.timePicker.js"></script>
     <script>$(function () {
             $(".datepicker").datepicker();
             $(".datepicker").datepicker("option", "dateFormat", "dd/mm/yy");
+            $(".hr-time-picker").hrTimePicker({
+                disableColor: "#989c9c", // red, green, #000
+                enableColor: "#ff5722", // red, green, #000
+                arrowTopSymbol: "&#9650;", // ▲ -- Enter html entity code
+                arrowBottomSymbol: "&#9660;" // ▼ -- Enter html entity code
+            });
         });</script>
     <script>function showX(x) {
             x.classList.toggle("change");
