@@ -68,5 +68,7 @@ namespace GymTest.Data
 
         public DbSet<GymTest.Models.Product> Product { get; set; }
 
+        public DbSet<GymTest.Models.Field> Field { get; set; }
+
     }
 }
