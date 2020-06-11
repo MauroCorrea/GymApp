@@ -19,10 +19,14 @@ namespace GymTest.Controllers
         }
 
         // GET: Schedule
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(DateTime? FromDate)
         {
-            var gymTestContext = _context.Schedule.Where(s => s.ScheduleDate == DateTime.Today).Include(s => s.Field);
-            return View(await gymTestContext.ToListAsync());
+            if (FromDate == null) FromDate = DateTime.Today;
+
+            var scheduleElements = _context.Schedule.Where(s => s.ScheduleDate == FromDate).Include(s => s.Field).ToList();
+            scheduleElements = scheduleElements.OrderBy(s => Convert.ToInt16(s.StartTime.Split(":")[0])).ThenBy(s => s.FieldId).ToList();
+
+            return View(scheduleElements);
         }
 
         // GET: Schedule/Details/5

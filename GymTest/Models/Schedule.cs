@@ -27,6 +27,7 @@ namespace GymTest.Models
 
         [Required]
         [Display(Name = "Hora Inicio")]
+        [RegularExpression("^[0-2][0-9]:[0-5][0-9]$", ErrorMessage = "El formato debe ser HH:mm. Ejemplo: 09:30")]
         public string StartTime { get; set; }
 
         [Required]

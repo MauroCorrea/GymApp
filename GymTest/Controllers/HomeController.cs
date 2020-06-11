@@ -33,6 +33,8 @@ namespace GymTest.Controllers
             if (FromDate == null) FromDate = DateTime.Today;
 
             var scheduleElements = _context.Schedule.Where(s => s.ScheduleDate == FromDate).Include(s => s.Field).ToList();
+            scheduleElements = scheduleElements.OrderBy(s => Convert.ToInt16(s.StartTime.Split(":")[0])).ThenBy(s => s.FieldId).ToList();
+
             return View(scheduleElements);
         }
 
