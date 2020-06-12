@@ -120,9 +120,9 @@ namespace GymTest.Controllers
             double monthlyAmount = 0;
 
             var allDaylyMovement = cashMovements.Where(m => m.CashMovementDate.ToString("dd.MM.yyyy") == DateTime.Today.ToString("dd.MM.yyyy"));
-            foreach(var mov in allDaylyMovement)
+            foreach (var mov in allDaylyMovement)
             {
-                if(mov.CashMovementTypeId == 1)
+                if (mov.CashMovementTypeId == 1)
                 {
                     dailyAmount += mov.Amount;
                 }
@@ -178,6 +178,7 @@ namespace GymTest.Controllers
             ExcelPackage Package = new ExcelPackage(new System.IO.FileInfo(Ruta_Publica_Excel));
             var Hoja_1 = Package.Workbook.Worksheets.Add("Contenido_1");
 
+            #region cabezal
             /*------------------------------------------------------*/
             int rowNum = 1;
 
@@ -187,6 +188,9 @@ namespace GymTest.Controllers
             Hoja_1.Cells["E" + rowNum].Value = ToDate.ToShortDateString();
 
             /*------------------------------------------------------*/
+            #endregion
+
+            #region titulos de columna
             rowNum = 2;
             int originalRowNum = rowNum;
 
@@ -205,7 +209,9 @@ namespace GymTest.Controllers
 
             Hoja_1.Cells["B" + rowNum + ":N" + rowNum].Style.Font.Bold = true;
             Hoja_1.Cells["B" + rowNum + ":N" + rowNum].Style.Font.Size = 15;
+            #endregion
 
+            #region movimientos
             Dictionary<string, float> balances = new Dictionary<string, float>();
 
             foreach (CashMovement row in cashMovs)
@@ -236,6 +242,9 @@ namespace GymTest.Controllers
                     balances.Add(row.PaymentMedia.PaymentMediaDescription, (float)(row.CashMovementTypeId == 1 ? row.Amount : (row.Amount * (-1))));
                 }
             }
+            #endregion
+
+            #region totales
 
             if (cashMovs.Count() > 0)
             {
@@ -251,12 +260,12 @@ namespace GymTest.Controllers
                     Hoja_1.Cells["L" + rowNumTotal].Value = balances[key];
                 }
             }
-
+            #endregion
             /*------------------------------------------------------*/
 
             Package.Save();
 
-            //SendMail
+            #region send Mail
             var user = await _userManager.GetUserAsync(User);
             var userEmail = user.Email;
             var userName = user.UserName;
@@ -278,6 +287,7 @@ namespace GymTest.Controllers
                                  new List<string>() { userEmail },
                                  new List<string>() { Ruta_Publica_Excel }
                                 );
+            #endregion
             try
             {
                 if ((System.IO.File.Exists(Ruta_Publica_Excel)))

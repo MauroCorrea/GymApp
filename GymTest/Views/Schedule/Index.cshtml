@@ -10,6 +10,15 @@
     <a asp-action="Create" class="btn btn-primary">Nueva clase</a>
     <a asp-controller="ScheduleMassively" asp-action="Create" class="btn btn-primary">Ingreso clases fijas</a>
 </p>
+
+<form asp-controller="Schedule" asp-action="ExportToExcel">
+    <p>
+        Fecha desde: <input name="FromDate" class="datepicker" type="text" placeholder="dd/mm/aaaa">
+        Fecha hasta: <input name="ToDate" class="datepicker" type="text" placeholder="dd/mm/aaaa">
+        <input type="submit" value="Exportar a Excel" class="btn btn-primary" />
+    </p>
+</form>
+
 <form asp-controller="Schedule" asp-action="Index">
     <p>
         Fecha desde: <input name="FromDate" class="datepicker" type="text" placeholder="dd/mm/aaaa">
@@ -44,31 +53,31 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Discipline.DisciplineDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Resource.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Places)
-            </td>
-            <td>
-                @(item.ScheduleDate.ToString("dddd").ToUpper() + " - " + item.ScheduleDate.ToString("dd/MM/yy"))
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ScheduleId" class="btn btn-primary">Modificar</a>
-                <a asp-action="Details" asp-route-id="@item.ScheduleId" class="btn btn-primary">Agregar Alumno</a>
-                <a asp-action="Delete" asp-route-id="@item.ScheduleId" class="btn btn-danger">Eliminar</a>
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Discipline.DisciplineDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Resource.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Places)
+                </td>
+                <td>
+                    @(item.ScheduleDate.ToString("dddd").ToUpper() + " - " + item.ScheduleDate.ToString("dd/MM/yy"))
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ScheduleId" class="btn btn-primary">Modificar</a>
+                    <a asp-action="Details" asp-route-id="@item.ScheduleId" class="btn btn-primary">Agregar Alumno</a>
+                    <a asp-action="Delete" asp-route-id="@item.ScheduleId" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>

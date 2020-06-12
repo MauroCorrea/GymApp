@@ -9,6 +9,11 @@ using GymTest.Models;
 using Microsoft.AspNetCore.Authorization;
 using GymTest.Services;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Hosting;
+using OfficeOpenXml;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace GymTest.Controllers
 {
@@ -21,11 +26,29 @@ namespace GymTest.Controllers
 
         private readonly IPaymentLogic _paymentLogic;
 
-        public ScheduleController(GymTestContext context, IScheduleLogic scheduleLogic, IPaymentLogic paymentLogic)
+        private UserManager<IdentityUser> _userManager;
+
+        private readonly ITimezoneLogic _timeZone;
+
+        private readonly ILogger<IPaymentLogic> _logger;
+
+        private IHostingEnvironment _env;
+
+        private readonly ISendEmail _sendEmail;
+
+        private readonly IOptionsSnapshot<AppSettings> _appSettings;
+
+        public ScheduleController(GymTestContext context, IScheduleLogic scheduleLogic, IPaymentLogic paymentLogic, ITimezoneLogic timeZone, IHostingEnvironment env, ISendEmail sendEmail, IOptionsSnapshot<AppSettings> app, UserManager<IdentityUser> userManager, ILogger<IPaymentLogic> logger)
         {
+            _logger = logger;
+            _userManager = userManager;
             _context = context;
             _scheduleLogic = scheduleLogic;
             _paymentLogic = paymentLogic;
+            _timeZone = timeZone;
+            _env = env;
+            _sendEmail = sendEmail;
+            _appSettings = app;
         }
 
         public bool RegisterUser(int userId, int scheduleId)
@@ -79,7 +102,7 @@ namespace GymTest.Controllers
                 .Include(s => s.ScheduleUsers)
                 .FirstOrDefaultAsync(m => m.ScheduleId == id);
 
-            if(schedule.ScheduleUsers == null)
+            if (schedule.ScheduleUsers == null)
             {
                 schedule.ScheduleUsers = new List<ScheduleUser>();
             }
@@ -108,7 +131,7 @@ namespace GymTest.Controllers
             var result = new List<User>();
 
             var users = _context.User.ToList();
-            foreach(var user in users)
+            foreach (var user in users)
             {
                 var userIsIn = addedUsers.Where(u => u.UserId == user.UserId).FirstOrDefault() != null;
                 if (!userIsIn && _paymentLogic.HasPaymentValid(user.UserId))
@@ -254,5 +277,124 @@ namespace GymTest.Controllers
         {
             return _context.Schedule.Any(e => e.ScheduleId == id);
         }
+
+        public async Task<IActionResult> ExportToExcel(DateTime FromDate, DateTime ToDate)
+        {
+            try
+            {
+                if (FromDate == DateTime.MinValue)
+                    FromDate = _timeZone.GetCurrentDateTime(DateTime.Now);
+                if (ToDate == DateTime.MinValue)
+                    ToDate = _timeZone.GetCurrentDateTime(DateTime.Now).AddDays(7);
+
+
+                string path = _env.WebRootPath;
+                string Ruta_Publica_Excel = path + "/Agendas_" + _timeZone.GetCurrentDateTime(DateTime.Now).ToString("ddMMyyyyHHmmss") + ".xlsx";
+
+                ExcelPackage Package = new ExcelPackage(new System.IO.FileInfo(Ruta_Publica_Excel));
+
+                while (FromDate <= ToDate)
+                {
+                    //Creo la hoja para la fecha
+                    var hoja = Package.Workbook.Worksheets.Add(FromDate.ToShortDateString());
+
+                    //obtengo las clases para esa fecha
+                    var schedules = from u
+                               in _context.Schedule.Include(p => p.Resource)
+                                                  .Include(p => p.Discipline)
+                                                  .Include(s => s.ScheduleUsers)
+                                    select u;
+
+                    schedules = schedules
+                        .Where(s => s.ScheduleDate == FromDate)
+                        .OrderBy(s => s.StartTime)
+                        .OrderBy(s => s.EndTime);
+
+                    var rowNum = 1;
+                    //armo la agenda para esa fecha
+                    //Cabezal
+                    hoja.Cells["A" + rowNum].Value = "Inicio";
+                    hoja.Cells["B" + rowNum].Value = "Fin";
+                    hoja.Cells["C" + rowNum].Value = "Disciplina";
+                    hoja.Cells["D" + rowNum].Value = "Instructor";
+                    hoja.Cells["E" + rowNum].Value = "Cupos";
+                    hoja.Cells["F" + rowNum].Value = "Socios inscriptos";
+
+                    hoja.Cells["A" + rowNum + ":F" + rowNum].Style.Font.Bold = true;
+                    hoja.Cells["A" + rowNum + ":F" + rowNum].Style.Font.Size = 15;
+
+                    //agenda
+                    rowNum = 2;
+                    foreach (var clase in schedules)
+                    {
+                        hoja.Cells["A" + rowNum].Value = clase.StartTime;
+                        hoja.Cells["B" + rowNum].Value = clase.EndTime;
+                        hoja.Cells["C" + rowNum].Value = clase.Discipline.DisciplineDescription;
+                        hoja.Cells["D" + rowNum].Value = clase.Resource.FullName;
+                        hoja.Cells["E" + rowNum].Value = clase.Places;
+                        if (clase.ScheduleUsers != null)
+                            hoja.Cells["F" + rowNum].Value = clase.ScheduleUsers.Count;
+                        else
+                            hoja.Cells["F" + rowNum].Value = 0;
+
+                        rowNum++;
+                    }
+
+                    hoja.DefaultColWidth = 20;
+
+                    FromDate = FromDate.AddDays(1);
+                }
+
+                Package.Save();
+
+
+                #region send Mail
+                var user = await _userManager.GetUserAsync(User);
+                var userEmail = user.Email;
+                var userName = user.UserName;
+                if (string.IsNullOrEmpty(userEmail))
+                    userEmail = _appSettings.Value.EmailConfiguration_Username;
+                if (string.IsNullOrEmpty(userName))
+                    userName = "Administrador";
+
+                var bodyData = new Dictionary<string, string>
+                {
+                    { "UserName", userName },
+                    { "Title", "Envío de Agenda." },
+                    { "message", "Descargue el archivo adjunto." }
+                };
+
+                _sendEmail.SendEmail(bodyData,
+                                     "ReportTemplate",
+                                     "Reporte de agenda",
+                                     new List<string>() { userEmail },
+                                     new List<string>() { Ruta_Publica_Excel }
+                                    );
+                #endregion
+                try
+                {
+                    if ((System.IO.File.Exists(Ruta_Publica_Excel)))
+                    {
+                        System.IO.File.Delete(Ruta_Publica_Excel);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var messageError = ex.Message;
+                    _logger.LogError("Error creating Agenda. Detail: " + messageError);
+                    if (ex.InnerException != null)
+                        _logger.LogError("Error creating Agenda. Detail: " + ex.InnerException.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                var messageError = ex.Message;
+                _logger.LogError("Error creating Agenda. Detail: " + messageError);
+                if (ex.InnerException != null)
+                    _logger.LogError("Error creating Agenda. Detail: " + ex.InnerException.Message);
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }
