@@ -16,7 +16,7 @@ namespace GymTest.Models
         [Required(ErrorMessage = "Campo descripción de producto es obligatorio")]
         public string ProductDescription { get; set; }
 
-        [Display(Name = "Price")]
+        [Display(Name = "Precio")]
         [Required(ErrorMessage = "Campo precio de producto es obligatorio")]
         [DisplayFormat(DataFormatString = "$ {0:0.00}")]
         public double ProductPrice { get; set; }
