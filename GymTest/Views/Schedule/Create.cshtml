@@ -4,6 +4,17 @@
     ViewData["Title"] = "Create";
 }
 
+
+
+<h2>Cargar Clases</h2>
+
+<form asp-controller="Schedule" asp-action="UploadFile" method="post"
+      enctype="multipart/form-data">
+
+    <input type="file" name="formFile" />
+    <button type="submit">Cargar clases</button>
+</form>
+
 <h2>Crear Clase</h2>
 
 <hr />

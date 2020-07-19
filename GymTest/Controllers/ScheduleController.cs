@@ -14,6 +14,8 @@ using OfficeOpenXml;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace GymTest.Controllers
 {
@@ -393,6 +395,99 @@ namespace GymTest.Controllers
                 if (ex.InnerException != null)
                     _logger.LogError("Error creating Agenda. Detail: " + ex.InnerException.Message);
             }
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost("UploadFile")]
+        public async Task<IActionResult> UploadFile(IFormFile formFile)
+        {
+            var changes = false;
+            if (formFile == null)
+            {
+                _logger.LogError("Schedules file null: " + formFile);
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (formFile.Length <= 0)
+            {
+                _logger.LogError("Schedules file empty: " + formFile.Length);
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (!Path.GetExtension(formFile.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+            {
+                _logger.LogError("Schedules file not supported: " + formFile.FileName);
+                return RedirectToAction(nameof(Index));
+            }
+
+            try
+            {
+
+                using (var stream = new MemoryStream())
+                {
+                    await formFile.CopyToAsync(stream);
+
+                    Schedule sch = new Schedule();
+
+                    using (var package = new ExcelPackage(stream))
+                    {
+                        ExcelWorksheet worksheet = package.Workbook.Worksheets.First();
+
+                        var rowCount = worksheet.Dimension.Rows;
+
+                        for (int row = 2; row <= rowCount; row++)
+                        {
+
+                            try
+                            {
+                                var discipline = _context.Discipline.Where(d => d.DisciplineDescription.Equals(worksheet.Cells[row, 1].Value.ToString().Trim())).First();
+                                var places = int.Parse(worksheet.Cells[row, 4].Value.ToString().Trim());
+                                var resource = _context.Resource.Where(d => d.FullName.Equals(worksheet.Cells[row, 5].Value.ToString().Trim())).First();
+                                var day = int.Parse(worksheet.Cells[row, 6].Value.ToString().Trim());
+                                var month = int.Parse(worksheet.Cells[row, 7].Value.ToString().Trim());
+                                var year = int.Parse(worksheet.Cells[row, 8].Value.ToString().Trim());
+                                DateTime date = new DateTime(year, month, day);
+
+                                var scheduleClass = new Schedule
+                                {
+                                    Discipline = discipline,
+                                    DisciplineId = discipline.DisciplineId,
+                                    StartTime = worksheet.Cells[row, 2].Value.ToString().Trim(),
+                                    EndTime = worksheet.Cells[row, 3].Value.ToString().Trim(),
+                                    ScheduleDate = date,
+                                    Places = places,
+                                    Resource = resource,
+                                    ResourceId = resource.ResourceId,
+
+                                };
+
+                                _context.Schedule.Add(scheduleClass);
+                                changes = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                var messageError = ex.Message;
+                                _logger.LogError("Error creating Agenda from file. Detail: " + messageError);
+                                if (ex.InnerException != null)
+                                    _logger.LogError("Error creating Agenda from file. Inner detail: " + ex.InnerException.Message);
+                            }
+
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                var messageError = ex.Message;
+                _logger.LogError("Error creating Agenda from file. Detail: " + messageError);
+                if (ex.InnerException != null)
+                    _logger.LogError("Error creating Agenda from file. Inner detail: " + ex.InnerException.Message);
+            }
+
+            if (changes)
+                await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
