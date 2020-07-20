@@ -1,0 +1,42 @@
+﻿@model GymTest.Models.AssistanceInformation
+
+@{
+    ViewData["Title"] = "Información de registro";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h3>@Model.Message</h3>
+
+
+@if (Model.AdditionalData != null && Model.AdditionalData.Length > 0)
+{
+    <h4>@Model.AdditionalData</h4>
+}
+
+@if (Model.User != null)
+{
+    <div>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.User.FullName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.User.FullName)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.User.DocumentNumber)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.User.DocumentNumber)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.User.SignInDate)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.User.SignInDate)
+            </dd>
+        </dl>
+    </div>
+}

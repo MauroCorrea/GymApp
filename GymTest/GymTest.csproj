@@ -43,6 +43,7 @@
         <Folder Include="Views\Payroll\" />
         <Folder Include="Models\ReportModels\" />
         <Folder Include="Views\CategoryAdmin\" />
+        <Folder Include="Views\ExternalUser\" />
     </ItemGroup>
     <ItemGroup>
         <Content Remove="wwwroot\images\ui-icons_444444_256x240.png" />
