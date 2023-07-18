@@ -9,7 +9,7 @@
             <PrivateAssets>all</PrivateAssets>
             <Publish>true</Publish>
         </PackageReference>
-        <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.1">
+        <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.21">
             <IsImplicitlyDefined>true</IsImplicitlyDefined>
             <PrivateAssets>all</PrivateAssets>
             <Publish>true</Publish>
