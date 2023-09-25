@@ -15,7 +15,7 @@
             <Publish>true</Publish>
         </PackageReference>
         <!--    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.1" />-->
-        <PackageReference Include="jQuery.UI.Combined" Version="1.12.1" />
+        <PackageReference Include="jQuery.UI.Combined" Version="1.13.0" />
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.4" />
         <PackageReference Include="EPPlus.Core" Version="1.5.4" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
